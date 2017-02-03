@@ -9,21 +9,32 @@
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <row>
-            <div class="col-xs-5" style="padding:0">
-              <a class="navbar-brand" href="#" contenteditable="true" style="padding:0px"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
-            </div>
-            <div class="col-xs-7">
-              <div class="input-group" style="padding-top:10px">
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">
-                    <span class="glyphicon glyphicon-search" style="padding-top:3px; padding-bottom:3px"></span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </row>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#" contenteditable="true" style="padding:0px"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="#">Up Next</a>
+            </li>
+            <li>
+              <a href="#">Previous Songs</a>
+            </li>
+            <li>
+              <a href="#">Send feedback to host</a>
+            </li>
+            <li>
+              <a href="#">Join event</a>
+            </li>
+            <li>
+              <a href="#">Settings</a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -38,15 +49,15 @@
                   <img class="img-responsive" src="img\bruno-mars-xxiv-magic.jpg">
                 </div>
                 <div class="col-xs-6">
-                  <h3>24K Magic</h3>
-                  <h4>Bruno Mars</h4>
+                  <h4>24K Magic</h5>
+                  <h5>Bruno Mars</h5>
                 </div>
                 <div class="col-xs-3">
                   <div class="pull-right">
-                    <button type="button" class="btn btn-secondary" style="width:100%">Vote
+                    <!--button type="button" class="btn btn-secondary" style="width:100%">Vote
                       <span class="glyphicon glyphicon-ok" style="padding-left:10px"></span>
                     </button>
-                    <br>
+                    <br-->
                     <br>
                     <button type="button" class="btn btn-secondary">
                       <span>Veto</span>
@@ -59,8 +70,7 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="col-md-12">
+
       <ul class="list-group">
         <h2>Up next</h2>
         <div class="">
@@ -70,8 +80,8 @@
                 <img class="img-responsive" src="img\MigosCulture.jpg">
               </div>
               <div class="col-xs-6">
-                <h3>Bad and Boujee</h3>
-                <h4>Migos</h4>
+                <h4>Bad and Boujee</h4>
+                <h5>Migos</h5>
               </div>
               <div class="col-xs-3">
                 <div class="pull-right">
@@ -161,6 +171,5 @@
         </div>
       </ul>
     </div>
-  
-
-</body></html>
+  </body>
+</html>
