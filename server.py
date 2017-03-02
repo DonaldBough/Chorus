@@ -49,9 +49,25 @@ class SendVote(Resource):
         except Exception as e:
             return {'error': str(e)}
 
-#db stuff
-cnx = mysql.connector.connect(user='root', passswd="ChorusIsNumber1", host="174.138.64.25", database='mydb')
-cursor = cnx.cursor()
+#All database functions are abstracted here
+class Database()
+    cursor = None
+
+    def __init__(self):
+        cnx = mysql.connector.connect(user='root', passswd="ChorusIsNumber1", 
+            host="174.138.64.25", database='mydb')
+        Database.cursor = cnx.cursor()
+
+    #Template for what insert statements look like, table name/columns aren't right
+    def insertNewEvent(eventId, eventName, hostID):
+        insert_stmt = ("INSERT INTO events (event_ID, event_name, host_ID) "
+            "VALUES (%s, %s, %s)"
+        )
+        data = (eventId, eventName, hostID)
+        Database.cursor.execute("SELECT * FROM event")
+        cursor.execute(insert_stmt, data)
+
+    def searchEvent():
 
 cursor.execute("SELECT * FROM event")
 
@@ -68,3 +84,4 @@ api.add_resource(SendVote, '/SendVote')
 
 if __name__ == '__main__':
     app.run(debug=True)
+
