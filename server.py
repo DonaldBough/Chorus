@@ -124,8 +124,7 @@ class CreateEvent(Resource):
             print("GOT THE ID:" + playlistID)
             token = sp.getToken()
             userName = sp.getUserName()
-            db.insertNewHost("1", playlistID, token, username)
-            db.insertNewEvent("running", "1", explicitBol, _eventPassword)
+            db.insertNewEvent("running", "2", explicitBol, _eventPassword)
 
 
             eventID = db.getEventID(_eventPassword)
@@ -135,6 +134,42 @@ class CreateEvent(Resource):
         except Exception as e:
             return {'error': str(e)}
 
+class CreateEvent(Resource):
+    def post(self):
+        try:
+            # Parse the arguments
+            parser = reqparse.RequestParser()
+            parser.add_argument('password', type=str, help='Password to create user')
+            parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
+            args = parser.parse_args()
+
+            _eventPassword = args['password']
+            _eventExplicit = args['explicit']
+
+            explicitBol = None
+            if _eventExplicit: 
+                explicitBol = 0
+            else:
+                explicitBol = 1
+
+            db = Database()
+
+
+
+
+
+
+
+            db.insertNewEvent("running", "2", explicitBol, _eventPassword)
+
+
+            eventID = db.getEventID(_eventPassword)
+
+            return {'EventID': eventID}
+
+        except Exception as e:
+            return {'error': str(e)}
+            
 #All database functions are abstracted here
 class Database:
     #cursor = None
