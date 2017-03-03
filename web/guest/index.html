@@ -19,7 +19,7 @@
 
    <!-- Angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script src="js/controller.js"></script>
+  <script src="js/joinController.js"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,7 +29,7 @@
       <![endif]-->
     </head>
     <body ng-app="myApp">
-      <div ng-controller = "appCtrl as controller" >
+      <div ng-controller = "joinCtrl as controller" >
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -80,6 +80,7 @@
       </div>
       <!--tab2!-->
       <div id="tab2" class="tab-pane active">
+        <iframe src="https://embed.spotify.com/?uri=spotify%3Auser%3Aspotify%3Aplaylist%3A2PXdUld4Ueio2pHcB6sM8j&theme=white" width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
         <h2>Now Playing {{controller.greeting}}</h2>
         <li class="list-group-item">
           <div class="row">

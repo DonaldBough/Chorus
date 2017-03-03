@@ -1,5 +1,5 @@
 var myApp = angular.module("myApp", [])   
-   .controller('appCtrl', ['$scope',
+   .controller('joinCtrl', ['$scope',
   	function($scope) {
     this.greeting = 'Hello World';
 }]);

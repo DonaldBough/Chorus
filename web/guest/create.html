@@ -18,7 +18,7 @@
 
    <!-- Angular -->
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script src="js/joinController.js"></script>
+  <script src="js/createController.js"></script>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -28,7 +28,7 @@
       <![endif]-->
     </head>
     <body ng-app="myApp">
-    <div ng-controller = "joinCtrl as controller">
+    <div ng-controller = "createCtrl as controller">
     <div class="cover-image"></div>
     <div class="cover">
       <div class="cover-image"></div>
@@ -42,13 +42,17 @@
             <div class="row">
               <div class="col-xs-2"></div>
               <div class="col-xs-8">
-                <input type="text" class="form-control" placeholder="Enter party code" style="height:45px">
+                
+                <input type="text" class="form-control" placeholder="Enter party code" style="height:45px" ng-model="controller.eventCode">
+                <br />
+                <label>Allow Explicit?
+                  <input type="checkbox" ng-model="controller.check" checked>
+                </label>
               </div>
             </div>
             <br>
-            <a href="index.html"class="btn btn-lg btn-default">Join</a>
+            <button ng-click="create()">Join Event</button>
             <br>
-            <a href="index.html">Create a new event</a>
           </div>
         </div>
       </div>
