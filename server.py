@@ -50,38 +50,69 @@ class SendVote(Resource):
             return {'error': str(e)}
 
 #All database functions are abstracted here
-class Database()
-    cursor = None
-
-    def __init__(self):
-        cnx = mysql.connector.connect(user='root', passswd="ChorusIsNumber1", 
-            host="174.138.64.25", database='mydb')
-        Database.cursor = cnx.cursor()
+class Database:
+    #cursor = None
+    #cnx = None
+    #Database.insertNewEvent("2", "on", "22", "yes", "dummy")
+    #def __init__(self):
+     #   cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
+      #      host="127.0.0.1", database ='mydb')
+       # self.cursor = cnx.cursor(buffered = True)
 
     #Template for what insert statements look like, table name/columns aren't right
-    def insertNewEvent(eventId, eventName, hostID):
-        insert_stmt = ("INSERT INTO events (event_ID, event_name, host_ID) "
-            "VALUES (%s, %s, %s)"
-        )
-        data = (eventId, eventName, hostID)
-        Database.cursor.execute("SELECT * FROM event")
-        cursor.execute(insert_stmt, data)
+    def insertNewEvent(self, eventId, eventStatus, hostID, explicitAllowed, eventName):
+        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
+            host="127.0.0.1", database ='mydb')
+        cursor = cnx.cursor()
+        query = ("INSERT INTO event (eventId, eventStatus, hostID, explicitAllowed, eventName) "
+            "VALUES(%s, %s, %s, %s, %s)")
+        data = (eventId, eventStatus, hostID, explicitAllowed, eventName)
+        cursor.execute(query, data)
+        cursor.close()
+        cnx.close()
+        #self.cursor.commit
 
-    def searchEvent():
+    def insertNewHost(self, hostID, playlistID, spotifyToken, spotifyUsername):
+        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
+            host="127.0.0.1", database ='mydb')
+        cursor = cnx.cursor()
+        #query = ("INSERT INTO host (hostID, playlistID, spotifyToken, spotifyUsername) VALUES (2, bcc, abc, abb);")
+        query = ("INSERT INTO host (hostID, playlistID, spotifyToken, spotifyUsername) "
+           "VALUES(%s, %s, %s, %s)")
+        data = ("2", "bcc", "abc", "abb")
+        cursor.execute(query, data)
+        for (hostID, playlistID, spotifyToken, spotifyUsername) in cursor:
+            print("{}, {}, {}, {}".format(
+            hostID, playlistID, spotifyToken, spotifyUsername))
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+    
 
-cursor.execute("SELECT * FROM event")
-
-for (eventID, eventStatus, hostID, explicit) in cursor:
-  print("{}, {}, {}, {}".format(
-    eventID, eventStatus, hostID, explicit))
-
-cursor.close()
-cnx.close()
+    def printing(self):
+        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
+            host="127.0.0.1", database ='mydb')
+        cursor = cnx.cursor()
+        for (hostID, playlistID, spotifyToken, spotifyUsername) in cursor:
+            print("{}, {}, {}, {}".format(
+            hostID, playlistID, spotifyToken, spotifyUsername))
+        cursor.close()
+        cnx.close()
+    #for (eventID, eventStatus, hostID, explicit) in self.cursor:
+    #   print("{}, {}, {}, {}".format(
+    #  eventID, eventStatus, hostID, explicit))
 
 #define API endpoints
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(SendVote, '/SendVote')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    
+    db = Database()
+    db.insertNewHost("2", "11", "22", "dummy")
+    #db.printing()
+    #db.insertNewEvent("3", "on", "2", "0", "my")
 
+    
+
+app.run(debug=True)
