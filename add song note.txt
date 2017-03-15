@@ -1,0 +1,5 @@
+n UI check if that songhas already been in queue
+get track info when tey vote
+return the track id as a variable
+give to server
+go from there
