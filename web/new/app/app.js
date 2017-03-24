@@ -6,6 +6,7 @@ angular.module('myApp', [
   'myApp.played',
   'myApp.next',
   'myApp.suggest',
+  'myApp.settings',
   'myApp.version'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
