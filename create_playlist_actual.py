@@ -6,8 +6,8 @@ import spotipy.util as util
 #refresh_access_token(
 #Creates a playlist for a user
 #need username id from database
-username = '1210281728'
-#username =  '1235536440'
+#username = 
+
 playlist_name = 'Chorus'
 scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private'
 
