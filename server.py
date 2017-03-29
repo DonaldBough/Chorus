@@ -118,8 +118,10 @@ class joinEvent(Resource):
 
 db = Database()
 #def insertEvent(self, eventID, eventStatus, hostID, explicit):
-newData = db.getArtistOfSong(1)
-print newData
+# newData = db.getArtistOfSong(1)
+print db.getSongID("Riptide")
+
+# print newData
 
 # print "Token was : %s" % db.getHostSpotifyToken(100)
 #print("token was" + db.getHostSpotifyToken(100))
