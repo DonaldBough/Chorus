@@ -1,155 +1,22 @@
-#forDB
 import datetime
-import mysql.connector
 import pprint
 import sys
 import os
 import subprocess
-import spotipy
-import spotipy.util as util
 
 from flask import Flask
 from flask_restful import Resource, Api
 from flask_restful import reqparse
+#import our classes
+from database import Database
+from spotify import Spotify
 
 app = Flask(__name__)
 api = Api(app)
 
-
-class Spotify:
-    def getUserName(self):
-        return '1210281728'
-
-    def getToken(self):
-        username =  '1210281728'
-        playlist_name = 'Chorus'
-        scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify'
-        #put server url for redirect url
-        token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-        return token
-
-    def createPlaylist():
-        #refresh_access_token(
-        # Creates a playlist for a user
-        username = '1210281728'
-        #username =  '1235536440'
-        playlist_name = 'Chorus3'
-        scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify'
-
-        #put server url for redirect url
-        token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-
-        if token:
-            sp = spotipy.Spotify(auth=token)
-            sp.trace = False
-            playlists = sp.user_playlist_create(username, playlist_name)
-            pprint.pprint(playlists)
-            return token
-        else:
-            print("Can't get token for", username)
-            return 0;
-
-        '''
-        username =  '1210281728'
-        playlist_name = 'Chorus'
-        scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify'
-        #put server url for redirect url
-        token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-        if token:
-            sp = spotipy.Spotify(auth=token)
-            sp.trace = False
-            sp.user_playlist_create(username, playlist_name)
-            # find album by name
-            playlists = sp.user_playlists(username, limit=50, offset=0)
-    '''
-    def addSongs(token):
-        username = '1210281728'
-        #username = '1235536440'
-
-        track_ids = ["2gFvRmQiWg9fN9i74Q0aiw", "4Km5HrUvYTaSUfiSGPJeQR", "7BKLCZ1jbUBVqRi2FVlTVw", "3bi8yEuK44vLcbjHkPH0u1", "5SDVX9gpSXoE0M6KZt4EBF", "0O6jl8Zamz6TGF0nUwMQsF", "4RnfMhMUMqHlrn4V6A3KfS", "6F5c58TMEs1byxUstkzVeM", "3cfOd4CMv2snFaKAnMdnvK"]
-        #scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private'
-        #token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-
-        # find album by name
-        playlists = sp.user_playlists(username, limit=50, offset=0)
-
-        # get the first album uri
-        for playlist in playlists['items']:
-            if(playlist['name'] == "Chorus3"):
-                playlist_id = playlist['id']
-
-        #playlist_id = '59E9xmQUzDY7H9yKNlj48F'
-        print track_ids
-        sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-        print("playlist id: " + playlist_id)
-        return playlist_id
-        '''
-        username = '1210281728'
-        track_ids = ["2gFvRmQiWg9fN9i74Q0aiw", "4Km5HrUvYTaSUfiSGPJeQR", "7BKLCZ1jbUBVqRi2FVlTVw", "3bi8yEuK44vLcbjHkPH0u1", "5SDVX9gpSXoE0M6KZt4EBF", "0O6jl8Zamz6TGF0nUwMQsF", "4RnfMhMUMqHlrn4V6A3KfS", "6F5c58TMEs1byxUstkzVeM", "3cfOd4CMv2snFaKAnMdnvK"]
-        scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify'
-        token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-
-        # find album by name
-        playlists = sp.user_playlists(username, limit=50, offset=0)
-
-        # get the first album uri
-        for playlist in playlists['items']:
-            if(playlist['name'] == "Chorus"):
-                playlist_id = playlist['id']
-
-        sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-        '''
-'''
-    def create_playlist():
-        #refresh_access_token(
-        # Creates a playlist for a user
-        username = '1210281728'
-        #username =  '1235536440'
-        playlist_name = 'Chorus3'
-        scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify'
-
-        #put server url for redirect url
-        token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-
-        if token:
-            sp = spotipy.Spotify(auth=token)
-            sp.trace = False
-            playlists = sp.user_playlist_create(username, playlist_name)
-            pprint.pprint(playlists)
-            return token
-        else:
-            print("Can't get token for", username)
-            return 0;
-
-    def add_songs(token):
-        username = '1210281728'
-        #username = '1235536440'
-
-        track_ids = ["2gFvRmQiWg9fN9i74Q0aiw", "4Km5HrUvYTaSUfiSGPJeQR", "7BKLCZ1jbUBVqRi2FVlTVw", "3bi8yEuK44vLcbjHkPH0u1", "5SDVX9gpSXoE0M6KZt4EBF", "0O6jl8Zamz6TGF0nUwMQsF", "4RnfMhMUMqHlrn4V6A3KfS", "6F5c58TMEs1byxUstkzVeM", "3cfOd4CMv2snFaKAnMdnvK"]
-        #scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private'
-        #token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-
-        # find album by name
-        playlists = sp.user_playlists(username, limit=50, offset=0)
-
-        # get the first album uri
-        for playlist in playlists['items']:
-            if(playlist['name'] == "Chorus3"):
-                playlist_id = playlist['id']
-
-        #playlist_id = '59E9xmQUzDY7H9yKNlj48F'
-        print track_ids
-        sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-        print("playlist id: " + playlist_id)
-        return playlist_id
-'''
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#CreateUser, SendVote, CreateEvent, and joinEvent need to be functions, not Classes
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
 class CreateUser(Resource):
     def post(self):
         try:
@@ -248,87 +115,19 @@ class joinEvent(Resource):
         except Exception as e:
             return {'error': str(e)}
             
-#All database functions are abstracted here
-class Database:
-    #cursor = None
-    #cnx = None
-    #Database.insertNewEvent("2", "on", "22", "yes", "dummy")
-    #def __init__(self):
-     #   cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
-      #      host="127.0.0.1", database ='mydb')
-       # self.cursor = cnx.cursor(buffered = True)
 
-    #Template for what insert statements look like, table name/columns aren't right
-    def insertNewEvent(self, eventStatus, hostID, explicitAllowed, eventName):
-        print("herer")
-        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
-            host="127.0.0.1", database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO event (eventStatus, hostID, explicitAllowed, eventName) "
-            "VALUES(%s, %s, %s, %s)")
-        data = (eventStatus, hostID, explicitAllowed, eventName)
-        cursor.execute(query, data)
-        cursor.close()
-        cnx.commit()
-        cnx.close()
+db = Database()
+#def insertEvent(self, eventID, eventStatus, hostID, explicit):
+newData = db.getArtistOfSong(1)
+print newData
 
-    def insertNewHost(self, hostID, playlistID, spotifyToken, spotifyUsername):
-        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
-            host="127.0.0.1", database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO host (hostID, playlistID, spotifyToken, spotifyUsername) "
-           "VALUES(%s, %s, %s, %s)")
-        data = (hostID, playlistID, spotifyToken, spotifyUsername)
-        cursor.execute(query, data)
-        #for (hostID, playlistID, spotifyToken, spotifyUsername) in cursor:
-         #   print("{}, {}, {}, {}".format(
-          #  hostID, playlistID, spotifyToken, spotifyUsername))
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-
-    def getEventID(self, eventName):
-        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
-            host="127.0.0.1", database ='mydb')
-        cursor = cnx.cursor(buffered=True)
-        query = ("SELECT eventID FROM EVENT WHERE eventName = '" +eventName + "'")
-        print(query)
-        cursor.execute(query)
-        result = cursor.fetchone()[0];
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-        return result
-
-    def JoinEvent(self, currentEvent, inEvent, host):
-        print("inside")
-        cnx = mysql.connector.connect(user='root', password ="mynewpassword", 
-            host="127.0.0.1", database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO user (currentEvent, inEvent, host) "
-           "VALUES(%s, %s, %s)")
-        print("query")
-        data = (currentEvent, inEvent, host)
-        cursor.execute(query, data)
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-
-    #for (eventID, eventStatus, hostID, explicit) in self.cursor:
-    #   print("{}, {}, {}, {}".format(
-    #  eventID, eventStatus, hostID, explicit))
+# print "Token was : %s" % db.getHostSpotifyToken(100)
+#print("token was" + db.getHostSpotifyToken(100))
 
 #define API endpoints
-api.add_resource(CreateUser, '/CreateUser')
-api.add_resource(SendVote, '/SendVote')
-api.add_resource(CreateEvent, '/CreateEvent')
-api.add_resource(joinEvent, '/JoinEvent')
-if __name__ == '__main__':
-    
-    #db = Database()
-    #db.printing()
-    #db.insertNewEvent("on", "2", "0", "my")
-    #result = db.getEventID("my")
-    #print(result)
-
-    app.run(debug=True)
+# api.add_resource(CreateUser, '/CreateUser')
+# api.add_resource(SendVote, '/SendVote')
+# api.add_resource(CreateEvent, '/CreateEvent')
+# api.add_resource(joinEvent, '/JoinEvent')
+# if __name__ == '__main__':
+# app.run(debug=True)
