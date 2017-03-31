@@ -118,3 +118,16 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
+
+    def getEventID(self, eventName):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT eventID FROM EVENT WHERE eventName = '" +eventName + "'")
+        print(query)
+        cursor.execute(query)
+        result = cursor.fetchone()[0];
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+        return result

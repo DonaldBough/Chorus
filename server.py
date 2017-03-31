@@ -80,7 +80,7 @@ class CreateEvent(Resource):
             #print("GOT THE ID:" + playlistID)
             #token = sp.getToken()
             #userName = sp.getUserName()
-            db.insertNewEvent("running", "2", explicitBol, _eventPassword)
+            db.insertEvent("7", "running", explicitBol, _eventPassword)
 
 
             eventID = db.getEventID(_eventPassword)
@@ -117,9 +117,10 @@ class joinEvent(Resource):
             
 
 db = Database()
+
 #def insertEvent(self, eventID, eventStatus, hostID, explicit):
 # newData = db.getArtistOfSong(1)
-print db.getSongID("Riptide")
+#print db.getSongID("Riptide")
 
 # print newData
 
@@ -127,9 +128,9 @@ print db.getSongID("Riptide")
 #print("token was" + db.getHostSpotifyToken(100))
 
 #define API endpoints
-# api.add_resource(CreateUser, '/CreateUser')
-# api.add_resource(SendVote, '/SendVote')
-# api.add_resource(CreateEvent, '/CreateEvent')
-# api.add_resource(joinEvent, '/JoinEvent')
-# if __name__ == '__main__':
-# app.run(debug=True)
+api.add_resource(CreateUser, '/CreateUser')
+api.add_resource(SendVote, '/SendVote')
+api.add_resource(CreateEvent, '/CreateEvent')
+api.add_resource(joinEvent, '/JoinEvent')
+if __name__ == '__main__':
+    app.run(debug=True)
