@@ -13,6 +13,7 @@ import spotipy.util as util
 #scope = 'playlist-read-private playlist-read-collaborative playlist-modify-private'
 #token = util.prompt_for_user_token(username,scope,client_id='3c6df9a90b934200856b352829f09fd0',client_secret='694b8ac2f8cb478796b304fd6f1fd082',redirect_uri='http://localhost/')
 
+
 #token needs to be obtaines from the database
 sp = spotipy.Spotify(auth=token)
 sp.trace = False

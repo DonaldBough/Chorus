@@ -1,0 +1,1 @@
+have to use get call get the genre, artis, etc from the song currently playing, then uset that as seeds for recommendations
