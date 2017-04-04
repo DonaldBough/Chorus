@@ -123,7 +123,7 @@ class Database:
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT eventID FROM EVENT WHERE eventName = '" +eventName + "'")
+        query = ("SELECT eventID FROM EVENT WHERE eventName = '" + eventName + "'")
         print(query)
         cursor.execute(query)
         result = cursor.fetchone()[0];
@@ -131,3 +131,15 @@ class Database:
         cnx.commit()
         cnx.close()
         return result
+
+    def registerVote(self, userID, eventID, songID, vote, veto):
+        print("Inserting a new event")
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + %s, vetoCount = vetoCount + %s WHERE songID = %s")
+        data = (vote, veto, songID)
+        cursor.execute(query, data)
+        cursor.close()
+        cnx.commit()
+        cnx.close()

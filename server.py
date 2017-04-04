@@ -38,7 +38,7 @@ class SendVote(Resource):
             parser = reqparse.RequestParser()
             parser.add_argument('userid', type=str, help='ID of User that is sending vote')
             parser.add_argument('eventid', type=str, help='ID of event user is in')
-            parser.add_argument('songid', type=str, help='ID of song that is being voted on')
+            parser.add_argument('songid', type=int, help='ID of song that is being voted on')
             parser.add_argument('vote', type=str, help='Email address to create user')
             parser.add_argument('veto', type=str, help='Email address to create user')
             args = parser.parse_args()
@@ -48,8 +48,10 @@ class SendVote(Resource):
             _songID = args['songid']
             _vote = args['vote']
             _veto = args['veto']
-
-            return {'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
+            
+            db = Database();
+            db.registerVote(_userID, _eventID, _songID, _vote, _veto);
+            return {'status': 'Success'} #'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
 
         except Exception as e:
             return {'error': str(e)}
@@ -86,6 +88,22 @@ class CreateEvent(Resource):
             eventID = db.getEventID(_eventPassword)
 
             return {'EventID': eventID}
+
+        except Exception as e:
+            return {'error': str(e)}
+
+class getQueue(Resource):
+    def post(self):
+        try:
+            # Parse the arguments
+            parser = reqparse.RequestParser()
+            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
+            parser.add_argument('eventid', type=str, help='ID of event user is in')
+            args = parser.parse_args()
+
+            db = Database()
+            
+            
 
         except Exception as e:
             return {'error': str(e)}
