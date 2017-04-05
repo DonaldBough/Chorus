@@ -170,3 +170,24 @@ class Database:
 
 
 
+    def getPlayedSongs(self, eventID, userID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT songsid, eventID, playOrder, songname, artist FROM PLAYEDSONGS WHERE eventid = '%s' order by playOrder") % (eventid) 
+        cursor.execute(query)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+
+    def sendVote(self, eventID, userID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
+        cursor.execute(query)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
