@@ -107,17 +107,28 @@ class Database:
         if songID is not None:
             return songID[0]
 
-    def joinEvent(self, currentEvent, inEvent, host):
+    def getQueue(self, eventID, userID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO user (currentEvent, inEvent, host) "
-           "VALUES(%s, %s, %s)")
-        data = (currentEvent, inEvent, host)
-        cursor.execute(query, data)
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
+        cursor.execute(query)
+
+        json_response = {}
+        songs = []
+
+        for row in cursor:
+            songs.append({"songID" : row["songID"],
+                "songName" : row["songName"],
+                "artist" : row["artist"],
+                "voteCount" : row[voteCount],
+                "vetoBoolean" : row[vetoBoolean]})
+
+        json_response["songs"] = songs
         cursor.close()
         cnx.commit()
         cnx.close()
+        return json_response
 
     def getEventID(self, eventName):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -132,6 +143,18 @@ class Database:
         cnx.close()
         return result
 
+    def joinEvent(self, currentEvent, inEvent, host):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("INSERT INTO user (currentEvent, inEvent, host) "
+           "VALUES(%s, %s, %s)")
+        data = (currentEvent, inEvent, host)
+        cursor.execute(query, data)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
     def registerVote(self, userID, eventID, songID, vote, veto):
         print("Inserting a new event")
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
@@ -144,13 +167,6 @@ class Database:
         cnx.commit()
         cnx.close()
 
-    def getQueue(self, eventID, userID):
-        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
-            host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor(buffered=True)
-        query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
-        cursor.execute(query)
-        cursor.close()
-        cnx.commit()
-        cnx.close()
+
+
 

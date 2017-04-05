@@ -3,6 +3,7 @@ import pprint
 import sys
 import os
 import subprocess
+import json
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -13,10 +14,7 @@ from spotify import Spotify
 
 app = Flask(__name__)
 api = Api(app)
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#CreateUser, SendVote, CreateEvent, and joinEvent need to be functions, not Classes
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
+    
 class CreateUser(Resource):
     def post(self):
         try:
@@ -102,8 +100,7 @@ class getQueue(Resource):
             args = parser.parse_args()
 
             db = Database()
-            
-            
+            return db.getQueue()
 
         except Exception as e:
             return {'error': str(e)}
@@ -133,8 +130,6 @@ class joinEvent(Resource):
         except Exception as e:
             return {'error': str(e)}
             
-
-db = Database()
 
 #def insertEvent(self, eventID, eventStatus, hostID, explicit):
 # newData = db.getArtistOfSong(1)
