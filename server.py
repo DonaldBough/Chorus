@@ -20,6 +20,20 @@ api = Api(app)
 
 
 class Spotify:
+    
+    def hostUserId():
+        #use GET command to get users info
+        GET https://api.spotify.com/v1/me
+        #Find index make the hostID string
+        indexID = find("\"id\":", 0, len(put response string))
+        indexID = indexID + 6
+        s = ""
+        while responsestring[indexID] != '"'
+            s += responsestring[indexID]
+            indexID++
+        #s will equal hostUSERID
+        return s
+    
     currentSong = 'Start'
     recentSong = 'recent'
     
