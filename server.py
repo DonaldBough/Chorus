@@ -59,32 +59,19 @@ class CreateEvent(Resource):
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            parser.add_argument('password', type=str, help='Password to create user')
-            parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
+            parser.add_argument('eventStatus', type=str)
+            parser.add_argument('hostID', type=int)
+            parser.add_argument('explicitAllowed')
+            parser.add_argument('eventName', type=str)
+            parser.add_argument('accessToken', type=str)
+            parser.add_argument('refreshToken', type=str)
             args = parser.parse_args()
-
-            _eventPassword = args['password']
-            _eventExplicit = args['explicit']
-
-            explicitBol = None
-            if _eventExplicit: 
-                explicitBol = 0
-            else:
-                explicitBol = 1
-
+            
             db = Database()
-            #sp = Spotify()
+            db.insertEvent(args['eventStatus'], args['hostID'], args['explicitAllowed'], 
+                args['eventName'], args['accessToken'], args['refreshToken'])
 
-            #token = sp.createPlaylist()
-            #playlistID = sp.addSongs(token)
-            #print("GOT THE ID:" + playlistID)
-            #token = sp.getToken()
-            #userName = sp.getUserName()
-            db.insertEvent("7", "running", explicitBol, _eventPassword)
-
-
-            eventID = db.getEventID(_eventPassword)
-
+            eventID = db.getEventID(args['eventName'], args['hostID'])
             return {'EventID': eventID}
 
         except Exception as e:
@@ -141,6 +128,7 @@ class joinEvent(Resource):
 #print("token was" + db.getHostSpotifyToken(100))
 
 #define API endpoints
+
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(SendVote, '/SendVote')
 api.add_resource(CreateEvent, '/CreateEvent')
