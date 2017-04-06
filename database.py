@@ -107,28 +107,17 @@ class Database:
         if songID is not None:
             return songID[0]
 
-    def getQueue(self, eventID, userID):
+    def joinEvent(self, currentEvent, inEvent, host):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor(buffered=True)
-        query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
-        cursor.execute(query)
-
-        json_response = {}
-        songs = []
-
-        for row in cursor:
-            songs.append({"songID" : row["songID"],
-                "songName" : row["songName"],
-                "artist" : row["artist"],
-                "voteCount" : row[voteCount],
-                "vetoBoolean" : row[vetoBoolean]})
-
-        json_response["songs"] = songs
+        cursor = cnx.cursor()
+        query = ("INSERT INTO user (currentEvent, inEvent, host) "
+           "VALUES(%s, %s, %s)")
+        data = (currentEvent, inEvent, host)
+        cursor.execute(query, data)
         cursor.close()
         cnx.commit()
         cnx.close()
-        return json_response
 
     def getEventID(self, eventName):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -143,32 +132,39 @@ class Database:
         cnx.close()
         return result
 
-    def joinEvent(self, currentEvent, inEvent, host):
-        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
-            host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO user (currentEvent, inEvent, host) "
-           "VALUES(%s, %s, %s)")
-        data = (currentEvent, inEvent, host)
-        cursor.execute(query, data)
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-
-    def registerVote(self, userID, eventID, songID, vote, veto):
+    def registerVote(self, userID, eventID, songID, vote):
         print("Inserting a new event")
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + %s, vetoCount = vetoCount + %s WHERE songID = %s")
-        data = (vote, veto, songID)
+        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = %s")
+        data = (songID)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
         cnx.close()
 
+    def registerVeto(self, userID, eventID, songID, veto):
+        print("Inserting a new event")
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("UPDATE NEXTSONGS SET vetoCount = vetoCount + 1 WHERE songID = %s")
+        data = (songID)
+        cursor.execute(query, data)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
 
-
+    def getQueue(self, eventID, userID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
+        cursor.execute(query)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
 
     def getPlayedSongs(self, eventID, userID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -180,8 +176,7 @@ class Database:
         cnx.commit()
         cnx.close()
 
-
-    def sendVote(self, eventID, userID):
+    def isVoted(self, eventID, userID, songid):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
