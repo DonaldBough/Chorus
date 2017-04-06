@@ -18,15 +18,30 @@ app = Flask(__name__)
 api = Api(app)
 
 
+
 class Spotify:
+    currentSong = 'Start'
+    recentSong = 'recent'
+    
     def authenticate():
         #use GET command to get users played songs
-        #compare the last played track ID to trackID in database
+        GET https://api.spotify.com/v1/me/player/recently-played #change up some things still
+        #find the index and make the string
+    
+        indexID = find("\"id\":", 0, len(put response string))
+        indexID = indexID + 6
+        recentSong = response string[indexID: indexID+22]
+        #compare the last played track ID to trackID in server
+        if (currentSong != recentSong)
         #if it is the different, move song ID from next to played in database
-        #change the song in Event database to the track ID that we GOT
+            call query to move the song
+        #change the song in server to what was played
+            currentSong = recentSong;
         #then call addSong, which adds the top voted song into the playlist
+            addSongs(query token from database)
         #if it is the same, then chill
-        print "hi"
+        
+        print "the same"
     def authtarget():
         while True:
             authenticate()
