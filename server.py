@@ -26,7 +26,7 @@ class Spotify:
         #change the song in Event database to the track ID that we GOT
         #then call addSong, which adds the top voted song into the playlist
         #if it is the same, then chill
-        print("hi")
+        print "hi"
     def authtarget():
         while True:
             authenticate()
