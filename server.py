@@ -9,12 +9,18 @@ import time
 from flask import Flask
 from flask_restful import Resource, Api
 from flask_restful import reqparse
+from flask_cors import CORS, cross_origin
 #import our classes
 from database import Database
 from spotify import Spotify
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
+
+@app.route("/")
+def helloWorld():
+  return "Hello, cross-origin-world!"
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #CreateUser, SendVote, CreateEvent, and joinEvent need to be functions, not Classes
@@ -63,10 +69,22 @@ class CreateEvent(Resource):
             parser = reqparse.RequestParser()
             parser.add_argument('password', type=str, help='Password to create user')
             parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
+            parser.add_argument('authCode', type=bool, help='Spotify authorization code')
             args = parser.parse_args()
 
             _eventPassword = args['password']
             _eventExplicit = args['explicit']
+            _authCode = args['authCode']
+
+            tokens = auth2Token(_authCode)
+
+            token = tokens[0]
+            refresh = tokens[1]
+
+            #print('token')
+            #print(token)
+            #print('refresh')
+            #print(refresh)
 
             explicitBol = None
             if _eventExplicit: 
@@ -82,7 +100,8 @@ class CreateEvent(Resource):
             #print("GOT THE ID:" + playlistID)
             #token = sp.getToken()
             #userName = sp.getUserName()
-            db.insertEvent("7", "running", explicitBol, _eventPassword)
+            print('INSERT EVENT')
+            db.insertEvent(1, 123, _eventExplicit, _eventPassword)
 
 
             eventID = db.getEventID(_eventPassword)
@@ -118,6 +137,27 @@ class joinEvent(Resource):
             return {'error': str(e)}
             
 
+def auth2Token(code):
+    url = "https://accounts.spotify.com/api/token"
+    grant_type = "authorization_code"
+    #get code from UI
+    redirect_uri = "http://localhost:8000/create.html"
+    #redirect_uri = "http:%2F%2Flocalhost:8000%2Fcreate.html"
+    client_id = "0abc049d139f4ee8b465fd9416aa358d"
+    client_secret = "dd477b353e744461ae1b3062f256c952"
+    payload = {'grant_type': grant_type, 'code': code, 'redirect_uri': redirect_uri, 'client_id':client_id, 'client_secret':client_secret}
+
+    req = requests.post(url, data = payload)
+    res = json.loads (req.content)
+    #print(res['access_token'])
+    #print(res['refresh_token'])
+    #print(res)
+    return [res['access_token'], res['refresh_token']]
+
+
+
+
+'''
 def timer():
     while(True):
         #scheduler = sched.scheduler(time.time, time.sleep)
@@ -131,7 +171,7 @@ def timer():
 def checkSongs(val):
     print(val)
 
-timer()
+timer()'''
 
 db = Database()
 

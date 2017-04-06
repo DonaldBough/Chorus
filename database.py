@@ -6,14 +6,14 @@ import mysql.connector
 
 class Database:
     #Template for what insert statements look like, table name/columns aren't right
-    def insertEvent(self, eventID, eventStatus, hostID, explicit):
+    def insertEvent(self, eventStatus, hostID, explicit, eventName):
         print("Inserting a new event")
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO EVENT (eventStatus, hostID, explicit, eventID) "
+        query = ("INSERT INTO EVENT (eventStatus, hostID, explicit, eventName) "
             "VALUES(%s, %s, %s, %s)")
-        data = (eventStatus, hostID, explicit, eventID)
+        data = (eventStatus, hostID, explicit, eventName)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
