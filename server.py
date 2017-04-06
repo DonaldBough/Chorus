@@ -7,6 +7,8 @@ import os
 import subprocess
 import spotipy
 import spotipy.util as util
+import time
+import threading
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -17,6 +19,23 @@ api = Api(app)
 
 
 class Spotify:
+    def authenticate():
+        #use GET command to get users played songs
+        #compare the last played track ID to trackID in database
+        #if it is the different, move song ID from next to played in database
+        #change the song in Event database to the track ID that we GOT
+        #then call addSong, which adds the top voted song into the playlist
+        #if it is the same, then chill
+        print("hi")
+    def authtarget():
+        while True:
+            authenticate()
+            time.sleep(20)
+    t = threading.Thread(target = authtarget)
+    t.daemon = True
+    t.start()
+    #do we need to put raw_input for the rest of the stuff?
+    
     def getUserName(self):
         return '1210281728'
 
@@ -318,6 +337,8 @@ class Database:
     #   print("{}, {}, {}, {}".format(
     #  eventID, eventStatus, hostID, explicit))
 
+    
+    
 #define API endpoints
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(SendVote, '/SendVote')
