@@ -29,7 +29,7 @@ class CreateUser(Resource):
     def post(self):
         try:
             # Parse the arguments
-            parser = reqparse.RequestParser()
+            parser = reqparse.RequestParser()   
             parser.add_argument('password', type=str, help='Password to create user')
             #parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
             args = parser.parse_args()
@@ -67,45 +67,19 @@ class CreateEvent(Resource):
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            parser.add_argument('password', type=str, help='Password to create user')
-            parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
-            parser.add_argument('authCode', type=bool, help='Spotify authorization code')
+            #parser.add_argument('eventStatus', type=str)
+            #parser.add_argument('hostID', type=int)
+            parser.add_argument('eventName', type=str)
+            parser.add_argument('explicitAllowed')
+            parser.add_argument('accessToken', type=str)
+            parser.add_argument('refreshToken', type=str)
             args = parser.parse_args()
-
-            _eventPassword = args['password']
-            _eventExplicit = args['explicit']
-            _authCode = args['authCode']
-
-            tokens = auth2Token(_authCode)
-
-            token = tokens[0]
-            refresh = tokens[1]
-
-            #print('token')
-            #print(token)
-            #print('refresh')
-            #print(refresh)
-
-            explicitBol = None
-            if _eventExplicit: 
-                explicitBol = 0
-            else:
-                explicitBol = 1
-
+            
             db = Database()
-            #sp = Spotify()
+            db.insertEvent('LIVE', args['hostID'], args['explicitAllowed'], 
+                args['eventName'], args['accessToken'], args['refreshToken'])
 
-            #token = sp.createPlaylist()
-            #playlistID = sp.addSongs(token)
-            #print("GOT THE ID:" + playlistID)
-            #token = sp.getToken()
-            #userName = sp.getUserName()
-            print('INSERT EVENT')
-            db.insertEvent(1, 123, _eventExplicit, _eventPassword)
-
-
-            eventID = db.getEventID(_eventPassword)
-
+            eventID = db.getEventID(args['eventName'], args['hostID'])
             return {'EventID': eventID}
 
         except Exception as e:

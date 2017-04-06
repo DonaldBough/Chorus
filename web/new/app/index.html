@@ -24,7 +24,7 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-   <!-- Angular 
+   <!--Angular 
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
 </head>
@@ -33,7 +33,7 @@
     <div class="navbar-header">
         <a class="navbar-brand" href="#" contenteditable="true" style="padding:0px"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
         <!--a href="#!/settings" data-toggle="tab">Settings</a-->
-        <a href="#!/settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a>
+        <a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a>
     </div>
   </nav>
 
@@ -44,9 +44,10 @@
       <!-- tabs bottom -->
       <div class="tabbable tabs-below navbar-fixed-bottom">
         <ul class="nav nav-tabs">
-          <li><a href="#!/played" data-toggle="tab">Played Songs</a></li>
-          <li><a href="#!/next" data-toggle="tab">Up Next</a></li>
-          <li><a href="#!/suggest" data-toggle="tab">Suggested</a></li>
+          <li><a href="#!/played" data-target="#played" data-toggle="tab">Played Songs</a></li>
+          <li><a href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
+          <li><a href="#!/suggest" data-target="#suggest" data-toggle="tab">Suggested</a></li>
+          <li><a href="#!/search" data-target="#search" data-toggle="tab">Search</a></li>
         </ul>
       </div>
       <!-- /tabs -->
@@ -61,6 +62,7 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
   <script src="app.js"></script>
+  <script src="create.js"></script>
   <script src="played/played.js"></script>
   <script src="next/next.js"></script>
   <script src="suggest/suggest.js"></script>
