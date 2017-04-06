@@ -3,7 +3,7 @@ angular.module('myApp.create', []).
 controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 
 	var url = window.location.href;
-	window.alert(url);
+	//window.alert(url);
 
 	var codeStart = url.search("code") + 5
 	var codeEnd = url.search("state") - 1
@@ -12,7 +12,7 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 	var error = url.search("error");
 
 	if(error >= 0){
-		window.alert("an error occured")
+		//window.alert("an error occured")
 	}
 	else{
 		code = url.substring(codeStart, codeEnd);
@@ -30,11 +30,11 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 		.then(function successCallback(response) {
     		// this callback will be called asynchronously
     		// when the response is available
-    		window.alert(data)
+    		//window.alert(data)
   		}, function errorCallback(response) {
     		// called asynchronously if an error occurs
     		// or server returns response with an error status.
-    		window.alert("error" + status)
+    		//window.alert("error" + status)
   		});
 
 	$scope.createEvent = function(){

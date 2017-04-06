@@ -3,6 +3,8 @@ import pprint
 import sys
 import os
 import subprocess
+import sched
+import time
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -115,6 +117,21 @@ class joinEvent(Resource):
         except Exception as e:
             return {'error': str(e)}
             
+
+def timer():
+    while(True):
+        #scheduler = sched.scheduler(time.time, time.sleep)
+        #scheduler.enter(15, 1, checkSongs, ('Checking  for new songs',))
+        #scheduler.run()
+        checkSongs('123')
+        time.sleep(10)
+    
+
+
+def checkSongs(val):
+    print(val)
+
+timer()
 
 db = Database()
 
