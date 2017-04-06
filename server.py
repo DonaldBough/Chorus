@@ -60,9 +60,15 @@ class SendVote(Resource):
             args = parser.parse_args()
 
             db = Database();
-            db.registerVote(args['eventID'], args['songID']);
-            return {'status': 'Success'}
+            votes = db.isVoted(_eventID, _userID, _songID)
 
+            if votes is not None:
+                if (vote == 1 and veto == 0):
+                    db.registerVote(_userID, _eventID, _songID, _vote);
+                elif (vote == 0 and veto == 1):
+                    db.registerVote(_userID, _eventID, _songID, _veto);
+                return {'status': 'Success'} #'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
+ 
         except Exception as e:
             return {'error': str(e)}
 
@@ -98,7 +104,26 @@ class GetQueue(Resource):
             args = parser.parse_args()
 
             db = Database()
-            return db.getQueue()
+            songs = db.getQueue()
+            
+            return {'songs': songs}
+
+        except Exception as e:
+            return {'error': str(e)}
+
+class GetPlayedSongs(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                               
+            parser = reqparse.RequestParser()
+            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
+            parser.add_argument('eventid', type=str, help='ID of event user is in')
+            args = parser.parse_args()
+
+            db = Database()
+            songs = db.getPlayedSongs(_eventID, _userID)
+
+            return {'songs': songs}
 
         except Exception as e:
             return {'error': str(e)}

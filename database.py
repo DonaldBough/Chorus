@@ -162,13 +162,12 @@ class Database:
     #        OTHER STATEMENTS        #
     ##################################
 
-    def registerVote(self, eventID, songID):
+    def registerVote(self, eventID, eventID, songID, vote):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE eventID = %s"
-            + " and songID = %s")
-        data = (eventID, songID)
+        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = %s")
+        data = (songID)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
