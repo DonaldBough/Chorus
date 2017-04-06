@@ -5,6 +5,7 @@ import os
 import subprocess
 import sched
 import time
+import json
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -22,14 +23,11 @@ api = Api(app)
 def helloWorld():
   return "Hello, cross-origin-world!"
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#CreateUser, SendVote, CreateEvent, and joinEvent need to be functions, not Classes
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      
 class CreateUser(Resource):
     def post(self):
         try:
             # Parse the arguments
-            parser = reqparse.RequestParser()   
+            parser = reqparse.RequestParser()
             parser.add_argument('password', type=str, help='Password to create user')
             #parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
             args = parser.parse_args()
@@ -56,8 +54,10 @@ class SendVote(Resource):
             _songID = args['songid']
             _vote = args['vote']
             _veto = args['veto']
-
-            return {'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
+            
+            db = Database();
+            db.registerVote(_userID, _eventID, _songID, _vote, _veto);
+            return {'status': 'Success'} #'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
 
         except Exception as e:
             return {'error': str(e)}
@@ -67,20 +67,35 @@ class CreateEvent(Resource):
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            #parser.add_argument('eventStatus', type=str)
-            #parser.add_argument('hostID', type=int)
-            parser.add_argument('eventName', type=str)
+            parser.add_argument('eventStatus', type=str)
+            parser.add_argument('hostID', type=int)
             parser.add_argument('explicitAllowed')
+            parser.add_argument('eventName', type=str)
             parser.add_argument('accessToken', type=str)
             parser.add_argument('refreshToken', type=str)
             args = parser.parse_args()
             
             db = Database()
-            db.insertEvent('LIVE', args['hostID'], args['explicitAllowed'], 
+            db.insertEvent(args['eventStatus'], args['hostID'], args['explicitAllowed'], 
                 args['eventName'], args['accessToken'], args['refreshToken'])
 
             eventID = db.getEventID(args['eventName'], args['hostID'])
             return {'EventID': eventID}
+
+        except Exception as e:
+            return {'error': str(e)}
+
+class getQueue(Resource):
+    def post(self):
+        try:
+            # Parse the arguments
+            parser = reqparse.RequestParser()
+            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
+            parser.add_argument('eventid', type=str, help='ID of event user is in')
+            args = parser.parse_args()
+
+            db = Database()
+            return db.getQueue()
 
         except Exception as e:
             return {'error': str(e)}
