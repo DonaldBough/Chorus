@@ -77,7 +77,7 @@ class CreateEvent(Resource):
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            parser.add_argument('hostID', type=int)
+            #parser.add_argument('hostID', type=int)
             parser.add_argument('explicitAllowed', type=str)
             parser.add_argument('eventName', type=str)
             parser.add_argument('accessToken', type=str)
@@ -85,7 +85,7 @@ class CreateEvent(Resource):
             args = parser.parse_args()
             
             db = Database()
-            db.insertEvent("LIVE", args['hostID'], args['explicitAllowed'], 
+            db.insertEvent("LIVE",  args['explicitAllowed'], 
                 args['eventName'], args['accessToken'], args['refreshToken'])
 
             eventID = db.getEventID(args['eventName'], args['hostID'])

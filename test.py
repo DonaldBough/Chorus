@@ -20,60 +20,30 @@ class Test():
     # Tests CreateEvent: Check that event is created successfully and that 2 different events cant be created with same names/passwords
     def testCreateEvent():
         print("Testing CreateEvent:")
-        print("Test1")
+        # print("Test1")
         db = Database()
-        db.insertEvent("LIVE", 1, 1,'Ivan', 1, 2)
-        eventID = db.getEventID('Ivan', 1)
+        db.insertEvent("LIVE", 1,'Ivan', 1, 2)
+        eventID = db.getEventid('Ivan')
 
-        if (eventID == 1): 
-            print("Test1: SUCCESS")
-        else:
-            print("Test1: FAIL")
-
-        print("Test2")
-        db.insertEvent("LIVE", 2, 1,'Ivan', 3, 4)
-        eventID = db.getEventID('Ivan', 2)
+        print("Test1")
+        db.insertEvent("LIVE", 1,'Ivan', 3, 4)
+        eventID = db.getEventid('Ivan')
 
         if (eventID == 2): 
+            print("Test1: FAIL")
+        else:
+            print("Test1: SUCCESS")
+
+        print("Test2")
+        db.insertEvent("LIVE", 1,'Donaldo', 5, 6)
+        eventID = db.getEventid('Donaldo')
+
+        if (eventID == 3): 
             print("Test2: FAIL")
         else:
             print("Test2: SUCCESS")
 
-        print("Test3")
-        db.insertEvent("LIVE", 3, 1,'Timmay', 5, 6)
-        eventID = db.getEventID('Timmay', 3)
-
-        if (eventID == 2): 
-            print("Test3: SUCCESS")
-        else:
-            print("Test3: FAIL")
-
-        print("Test4")
-        db.insertEvent("LIVE", 3, 1,'Donaldo', 5, 6)
-        eventID = db.getEventID('Donaldo', 3)
-
-        if (eventID == 3): 
-            print("Test3: FAIL")
-        else:
-            print("Test3: SUCCESS")
-
-        print("Test5")
-        db.insertEvent("LIVE", 4, 1,'Donaldo', 7, 8)
-        eventID = db.getEventID('Donaldo', 4)
-
-        if (eventID == 3): 
-            print("Test3: SUCCESS")
-        else:
-            print("Test3: FAIL")
-
-        print("Test6")
-        db.insertEvent("LIVE", 5, 1,'Ronald123', 9, 10)
-        eventID = db.getEventID('Ronald123', 5)
-
-        if (eventID == 4): 
-            print("Test3: SUCCESS")
-        else:
-            print("Test3: FAIL")
+        print
 
     ## Responsible: Ivan
     # Tests JoinEvent: Check that user successfully joins events and cannot join event if he inputs wrong event name/password
@@ -81,48 +51,47 @@ class Test():
         print("Testing JoinEvent:")
         print("Test1")
         db = Database()
-        eventID = db.getEventID("Ivan")
-        if (eventID == 1):
+        eventID = db.getEventid("Ivan")
+        if (eventID == 62):
             print("Test1: SUCCESS")
         else:
             print("Test1: FAIL")
 
         print("Test2")
-        eventID = db.getEventID("Timmay")
-        if (eventID == 2):
+        eventID = db.getEventid("Timmay")
+        if (eventID == 73):
             print("Test2: SUCCESS")
         else:
             print("Test2: FAIL")
 
         print("Test3")
-        eventID = db.getEventID("Timmay")
-        if (eventID == 3):
-            print("Test2: FAIL")
+        eventID = db.getEventid("Timmay")
+        if (eventID == 73):
+            print("Test3: SUCCESS")
         else:
-            print("Test2: SUCCESS")
+            print("Test3: FAIL")
 
         print("Test4")
-        eventID = db.getEventID("Donaldo")
-        if (eventID == 3):
-            print("Test2: SUCCESS")
+        eventID = db.getEventid("Donaldo")
+        if (eventID == 74):
+            print("Test4: SUCCESS")
         else:
-            print("Test2: FAIL")
+            print("Test4: FAIL")
 
         print("Test5")
-        eventID = db.getEventID("")
-        if (eventID == 4):
-            print("Test2: FAIL")
+        eventID = db.getEventid("RandomEventThatDoesntWork")
+        if (eventID != 0):
+            print("Test5: FAIL")
         else:
-            print("Test2: SUCCESS")
+            print("Test5: SUCCESS")
 
         print("Test6")
-        eventID = db.getEventID("Ronald123")
-        if (eventID == 4):
-            print("Test2: SUCCESS")
+        eventID = db.getEventid("Ronald123")
+        if (eventID == 76):
+            print("Test6: SUCCESS")
         else:
-            print("Test2: FAIL")
-    
-
+            print("Test6: FAIL")
+        print
 
     ## Responsible: Donald
     # Tests sendvote: Check that votes and vetos are updated properly 
@@ -152,7 +121,7 @@ class Test():
             return
         print "Test3: SUCCESS"
 
-        print "All tests passed :)"
+        print "All tests passed :) \n"
 
     ## Responsible: Kareem
     # Test sendvote: Check that user can't vote/veto a particular song more than once
@@ -182,3 +151,5 @@ class Test():
     if __name__ == '__main__':
         #os.system("python server.py")
         testSendVoteVeto1()
+        testCreateEvent()
+        testJoinEvent()

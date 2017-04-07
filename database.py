@@ -10,13 +10,13 @@ class Database:
     ##################################
 
     #Template for what insert statements look like, table name/columns aren't right
-    def insertEvent(self, eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken):
+    def insertEvent(self, eventStatus, explicitAllowed, eventName, accessToken, refreshToken):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO EVENT (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken) "
-            "VALUES(%s, %s, %s, %s, %s, %s)")
-        data = (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken)
+        query = ("INSERT INTO EVENT (eventStatus,  explicitAllowed, eventName, accessToken, refreshToken) "
+            "VALUES(%s, %s, %s, %s, %s)")
+        data = (eventStatus, explicitAllowed, eventName, accessToken, refreshToken)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
@@ -138,6 +138,21 @@ class Database:
         cnx.close()
         return result
 
+    def getEventid(self, eventname):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT eventid FROM EVENT WHERE eventname = '%s' ") % (eventname)
+        cursor.execute(query)
+        token = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if token is None:
+            return 0
+        return token[0]
+
     def getQueue(self, eventID, userID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
@@ -157,7 +172,6 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
-
 
     def getTopSong(self, eventID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
