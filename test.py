@@ -150,16 +150,18 @@ class Test():
         print("Testing SendVote2:")
         print("Test1: SUCCESS")
 
-    ## Responsible: Sid
+    ## Responsible: Sidd the kid
     # Tests getQueue: Check that songs are displayed in descing order of votes and ascending order of vetos if two songs have same number of votes
     def testGetQueue():
         print("Testing getQueue:")
         print("Test1: SUCCESS")
 
-    ## Responsible: Ronak
-    # Tests getPlayedSongs: Check that songs are displayed in descing order of votes and ascending order of vetos if two songs have same number of votes
+    ## Responsible: Tim
+    # Tests getPlayedSongs: Check that songs are displayed in descendinfing order of votes and ascending order of vetos if two songs have same number of votes
     def testGetPlayedSongs():
         print("Testing getPlayedSongs:")
+        db = Database()
+        db.
         print("Test1: SUCCESS")
     
     ##-----------------INSTRUCTIONS---------------##
