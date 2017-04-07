@@ -56,13 +56,13 @@ class Database:
         cnx.close()
         return hostID[0]
 
-    def insertSong(self, songID, eventID, voteCount, songName, artist, explicit, vetoCount, vetoBoolean):
+    def insertSong(self, songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO NEXTSONGS (songID, eventID, voteCount, songName, artist, explicit, vetoCount, vetoBoolean) "
+        query = ("INSERT INTO NEXTSONGS (songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean) "
            "VALUES(%s, %s, %s, %s, %s, %s, %s, %s)")
-        data = (songID, eventID, voteCount, songName, artist, explicit, vetoCount, vetoBoolean)
+        data = (songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
@@ -163,7 +163,6 @@ class Database:
     ##################################
 
     def registerVote(self, userID, eventID, songID, vote):
-        print("Inserting a new event")
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
@@ -203,24 +202,29 @@ class Database:
         cnx.commit()
         cnx.close()
 
-    def isVoted(self, eventID, userID, songid):
+    def isVoted(self, eventID, userID, songID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("select eventid, userid, songid from mydb.VOTEDSONGS where eventid = '%s' and userid = '%s' and songid = '%s';") % (eventID, userID, songID); 
+        query = ("""select eventid, userid, songid from VOTEDSONGS where eventid = '%s' 
+        and userid = '%s' and songid = '%s' """) % (eventID, userID, songID); 
         cursor.execute(query)
+        result = cursor.fetchone()
         cursor.close()
         cnx.commit()
         cnx.close()
+        return result
 
-        #transfer songs from nextsongs to playedsongs table
+    #transfer songs from nextsongs to playedsongs table
     def transfer(self, songID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query1 = ("INSERT into playedsongs (songsid, eventid, songname) select songid, eventid, songname from nextsongs where songid = '%s'") % (songID); 
+        query1 = ("""INSERT into PLAYEDSONGS (songsid, eventid, songname)
+        select songid, eventid, songname from NEXTSONGS where songID = '%s' """) % (songID);
         cursor.execute(query1)
-        query2 = ("DELETE from nextsongs where songid = '%s'") % (songID)
+
+        query2 = ("DELETE from NEXTSONGS where songID = '%s'") % (songID)
         cursor.execute(query2)
         cursor.close()
         cnx.commit()
