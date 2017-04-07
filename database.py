@@ -158,6 +158,19 @@ class Database:
         cnx.commit()
         cnx.close()
 
+
+    def getTopSong(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT MAX(songID) FROM NEXTSONGS WHERE eventid = %s") % (eventID) 
+        cursor.execute(query)
+        songID = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+        return songID[0]
+
     ##################################
     #        OTHER STATEMENTS        #
     ##################################
@@ -177,7 +190,6 @@ class Database:
 
 
     def registerVeto(self, userID, eventID, songID, veto):
-        print("Inserting a new event")
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()

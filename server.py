@@ -154,12 +154,13 @@ class JoinEvent(Resource):
             return {'error': str(e)}
 
 #define API endpoints
+db = Database()
+print db.getTopSong(1)
+# api.add_resource(CreateUser, '/CreateUser')
+# api.add_resource(CreateHost, '/CreateHost')
+# api.add_resource(SendVote, '/SendVote')
+# api.add_resource(CreateEvent, '/CreateEvent')
+# api.add_resource(JoinEvent, '/JoinEvent')
 
-api.add_resource(CreateUser, '/CreateUser')
-api.add_resource(CreateHost, '/CreateHost')
-api.add_resource(SendVote, '/SendVote')
-api.add_resource(CreateEvent, '/CreateEvent')
-api.add_resource(JoinEvent, '/JoinEvent')
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
