@@ -30,7 +30,7 @@ class Spotify:
         s = ""
         while responsestring[indexID] != '"'
             s += responsestring[indexID]
-            indexID++
+            indexID+= 1
         #s will equal hostUSERID
         return s
     
