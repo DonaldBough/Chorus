@@ -213,6 +213,7 @@ class Database:
         cnx.commit()
         cnx.close()
 
+        #transfer songs from nextsongs to playedsongs table
     def transfer(self, songID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
