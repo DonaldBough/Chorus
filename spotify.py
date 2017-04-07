@@ -1,5 +1,14 @@
+import requests
 import spotipy
+import datetime
+import pprint
+import sys
+import os
+import subprocess
+import json
 import spotipy.util as util
+import urllib2
+import time
 
 #All functions that interact directly with the Spotify API go here
 
@@ -30,3 +39,11 @@ class Spotify:
         #        playlist_id = playlist['id']
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
         #print("playlist id: " + playlist_id)
+
+    def authtarget(token, playlist_id, username):
+    while True:
+        timer(token, playlist_id, username)
+        time.sleep(20)
+    t = threading.Thread(target = authtarget)
+    t.daemon = True
+    t.start()
