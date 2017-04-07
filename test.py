@@ -22,9 +22,8 @@ class Test():
         print("Testing CreateEvent:")
         print("Test1")
         db = Database()
-        db.insertEvent("LIVE", args['1'], args['1'],
-            args['Ivan'], args['1'], args['2'])
-        eventID = db.getEventID(args['Ivan'], args['1'])
+        db.insertEvent("LIVE", 1, 1,'Ivan', 1, 2)
+        eventID = db.getEventID('Ivan', 1)
 
         if (eventID == 1): 
             print("Test1: SUCCESS")
@@ -32,9 +31,8 @@ class Test():
             print("Test1: FAIL")
 
         print("Test2")
-        db.insertEvent("LIVE", args['2'], args['1'],
-            args['Ivan'], args['3'], args['4'])
-        eventID = db.getEventID(args['Ivan'], args['2'])
+        db.insertEvent("LIVE", 2, 1,'Ivan', 3, 4)
+        eventID = db.getEventID('Ivan', 2)
 
         if (eventID == 2): 
             print("Test2: FAIL")
@@ -42,9 +40,8 @@ class Test():
             print("Test2: SUCCESS")
 
         print("Test3")
-        db.insertEvent("LIVE", args['3'], args['1'],
-            args['Timmay'], args['5'], args['6'])
-        eventID = db.getEventID(args['Timmay'], args['3'])
+        db.insertEvent("LIVE", 3, 1,'Timmay', 5, 6)
+        eventID = db.getEventID('Timmay', 3)
 
         if (eventID == 2): 
             print("Test3: SUCCESS")
@@ -52,9 +49,8 @@ class Test():
             print("Test3: FAIL")
 
         print("Test4")
-        db.insertEvent("LIVE", args['3'], args['1'],
-            args['Donaldo'], args['5'], args['6'])
-        eventID = db.getEventID(args['Donaldo'], args['3'])
+        db.insertEvent("LIVE", 3, 1,'Donaldo', 5, 6)
+        eventID = db.getEventID('Donaldo', 3)
 
         if (eventID == 3): 
             print("Test3: FAIL")
@@ -62,9 +58,8 @@ class Test():
             print("Test3: SUCCESS")
 
         print("Test5")
-        db.insertEvent("LIVE", args['4'], args['1'],
-            args['Donaldo'], args['7'], args['8'])
-        eventID = db.getEventID(args['Donaldo'], args['4'])
+        db.insertEvent("LIVE", 4, 1,'Donaldo', 7, 8)
+        eventID = db.getEventID('Donaldo', 4)
 
         if (eventID == 3): 
             print("Test3: SUCCESS")
@@ -72,9 +67,8 @@ class Test():
             print("Test3: FAIL")
 
         print("Test6")
-        db.insertEvent("LIVE", args['5'], args['1'],
-            args['Ronald123'], args['9'], args['10'])
-        eventID = db.getEventID(args['Ronald123'], args['5'])
+        db.insertEvent("LIVE", 5, 1,'Ronald123', 9, 10)
+        eventID = db.getEventID('Ronald123', 5)
 
         if (eventID == 4): 
             print("Test3: SUCCESS")
@@ -150,18 +144,16 @@ class Test():
         print("Testing SendVote2:")
         print("Test1: SUCCESS")
 
-    ## Responsible: Sidd the kid
+    ## Responsible: Sid
     # Tests getQueue: Check that songs are displayed in descing order of votes and ascending order of vetos if two songs have same number of votes
     def testGetQueue():
         print("Testing getQueue:")
         print("Test1: SUCCESS")
 
-    ## Responsible: Tim
-    # Tests getPlayedSongs: Check that songs are displayed in descendinfing order of votes and ascending order of vetos if two songs have same number of votes
+    ## Responsible: Ronak
+    # Tests getPlayedSongs: Check that songs are displayed in descing order of votes and ascending order of vetos if two songs have same number of votes
     def testGetPlayedSongs():
         print("Testing getPlayedSongs:")
-        db = Database()
-        db.
         print("Test1: SUCCESS")
     
     ##-----------------INSTRUCTIONS---------------##
