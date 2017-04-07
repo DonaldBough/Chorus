@@ -67,16 +67,32 @@ class Test():
     # Tests sendvote: Check that votes and vetos are updated properly 
     def testSendVoteVeto1():
         print("Testing SendVoteVeto1:")
+        #def isVoted(self, eventID, userID, songid):
+        #def registerVote(self, eventID, eventID, songID, vote):
         db = Database()
-        votes = db.isVoted(1, 1, 1)
-        result = 0
-        if votes is None:
-            result = db.registerVote(1, 1, 1, 1, 0)
-        #print(result)
-        if (result != 0):
-            print("Test1: SUCCESS")
-        else:
-            print("Test1: FAILED")
+        result = db.isVoted(1, 1, 1)
+        if result is None:
+            print "Test 1 failed"
+            return
+
+        print "Test1: SUCCESS"
+
+        result = db.isVoted(1, 1, 5498)
+        if result is not None:
+            print "Test 2 failed"
+            return
+
+        print "Test2: SUCCESS"
+
+        db.registerVote(1, 4, 1, 1)
+        result = db.isVoted(4, 1, 1)
+        if result is None:
+            print "Test 3 failed"
+            return
+        print "Test3: SUCCESS"
+
+        print "All tests passed :)"
+
     ## Responsible: Kareem
     # Test sendvote: Check that user can't vote/veto a particular song more than once
     def testSendVoteVeto2():
@@ -104,8 +120,4 @@ class Test():
 
     if __name__ == '__main__':
         #os.system("python server.py")
-        testCreateEvent()
         testSendVoteVeto1()
-        testSendVoteVeto2()
-        testGetQueue()
-        testGetPlayedSongs()
