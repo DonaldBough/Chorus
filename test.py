@@ -16,11 +16,64 @@ class Test():
     # step5: Repeat this for 5 to 6 tests
     ##-----------------------------------------------------------------------------------------------------------------##
     
-    ## Responsible: Tim
+  ## Responsible: Ivan
     # Tests CreateEvent: Check that event is created successfully and that 2 different events cant be created with same names/passwords
     def testCreateEvent():
         print("Testing CreateEvent:")
-        print("Test1: SUCCESS")
+        print("Test1")
+        db = Database()
+        db.insertEvent("LIVE", 1, 1,'Ivan', 1, 2)
+        eventID = db.getEventID('Ivan', 1)
+
+        if (eventID == 1): 
+            print("Test1: SUCCESS")
+        else:
+            print("Test1: FAIL")
+
+        print("Test2")
+        db.insertEvent("LIVE", 2, 1,'Ivan', 3, 4)
+        eventID = db.getEventID('Ivan', 2)
+
+        if (eventID == 2): 
+            print("Test2: FAIL")
+        else:
+            print("Test2: SUCCESS")
+
+        print("Test3")
+        db.insertEvent("LIVE", 3, 1,'Timmay', 5, 6)
+        eventID = db.getEventID('Timmay', 3)
+
+        if (eventID == 2): 
+            print("Test3: SUCCESS")
+        else:
+            print("Test3: FAIL")
+
+        print("Test4")
+        db.insertEvent("LIVE", 3, 1,'Donaldo', 5, 6)
+        eventID = db.getEventID('Donaldo', 3)
+
+        if (eventID == 3): 
+            print("Test3: FAIL")
+        else:
+            print("Test3: SUCCESS")
+
+        print("Test5")
+        db.insertEvent("LIVE", 4, 1,'Donaldo', 7, 8)
+        eventID = db.getEventID('Donaldo', 4)
+
+        if (eventID == 3): 
+            print("Test3: SUCCESS")
+        else:
+            print("Test3: FAIL")
+
+        print("Test6")
+        db.insertEvent("LIVE", 5, 1,'Ronald123', 9, 10)
+        eventID = db.getEventID('Ronald123', 5)
+
+        if (eventID == 4): 
+            print("Test3: SUCCESS")
+        else:
+            print("Test3: FAIL")
 
     ## Responsible: Ivan
     # Tests JoinEvent: Check that user successfully joins events and cannot join event if he inputs wrong event name/password
@@ -57,11 +110,19 @@ class Test():
 
         print("Test5")
         eventID = db.getEventID("")
-        if (eventID == 2):
+        if (eventID == 4):
+            print("Test2: FAIL")
+        else:
+            print("Test2: SUCCESS")
+
+        print("Test6")
+        eventID = db.getEventID("Ronald123")
+        if (eventID == 4):
             print("Test2: SUCCESS")
         else:
             print("Test2: FAIL")
     
+
 
     ## Responsible: Donald
     # Tests sendvote: Check that votes and vetos are updated properly 
