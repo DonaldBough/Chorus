@@ -9,6 +9,7 @@ import spotipy
 import spotipy.util as util
 import time
 import threading
+import requests
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -23,9 +24,10 @@ class Spotify:
     
     def hostUserId():
         #use GET command to get users info
-        GET https://api.spotify.com/v1/me
+        params = {"limit":1}
+        responsestring = requests.get("https://api.spotify.com/v1/me", params, headers={"Authorization":"token"})
         #Find index make the hostID string
-        indexID = find("\"id\":", 0, len(put response string))
+        indexID = find("\"id\":", 0, len(responsestring))
         indexID = indexID + 6
         s = ""
         while responsestring[indexID] != '"'
@@ -37,22 +39,26 @@ class Spotify:
     currentSong = 'Start'
     recentSong = 'recent'
     
-    def authenticate():
+    #get token
+    def timer(token):
         #use GET command to get users played songs
-        GET https://api.spotify.com/v1/me/player/recently-played #change up some things still
+        #GET https://api.spotify.com/v1/me/player/recently-played #change up some things still
         #find the index and make the string
-    
-        indexID = find("\"id\":", 0, len(put response string))
+        req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":"token"})
+
+        indexID = find("\"id\":", 0, len(req))
         indexID = indexID + 6
-        recentSong = response string[indexID: indexID+22]
+        recentSong = req[indexID: indexID+22]
         #compare the last played track ID to trackID in server
         if (currentSong != recentSong)
         #if it is the different, move song ID from next to played in database
-            call query to move the song
+        #call query to move the song
+
         #change the song in server to what was played
-            currentSong = recentSong;
+        currentSong = recentSong;
+
         #then call addSong, which adds the top voted song into the playlist
-            addSongs(query token from database)
+        addSongs(query token from database)
         #if it is the same, then chill
         
         print "the same"
