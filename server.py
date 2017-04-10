@@ -6,6 +6,7 @@ import subprocess
 import sched
 import time
 import json
+import requests
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -64,22 +65,40 @@ class SendVote(Resource):
 
 class CreateEvent(Resource):
     def post(self):
+        print "b4"
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            parser.add_argument('eventStatus', type=str)
-            parser.add_argument('hostID', type=int)
-            parser.add_argument('explicitAllowed')
+            #parser.add_argument('eventStatus', type=str)
+            #parser.add_argument('hostID', type=int)
+            parser.add_argument('explicitAllowed', type=str)
             parser.add_argument('eventName', type=str)
-            parser.add_argument('accessToken', type=str)
-            parser.add_argument('refreshToken', type=str)
+            parser.add_argument('authCode', type=str)
             args = parser.parse_args()
             
-            db = Database()
-            db.insertEvent(args['eventStatus'], args['hostID'], args['explicitAllowed'], 
-                args['eventName'], args['accessToken'], args['refreshToken'])
+            print "args"
 
-            eventID = db.getEventID(args['eventName'], args['hostID'])
+            _authCode = args['authCode']
+            tokens = auth2Token(_authCode)
+
+            accessToken = tokens[0]
+            refreshToken = tokens[1]
+
+            print "token"
+
+            #print(accessToken)
+            #host = CreateHost();
+            host = 1
+
+            db = Database()
+            db.insertEvent("LIVE", host, args['explicitAllowed'], 
+                args['eventName'], accessToken, refreshToken)
+
+            print "db"
+
+            eventID = db.getEventID(args['eventName'], host)
+            json.dumps({'EventID': eventID}), 200, {'ContentType':'application/json'} 
+            print eventID
             return {'EventID': eventID}
 
         except Exception as e:
