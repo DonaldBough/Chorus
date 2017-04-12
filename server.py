@@ -22,6 +22,10 @@ api = Api(app)
 
 class Spotify:
     
+    def fallback():
+        #user GET command to get recommendations based on al played songs 
+        
+    
     def hostUserId():
         #use GET command to get users info
         params = {"limit":1}
