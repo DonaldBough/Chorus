@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>My AngularJS App</title>
+  <title>Welcome to Chorus</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
@@ -45,17 +45,11 @@
                 <br>
                 <div class="row">
                   <div class="col-xs-2"></div>
-                    <div class="col-xs-8">
-                      <input type="text" class="form-control" placeholder="Enter party code" style="height:45px" ng-model="eventCode">
-                      <br />
-                      <label>Allow Explicit?
-                        <input type="checkbox" ng-model="check" checked>
-                      </label>
-                    </div>
-                  </div>
-                  <br>
-                  <button ng-click="createEvent()">Create Event</button>
-                  <br>
+                    <div class="col-xs-8 text-center">
+                    <br>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location.href='/join.html'">Be a Guest</button>
+                    <button type="button" class="btn btn-default btn-lg btn-block" onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Fcreate.html&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'>Be a Host <br>(requires Spotify Acount)</button>
+                    <br>
                 </div>
               </div>
             </div>

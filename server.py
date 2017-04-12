@@ -76,7 +76,7 @@ class CreateEvent(Resource):
             parser.add_argument('authCode', type=str)
             args = parser.parse_args()
             
-            print "args"
+            print args
 
             _authCode = args['authCode']
             tokens = auth2Token(_authCode)
@@ -97,14 +97,14 @@ class CreateEvent(Resource):
             print "db"
 
             eventID = db.getEventID(args['eventName'], host)
-            json.dumps({'EventID': eventID}), 200, {'ContentType':'application/json'} 
-            print eventID
-            return {'EventID': eventID}
+            #json.dumps({'EventID': eventID}), 200, {'ContentType':'application/json'} 
+            #print eventID
+            return json.dumps({'eventID': eventID, 'hostID': host})
 
         except Exception as e:
             return {'error': str(e)}
 
-class getQueue(Resource):
+class GetQueue(Resource):
     def post(self):
         try:
             # Parse the arguments
@@ -114,7 +114,9 @@ class getQueue(Resource):
             args = parser.parse_args()
 
             db = Database()
-            return db.getQueue()
+            songs = db.getQueue()
+            
+            return {'songs': songs}
 
         except Exception as e:
             return {'error': str(e)}
@@ -197,5 +199,6 @@ api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(SendVote, '/SendVote')
 api.add_resource(CreateEvent, '/CreateEvent')
 api.add_resource(joinEvent, '/JoinEvent')
+api.add_resource(GetQueue, '/GetQueue')
 if __name__ == '__main__':
     app.run(debug=True)

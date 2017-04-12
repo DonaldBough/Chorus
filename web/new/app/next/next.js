@@ -10,5 +10,9 @@ angular.module('myApp.next', ['ngRoute'])
 }])
 
 .controller('nextCtrl', [function() {
+		/*
+		document.chorusUser
+		document.chorusEvent = res.eventID;
+		document.chorusIsHost = true;*/
 
 }]);

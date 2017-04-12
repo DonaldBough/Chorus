@@ -25,24 +25,37 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 		else{
 			if(code != 'http'){
 
-				var data = {
-					"eventName": $scope.eventCode,
-					"explicitAllowed": 1,//$scope.check,
-					"authCode":  code
+				var sendData = {
+					eventName: $scope.eventCode,
+					explicitAllowed: 1,//$scope.check,
+					authCode: code
 				}
-				data = JSON.stringify(data);
+				sendData = JSON.stringify(sendData);
+				console.log(sendData)
+
+				var url = 'http://localhost:5000/CreateEvent?eventName='+$scope.eventCode+'&explicitAllowed='+1+'&authCode='+code
 
 			$.ajax({
 				type:"POST",
-				url: 'http://localhost:5000/CreateEvent',
-				data: sendData,
+				url: url,//'http://localhost:5000/CreateEvent',
+				//data: sendData,
+				async:false,
 				success: function(data) {
+					//console.log(data)
+					var res = $.parseJSON(data)
+					//console.log(res)
+					document.chorusUser = res.hostID;
+					document.chorusEvent = res.eventID;
+					document.chorusIsHost = true;
+					//window.alert(document.chorusUser)
+					//window.alert(document.chorusEvent)
 					console.log(data)
+					window.location.replace("/index.html#!/next")
 				},
 				error: function(error){
 					console.log(error)
 				},
-				dataType: "json"
+				//dataType: "json"
 			});
 
 			}
