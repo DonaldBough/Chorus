@@ -137,16 +137,11 @@ class JoinEvent(Resource):
             args = parser.parse_args()
 
             _eventPassword = args['password']
-    
-            #print(_eventPassword)
             
             db = Database()
-            #print("name :" +_eventPassword)
             eventID = db.getEventID(_eventPassword)
             print(eventID)
             db.JoinEvent(eventID, "0", "0")
-
-
 
             return {'EventID': eventID}
 
@@ -154,7 +149,6 @@ class JoinEvent(Resource):
             return {'error': str(e)}
 
 #define API endpoints
-
 api.add_resource(CreateUser, '/CreateUser')
 api.add_resource(CreateHost, '/CreateHost')
 api.add_resource(SendVote, '/SendVote')

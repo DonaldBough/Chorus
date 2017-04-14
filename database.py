@@ -203,6 +203,38 @@ class Database:
             return -1
         return songID[0]
 
+    def getHostID(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT hostID FROM EVENT WHERE eventID = '%s' ") % (eventID)
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if result is None:
+            return -1
+        return result[0]
+
+    #get accessToken based off of the eventID
+    def getEventSpotifyToken(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT accessToken FROM EVENT WHERE eventID = '%s' ") % (eventID)
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if result is None:
+            return -1
+        return result[0]
+
+
     ##################################
     #        OTHER STATEMENTS        #
     ##################################
