@@ -18,15 +18,20 @@ class Spotify:
     #get username
     #get track id to be played next
     #get playlist ID
+    
+    
     def getRecommendations(songID, token): #integrate with UI
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
+        db = Database()
+        
         return sp.recommendations(seed_artists=None, seed_genres=None, seed_tracks={songID}, limit=15, country=US)
 
     def createPlaylist(username, token): #get token from database
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
+        db = Database()
         playlists = sp.user_playlist_create(username, playlist_name)
 
     def addSongs(token, trackID, playlist_id): #token comes from database, trackID comes from highest voted song in database
@@ -37,6 +42,7 @@ class Spotify:
         #for playlist in playlists['items']:
         #    if(playlist['name'] == "Chorus"):
         #        playlist_id = playlist['id']
+        db = Database()
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
         #print("playlist id: " + playlist_id)
 
