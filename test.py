@@ -80,7 +80,7 @@ class Test():
 
         print("Test5")
         eventID = db.getEventid("RandomEventThatDoesntWork")
-        if (eventID != 0):
+        if (eventID != -1):
             print("Test5: FAIL")
         else:
             print("Test5: SUCCESS")
@@ -101,22 +101,22 @@ class Test():
         #def registerVote(self, eventID, eventID, songID, vote):
         db = Database()
         result = db.isVoted(1, 1, 1)
-        if result is None:
+        if result is -1:
             print "Test 1 failed"
             return
 
         print "Test1: SUCCESS"
 
         result = db.isVoted(1, 1, 5498)
-        if result is not None:
+        if result is not -1:
             print "Test 2 failed"
             return
 
         print "Test2: SUCCESS"
 
-        db.registerVote(1, 4, 1, 1)
+        db.updateVote(1, 4, 1, 1)
         result = db.isVoted(4, 1, 1)
-        if result is None:
+        if result is -1:
             print "Test 3 failed"
             return
         print "Test3: SUCCESS"

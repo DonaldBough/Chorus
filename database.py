@@ -37,6 +37,9 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
+
+        if userID is None:
+            return -1
         return userID[0]
 
     def insertHost(self, playlistID, spotifyToken, spotifyUsername):
@@ -54,6 +57,9 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
+
+        if hostID is None:
+            return -1
         return hostID[0]
 
     def insertSong(self, songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean):
@@ -83,6 +89,8 @@ class Database:
         cnx.commit()
         cnx.close()
 
+        if playlistID is None:
+            return -1
         return playlistID[0]
 
     def getHostSpotifyToken(self, hostID):
@@ -96,6 +104,8 @@ class Database:
         cnx.commit()
         cnx.close()
 
+        if token is None:
+            return -1
         return token[0]
 
     def getSongArtist(self, songName):
@@ -108,8 +118,10 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
-        if artist is not None:
-            return artist[0]
+
+        if artist is None:
+            return "NO ARTIST FOUND"
+        return artist[0]
 
     def getSongID(self, songName):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -121,8 +133,9 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
-        if songID is not None:
-            return songID[0]
+        if songID is None:
+            return -1
+        return songID[0]
 
     def getEventID(self, eventName, hostID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -132,11 +145,13 @@ class Database:
         data = (eventName, hostID)
         cursor.execute(query, data)
 
-        result = cursor.fetchone()[0];
+        result = cursor.fetchone();
         cursor.close()
         cnx.commit()
         cnx.close()
-        return result
+        if result is None:
+            return -1
+        return result[0]
 
     def getEventid(self, eventname):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -150,7 +165,7 @@ class Database:
         cnx.close()
 
         if token is None:
-            return 0
+            return -1
         return token[0]
 
     def getQueue(self, eventID, userID):
@@ -183,6 +198,9 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
+
+        if songID is None:
+            return -1
         return songID[0]
 
     ##################################
@@ -205,7 +223,7 @@ class Database:
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
         query = ("INSERT into VOTEDSONGS (userid, eventid, songid, vote) VALUES (%s, %s, %s, 1)") % (userID, eventID, songID)
-        cursor.execute(query1)
+        cursor.execute(query)
         cursor.close()
         cnx.commit()
         cnx.close()
@@ -254,7 +272,10 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
-        return result
+
+        if result is None:
+            return -1
+        return result[0]
 
     #transfer songs from nextsongs to playedsongs table
     def transfer(self, songID):
