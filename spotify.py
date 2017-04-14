@@ -120,14 +120,12 @@ class Spotify:
         for playlist in playlists['items']:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
-       
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
         
     def timer(eventID):
         #use GET command to get users played songs
         #currentSong = ""
-        payload = {'limit':1}
-        req = requests.get("https://api.spotify.com/v1/me/player/recently-played", data = payload, headers={"Authorization":'Bearer ' + token})
+        req = requests.get("https://api.spotify.com/v1/me/player/currently-playing", headers={"Authorization":'Bearer ' + token})
         indexID = req.text.find("id", 0, len(req.text))
         indexID = indexID + 7
         currentSong = ""
@@ -159,9 +157,9 @@ class Spotify:
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
     '''
-    def authtarget(token, playlist_id, username, currentSong, topVoted):
+    def authtarget(eventID):
         while True:
-            timer(token, playlist_id, username, currentSong, topVoted)
+            timer(eventID)
             time.sleep(30)
         t = threading.Thread(target = authtarget)
         t.daemon = True
