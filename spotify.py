@@ -41,7 +41,7 @@ class Spotify:
         Input: username of user from database, oauth token from database
         return: playlist ID, ID of playlist created
     '''
-    def createPlaylist(eventID):
+    def createPlaylist(token):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
@@ -65,7 +65,11 @@ class Spotify:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
         
-        db.insertHost(playlist_id, 
+        data = []
+        data.append(userID)
+        data.append(playlist_id)
+        
+        return data
     '''
         addSongs
         Def: Adds song to chorus playlist
