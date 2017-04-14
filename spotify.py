@@ -20,6 +20,22 @@ class Spotify:
     #get playlist ID
     playingSong
     flagFirst = True
+    
+    '''
+        authorize
+        Input: code
+        return: text that has the authorization
+    '''
+    def authorize(code):
+        url = "https://accounts.spotify.com/api/token"
+        grant_type = "authorization_code"
+        redirect_uri = "http://localhost:8000/create.html"
+        client_id = "0abc049d139f4ee8b465fd9416aa358d"
+        client_secret = "dd477b353e744461ae1b3062f256c952"
+        payload = {'grant_type': grant_type, 'code': code, 'redirect_uri': redirect_uri, 'client_id':client_id, 'client_secret':client_secret}
+        req = requests.post(url, data = payload)
+        return req.content
+    
     '''
         createPlaylist
         Def: Creates chorus playlist
