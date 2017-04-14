@@ -26,7 +26,7 @@ class Spotify:
         Input: username of user from database, oauth token from database
         return: playlist ID, ID of playlist created
     '''
-    def createPlaylist(username, token):
+    def createPlaylist(eventID):
         db = Database()
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
@@ -46,7 +46,7 @@ class Spotify:
         Input: oauth token from database, trackID from what user requests (UI), playlist_id from database/ other functions, username from database/other function
         return: N/A
     '''
-    def addSongs(token, trackID, playlist_id, username):
+    def addSongs(eventID):
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
@@ -60,7 +60,7 @@ class Spotify:
         Input: oauth token from database
         return: userID, current user's ID
     '''
-    def hostUserId(token):
+    def hostUserId(eventID):
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
         #gets start of user id
@@ -80,7 +80,7 @@ class Spotify:
         Input: oauth token from database, trackID from what user requests (UI), playlist_id from database/ other functions, username from database/other function
         return: N/A
     '''   
-    def addTwo(token, username, playlist_id):
+    def addTwo(eventID):
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3', '0KKkJNfGyhkQ5aFogxQAPU'})
@@ -92,7 +92,7 @@ class Spotify:
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
     '''
-    def timer(token, playlist_id, username, topVoted, songToAdd):
+    def timer(eventID):
         #use GET command to get users played songs
         #currentSong = ""
         payload = {'limit':1}
@@ -143,7 +143,7 @@ class Spotify:
         Input: token, track_id from ui, num_tracks from ui possibly
         Return: N/A
     '''
-    def recommend_fallback(token, track_id): 
+    def recommend_fallback(eventID): 
         headers={"Authorization":'Bearer ' + token}
         count = 0
         sp = spotipy.Spotify(auth=token)
@@ -162,7 +162,7 @@ class Spotify:
         Input: token, tracks for what to recommend
         Returrn: req.contents, the json text
     '''
-    def recommend_ui(token, tracks):
+    def recommend_ui(eventID):
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -170,32 +170,32 @@ class Spotify:
         return req.contents
 
     #play playlist start
-    def play(token):
+    def play(eventID):
         print('play')
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/play', headers)
 
     #pause playlist
-    def pause(token):   
+    def pause(eventID):   
         print('pause')
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/pause', headers)
 
     #resume playlist
-    def resume(token):  
+    def resume(eventID):  
         print('resume')
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/play', headers)
 
     #veto, skip track
-    def skip(token):
+    def skip(eventID):
         print('skip')
         headers={"Authorization":'Bearer ' + token}
         requests.post('https://api.spotify.com/v1/me/player/next',headers)
 
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
-    def delete(token, track_id):
+    def delete(eventID):
         print('delete')
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
