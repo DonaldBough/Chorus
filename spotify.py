@@ -108,6 +108,21 @@ class Spotify:
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
     '''
+    
+    def guestAdd(userID, token, songID):
+        
+        playlist_name = 'Chorus'
+        sp = spotipy.Spotify(auth=token)
+        sp.trace = False
+        sp.user_playlist_create(userID, playlist_name)
+        playlists = sp.user_playlists(username, limit=50, offset=0)
+
+        for playlist in playlists['items']:
+            if(playlist['name'] == "Chorus"):
+                playlist_id = playlist['id']
+       
+        sp.user_playlist_add_tracks(userID, playlist_id, songID)
+        
     def timer(eventID):
         #use GET command to get users played songs
         #currentSong = ""
