@@ -18,6 +18,8 @@ class Spotify:
     #get username
     #get track id to be played next
     #get playlist ID
+    playingSong
+    flagFirst = True
     '''
         createPlaylist
         Def: Creates chorus playlist
@@ -25,6 +27,7 @@ class Spotify:
         return: playlist ID, ID of playlist created
     '''
     def createPlaylist(username, token):
+        db = Database()
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -34,7 +37,7 @@ class Spotify:
         for playlist in playlists['items']:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
-
+        
         return playlist_id
 
     '''
@@ -47,6 +50,9 @@ class Spotify:
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
+        if(flagFirst):
+            playingSong = trackID
+            flagFirst = False
 
     '''
         hostUserId
@@ -86,16 +92,17 @@ class Spotify:
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
     '''
-    def timer(token, playlist_id, username, currentSong, topVoted):
+    def timer(token, playlist_id, username, topVoted, songToAdd):
         #use GET command to get users played songs
+        #currentSong = ""
         payload = {'limit':1}
         req = requests.get("https://api.spotify.com/v1/me/player/recently-played", data = payload, headers={"Authorization":'Bearer ' + token})
         indexID = req.text.find("id", 0, len(req.text))
         indexID = indexID + 7
-        recentSong = ""
+        currentSong = ""
 
         while (req.text[indexID] != '"'):
-            recentSong += req.text[indexID]
+            currentSong += req.text[indexID]
             indexID+= 1
 
         #debug
@@ -105,8 +112,8 @@ class Spotify:
         #if it is the different, move song ID from next to played in database
         #call query to move the song
         #change the song in server to what was played
-        if (currentSong != recentSong):
-            currentSong = recentSong;
+        if (playingSong != currentSong):
+            playingSong = currentSong;
             addSongs(token, {songToAdd}, playlist_id, username)
             print("song added")
 
@@ -136,16 +143,16 @@ class Spotify:
         Input: token, track_id from ui, num_tracks from ui possibly
         Return: N/A
     '''
-    def recommend_fallback(token, track_id, num_tracks): 
+    def recommend_fallback(token, track_id): 
         headers={"Authorization":'Bearer ' + token}
         count = 0
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers)
-        print(req.content)
+        #print(req.content)
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
-            if(count < num_tracks):
+            if(count < 10):
                 addSongs(token, i, playlist_id, username)
                 count = count + 1
 
