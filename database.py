@@ -189,29 +189,44 @@ class Database:
     #        OTHER STATEMENTS        #
     ##################################
 
-    def registerVote(self, userID, eventID, songID, vote):
+    def registerVote(self, songID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query1 = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = '%s'")
+        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = '%s'")
         data = (songID)
-        cursor.execute(query1, data)
-        query2 = ("INSERT into VOTEDSONGS (userid, eventid, songid, vote) VALUES (%s, %s, %s, 1)") % (userID, eventID, songID)
-        cursor.execute(query2)
+        cursor.execute(query, data)
         cursor.close()
         cnx.commit()
         cnx.close()
 
-
-    def registerVeto(self, userID, eventID, songID, veto):
+    def updateVote(self, userID, eventID, songID, vote):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query1 = ("UPDATE NEXTSONGS SET vetoCount = vetoCount + 1 WHERE songID = '%s'")
+        query = ("INSERT into VOTEDSONGS (userid, eventid, songid, vote) VALUES (%s, %s, %s, 1)") % (userID, eventID, songID)
+        cursor.execute(query1)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+    def registerVeto(self, songID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("UPDATE NEXTSONGS SET vetoCount = vetoCount + 1 WHERE songID = '%s'")
         data = (songID)
-        cursor.execute(query1, data)
-        query2 = ("INSERT into VOTEDSONGS (userid, eventid, songid, veto) VALUES (%s, %s, %s, 1)") % (userID, eventID, songID)
-        cursor.execute(query2)
+        cursor.execute(query, data)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+    def updateVeto(self, userID, eventID, songID, vote):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("INSERT into VOTEDSONGS (userid, eventid, songid, veto) VALUES (%s, %s, %s, 1)") % (userID, eventID, songID)
+        cursor.execute(query)
         cursor.close()
         cnx.commit()
         cnx.close()
