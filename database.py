@@ -243,9 +243,8 @@ class Database:
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = '%s'")
-        data = (songID)
-        cursor.execute(query, data)
+        query = ("UPDATE NEXTSONGS SET voteCount = voteCount + 1 WHERE songID = '%s'") % (songID)
+        cursor.execute(query)
         cursor.close()
         cnx.commit()
         cnx.close()
