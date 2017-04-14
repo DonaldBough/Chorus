@@ -18,14 +18,12 @@ class Spotify:
     #get username
     #get track id to be played next
     #get playlist ID
-    playingSong
-    flagFirst = True
     
     '''
         authorize
         Input: code
         return: text that has the authorization
-    '''
+    
     def authorize(code):
         url = "https://accounts.spotify.com/api/token"
         grant_type = "authorization_code"
@@ -35,6 +33,7 @@ class Spotify:
         payload = {'grant_type': grant_type, 'code': code, 'redirect_uri': redirect_uri, 'client_id':client_id, 'client_secret':client_secret}
         req = requests.post(url, data = payload)
         return req.content
+    '''
     
     '''
         createPlaylist
@@ -44,18 +43,29 @@ class Spotify:
     '''
     def createPlaylist(eventID):
         db = Database()
+        token = db.getEventSpotifyToken(eventID)
+        #use GET command to get user info
+        req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
+        #gets start of user id
+        indexID = req.text.find("id", 0, len(req.text))
+        indexID = indexID + 7
+        userID = ""
+
+        while (req.text[indexID] != '"'):
+            userID += req.text[indexID]
+            indexID+= 1
+            
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        sp.user_playlist_create(username, playlist_name)
-        playlists = sp.user_playlists(username, limit=50, offset=0)
+        sp.user_playlist_create(userID, playlist_name)
+        playlists = sp.user_playlists(userID, limit=50, offset=0)
 
         for playlist in playlists['items']:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
         
-        return playlist_id
-
+        db.insertHost(playlist_id, 
     '''
         addSongs
         Def: Adds song to chorus playlist
@@ -66,9 +76,6 @@ class Spotify:
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
-        if(flagFirst):
-            playingSong = trackID
-            flagFirst = False
 
     '''
         hostUserId
@@ -110,16 +117,22 @@ class Spotify:
     '''
     
     def guestAdd(userID, token, songID):
-        
+        hasPlaylist = False
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_create(userID, playlist_name)
-        playlists = sp.user_playlists(username, limit=50, offset=0)
 
         for playlist in playlists['items']:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
+                hasPlaylist = True
+        
+        playlists = sp.user_playlists(username, limit=50, offset=0)
+        for playlist in playlists['items']:
+            if(playlist['name'] == "Chorus"):
+                playlist_id = playlist['id']
+                
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
         
     def timer(eventID):
