@@ -234,6 +234,21 @@ class Database:
             return -1
         return result[0]
 
+    def getAllEventID(self):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT eventID FROM EVENT")
+        cursor.execute(query)
+        resultList = []
+        for (eventID) in cursor:
+            resultList.append(eventID)
+
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+        return resultList
+
 
     ##################################
     #        OTHER STATEMENTS        #
