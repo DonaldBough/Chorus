@@ -173,20 +173,34 @@ class Database:
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
         query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
-        cursor.execute(query)
+        row = cursor.execute(query)
+
+        songs = []
+        for row in cursor:
+            songs.append({'songname': row[4], 'artist': row[2], 'songid': row[0], 'votecount': row[1], 'vetocount': row[3]})
+
         cursor.close()
         cnx.commit()
         cnx.close()
+
+        return songs
 
     def getPlayedSongs(self, eventID, userID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
         query = ("SELECT songsid, eventID, playOrder, songname, artist FROM PLAYEDSONGS WHERE eventid = '%s' order by playOrder") % (eventid) 
-        cursor.execute(query)
+        row = cursor.execute(query)
+
+        songs = []
+        for row in cursor:
+            songs.append({'songname': row[3], 'artist': row[4], 'songid': row[0]})
+
         cursor.close()
         cnx.commit()
         cnx.close()
+
+        return songs
 
     def getTopSong(self, eventID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
