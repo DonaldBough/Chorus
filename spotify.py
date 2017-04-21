@@ -86,7 +86,7 @@ class Spotify:
         db = Database()
         trackID = db.getTopSong(eventID)
         token = db.getEventSpotifyToken(eventID)
-        username = db.
+        username = db.getHostID(eventID)
         playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -121,7 +121,7 @@ class Spotify:
     def addTwo(eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        username = db.
+        username = db.getHostID(eventID)
         playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -200,7 +200,7 @@ class Spotify:
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         playlist_id = db.getPlaylistID(eventID)
-        username = db.
+        username = db.getHostID(eventID)
         track_id = db.
         headers={"Authorization":'Bearer ' + token}
         count = 0
@@ -232,7 +232,7 @@ class Spotify:
     #play playlist start
     def play(eventID):
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         #print('play')
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/play', headers)
@@ -267,7 +267,7 @@ class Spotify:
         #print('delete')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        user = db.
+        user = db.getHostID(eventID)
         playlist_id = db.getPlaylistID(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
