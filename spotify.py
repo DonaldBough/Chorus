@@ -41,6 +41,12 @@ class Spotify:
         Input: username of user from database, oauth token from database
         return: playlist ID, ID of playlist created
     '''
+    def search(name)
+        sp = spotipy.Spotify()
+        sp.trace = False
+        results = spotify.search(q='artist:' + name, type='track')
+        return results
+    
     def createPlaylist(token):
         #db = Database()
         #token = db.getEventSpotifyToken(eventID)
@@ -79,9 +85,9 @@ class Spotify:
     def addSongs(eventID):
         db = Database()
         trackID = db.getTopSong(eventID)
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         username = db.
-        playlist_id = db.
+        playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
@@ -114,9 +120,9 @@ class Spotify:
     '''   
     def addTwo(eventID):
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         username = db.
-        playlist_id = db.
+        playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3', '0KKkJNfGyhkQ5aFogxQAPU'})
@@ -131,8 +137,8 @@ class Spotify:
     
     def guestAdd(userID, songID):
         db = Database()
-        playlist_id = db.
-        token = db.
+        playlist_id = db.getPlaylistID(eventID)
+        token = db.getEventSpotifyToken(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
@@ -192,8 +198,8 @@ class Spotify:
     '''
     def recommend_fallback(eventID): 
         db = Database()
-        token = db.
-        playlist_id = db.
+        token = db.getEventSpotifyToken(eventID)
+        playlist_id = db.getPlaylistID(eventID)
         username = db.
         track_id = db.
         headers={"Authorization":'Bearer ' + token}
@@ -216,7 +222,7 @@ class Spotify:
     '''
     def recommend_ui(eventID):
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -234,7 +240,7 @@ class Spotify:
     #pause playlist
     def pause(eventID):
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         #print('pause')
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/pause', headers)
@@ -243,7 +249,7 @@ class Spotify:
     def resume(eventID):  
         #print('resume')
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
         requests.put('https://api.spotify.com/v1/me/player/play', headers)
 
@@ -251,7 +257,7 @@ class Spotify:
     def skip(eventID):
         #print('skip')
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
         requests.post('https://api.spotify.com/v1/me/player/next',headers)
 
@@ -260,9 +266,9 @@ class Spotify:
     def deleteSong(eventID):
         #print('delete')
         db = Database()
-        token = db.
+        token = db.getEventSpotifyToken(eventID)
         user = db.
-        playlist_id = db.
+        playlist_id = db.getPlaylistID(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)
