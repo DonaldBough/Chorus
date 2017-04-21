@@ -10,13 +10,13 @@ class Database:
     ##################################
 
     #Template for what insert statements look like, table name/columns aren't right
-    def insertEvent(self, eventStatus, explicitAllowed, eventName, accessToken, refreshToken):
+    def insertEvent(self, eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO EVENT (eventStatus,  explicitAllowed, eventName, accessToken, refreshToken) "
-            "VALUES(%s, %s, %s, %s, %s)")
-        data = (eventStatus, explicitAllowed, eventName, accessToken, refreshToken)
+        query = ("INSERT INTO EVENT (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken) "
+            "VALUES(%s, %s, %s, %s, %s, %s)")
+        data = (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
@@ -83,6 +83,21 @@ class Database:
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
         query = ("SELECT playlistID FROM HOST WHERE hostID = %s") % (hostID)
+        cursor.execute(query)
+        playlistID = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if playlistID is None:
+            return -1
+        return playlistID[0]
+
+     def getPlaylistID(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT playlistID FROM HOST WHERE hostID in (SELECT hostID from EVENT where eventId = '%s')") % (eventID)
         cursor.execute(query)
         playlistID = cursor.fetchone()
         cursor.close()
@@ -221,7 +236,7 @@ class Database:
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT hostID FROM EVENT WHERE eventID = '%s' ") % (eventID)
+        query = ("SELECT hostID FROM EVENT WHERE eventID in (SELECT eventID from USER where currentEvent = '%s' and host = 1) ") % (eventID)
         cursor.execute(query)
         result = cursor.fetchone()
         cursor.close()
