@@ -224,12 +224,12 @@ class Database:
         cursor = cnx.cursor(buffered=True)
         query = ("SELECT userid from events where eventid = '%s'") % (eventid) 
         cursor.execute(query)
-        userid = cursor.fetchone()
+        result = cursor.fetchone()
         cursor.close()
         cnx.commit()
         cnx.close()
 
-        if userid is None:
+        if result is None:
             return -1
         return token[0]
     
