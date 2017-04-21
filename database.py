@@ -218,6 +218,21 @@ class Database:
             return -1
         return result[0]
 
+    def getUserID(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT userid from events where eventid = '%s'") % (eventid) 
+        cursor.execute(query)
+        userid = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if userid is None:
+            return -1
+        return token[0]
+    
     #get accessToken based off of the eventID
     def getEventSpotifyToken(self, eventID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
