@@ -135,6 +135,11 @@ class Spotify:
         sp.user_playlist_create(username, playlist_name)
         playlists = sp.user_playlists(userID, limit=50, offset=0)
         
+        for playlist in playlists['items']:
+            if(playlist['name'] == "Chorus"):
+                playlist_id = playlist['id']
+        return playlist_id
+        
     '''
         addSongs
         Def: Adds top voted song to playlist if there is no longer a locked in song
