@@ -263,6 +263,21 @@ class Database:
             return -1
         return result[0]
 
+    def eventNameCheck(self, eventname):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT eventName FROM EVENT WHERE eventName = '%s' ") % (eventname)
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if result is None:
+            return -1
+        return result[0]
+
     def getAllEventID(self):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
