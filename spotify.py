@@ -76,12 +76,7 @@ class Spotify:
         data.append(playlist_id)
         
         return data
-    '''
-        addSongs
-        Def: Adds song to chorus playlist
-        Input: oauth token from database, trackID from what user requests (UI), playlist_id from database/ other functions, username from database/other function
-        return: N/A
-    '''
+
     def addSongs(eventID):
         db = Database()
         trackID = db.getTopSong(eventID)
@@ -92,13 +87,8 @@ class Spotify:
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
 
-    '''
-        hostUserId
-        Def: Adds song to chorus playlist
-        Input: oauth token from database
-        return: userID, current user's ID
-    
-    def hostUserId(eventID):
+
+    def guestUserId(token):
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
         #gets start of user id
@@ -113,11 +103,6 @@ class Spotify:
         return userID
 
     
-        addTwo
-        Def: Adds song to chorus playlist
-        Input: oauth token from database, trackID from what user requests (UI), playlist_id from database/ other functions, username from database/other function
-        return: N/A
-    '''   
     def addTwo(eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
@@ -127,6 +112,29 @@ class Spotify:
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3', '0KKkJNfGyhkQ5aFogxQAPU'})
 
+        
+    def createGuestPlaylist(userID):
+        #db = Database()
+        #token = db.getEventSpotifyToken(eventID)
+        #use GET command to get user info
+        #req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
+        #gets start of user id
+        #indexID = req.text.find("id", 0, len(req.text))
+        #indexID = indexID + 7
+        #userID = ""
+
+        #while (req.text[indexID] != '"'):
+        #    userID += req.text[indexID]
+        #    indexID+= 1
+            
+        playlist_name = 'Chorus'
+        token = db.getUserToken(userID)
+        username = db.getGuestUsername(userID)
+        sp = spotipy.Spotify(auth=token)
+        sp.trace = False
+        sp.user_playlist_create(username, playlist_name)
+        playlists = sp.user_playlists(userID, limit=50, offset=0)
+        
     '''
         addSongs
         Def: Adds top voted song to playlist if there is no longer a locked in song
@@ -137,8 +145,8 @@ class Spotify:
     
     def guestAdd(userID, songID):
         db = Database()
-        playlist_id = db.getPlaylistID(eventID)
-        token = db.getEventSpotifyToken(eventID)
+        playlist_id = db.getPlaylistID(userID)
+        token = db.getEventSpotifyToken(userID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
