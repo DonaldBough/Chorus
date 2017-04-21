@@ -88,7 +88,7 @@ class Spotify:
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
 
 
-    def guestUserId(token):
+    def guestUsername(token):
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
         #gets start of user id
