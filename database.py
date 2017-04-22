@@ -55,12 +55,11 @@ class Database:
         cnx.commit()
         cnx.close()
 
-   --> def insertPlaylistID(self, playlistID):
+   	def insertPlaylistID(self, userID, playlistID):
     	cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO NEXTSONGS (songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean) "
-           "VALUES(%s, %s, %s, %s, %s, %s, %s, %s)")
+        query = ("UPDATE USER set playlistID = '%s' where userid = '%s'") % (playlistID, userID)
         data = (songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean)
         cursor.execute(query, data)
         cursor.close()
