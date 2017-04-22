@@ -257,7 +257,7 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         #print('play')
         headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/play', headers)
+        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
 
     #pause playlist
     def pause(eventID):
@@ -265,7 +265,7 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         #print('pause')
         headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/pause', headers)
+        requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + token})
 
     #resume playlist
     def resume(eventID):  
@@ -273,7 +273,7 @@ class Spotify:
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/play', headers)
+        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
 
     #veto, skip track
     def skip(eventID):
@@ -281,7 +281,7 @@ class Spotify:
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
-        requests.post('https://api.spotify.com/v1/me/player/next',headers)
+        requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + token})
 
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
