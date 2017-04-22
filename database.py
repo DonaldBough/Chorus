@@ -42,13 +42,13 @@ class Database:
             return -1
         return userID[0]
 
-    def insertHost(self, currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken):
+    def insertHost(self, currentEvent, inEvent, host, spotifyUsername, playlistID, spotifyToken, refreshToken):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO USER (currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken) "
+        query = ("INSERT INTO USER (currentEvent, inEvent, host, spotifyUsername, playlistID, spotifyToken, refreshToken) "
            "VALUES(%s, %s, %s, %s, %s, %s, %s)")
-        data = (currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken)
+        data = (currentEvent, inEvent, host, spotifyUsername, playlistID, spotifyToken, refreshToken)
         cursor.execute(query, data)
 
         #Get the userID from the insert
@@ -335,7 +335,7 @@ class Database:
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT accessToken FROM USER WHERE userID = '%s' ") % (userID)
+        query = ("SELECT spotifyToken FROM USER WHERE userID = '%s' ") % (userID)
         cursor.execute(query)
         result = cursor.fetchone()
         cursor.close()
