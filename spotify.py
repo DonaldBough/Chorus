@@ -74,9 +74,15 @@ class Spotify:
         data = []
         data.append(userID)
         data.append(playlist_id)
-        
         return data
-
+    
+    def getPlaylistUrl(eventID)
+        db = Database()
+        userID = db.getHostSpotifyUserName(eventID)
+        playlist_id = db.getPlaylistID(eventID)
+        url = ('https://open.spotify.com/user/' + userID + '/playlist/' + platlist_id)
+        return url
+    
     def addSongs(eventID):
         db = Database()
         trackID = db.getTopSong(eventID)
