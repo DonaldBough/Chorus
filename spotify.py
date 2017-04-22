@@ -81,7 +81,7 @@ class Spotify:
         db = Database()
         trackID = db.getTopSong(eventID)
         token = db.getEventSpotifyToken(eventID)
-        username = db.getHostID(eventID)
+        username = db.getHostSpotifyUserName(eventID)
         playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -106,7 +106,7 @@ class Spotify:
     def addTwo(eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        username = db.getHostID(eventID)
+        username = db.getHostSpotifyUserName(eventID)
         playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -150,8 +150,8 @@ class Spotify:
     
     def guestAdd(userID, songID):
         db = Database()
-        playlist_id = db.getPlaylistID(userID)
-        token = db.getEventSpotifyToken(userID)
+        playlist_id = db.getPlaylist(userID)
+        token = db.getGuestSpotifyToken(userID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
@@ -160,8 +160,8 @@ class Spotify:
         #use GET command to get users played songs
         #currentSong = ""
         db = Database()
-        token = db.
-        playingSong = db.
+        token = db.getGuestSpotifyToken(userID)
+        playingSong = db.getCurrentPlayingSong(eventID)
         req = requests.get("https://api.spotify.com/v1/me/player/currently-playing", headers={"Authorization":'Bearer ' + token})
         indexID = req.text.find("id", 0, len(req.text))
         indexID = indexID + 7
@@ -176,8 +176,9 @@ class Spotify:
         #change the song in server to what was played
         if (playingSong != currentSong):
             playingSong = currentSong;
+            db.updateCurrentSong(playingSong, eventID)
             #send playingSong back to db
-            addSongs(eventID)
+            #addSongs(eventID)
             print("song added")
 
         #do nothing if it is the same   
@@ -214,7 +215,7 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         playlist_id = db.getPlaylistID(eventID)
         username = db.getHostID(eventID)
-        track_id = db.
+        track_id = db.getCurrentPlayingSong(eventID)
         headers={"Authorization":'Bearer ' + token}
         count = 0
         sp = spotipy.Spotify(auth=token)
