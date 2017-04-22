@@ -10,13 +10,13 @@ class Database:
     ##################################
 
     #Template for what insert statements look like, table name/columns aren't right
-    def insertEvent(self, eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken):
+    def insertEvent(self, eventStatus, hostID, explicitAllowed, eventName):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO EVENT (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken) "
-            "VALUES(%s, %s, %s, %s, %s, %s)")
-        data = (eventStatus, hostID, explicitAllowed, eventName, accessToken, refreshToken)
+        query = ("INSERT INTO EVENT (eventStatus, hostID, explicitAllowed, eventName) "
+            "VALUES(%s, %s, %s, %s)")
+        data = (eventStatus, hostID, explicitAllowed, eventName)
         cursor.execute(query, data)
         cursor.close()
         cnx.commit()
@@ -42,7 +42,25 @@ class Database:
             return -1
         return userID[0]
 
-  
+    def insertHost(self, currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("INSERT INTO USER (currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken) "
+           "VALUES(%s, %s, %s, %s, %s, %s, %s)")
+        data = (currentEvent, inEvent, host, spotifyUsername, playlistID, accessToken, refreshToken)
+        cursor.execute(query, data)
+
+        #Get the userID from the insert
+        userID = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if userID is None:
+            return -1
+        return userID[0]
+    
     def insertSong(self, songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
@@ -60,11 +78,22 @@ class Database:
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
         query = ("UPDATE USER set playlistID = '%s' where userid = '%s'") % (playlistID, userID)
-        data = (songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean)
-        cursor.execute(query, data)
+        cursor.execute(query)
         cursor.close()
         cnx.commit()
         cnx.close()
+
+    def insertUserData(self, userID, spotifyUsername, spotifyToken):
+    	cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor()
+        query = ("UPDATE USER set spotifyUsername = '%s' and spotifyToken = '%s' where userID = '%s'") % (spotifyUsername, spotifyToken, userID)
+        cursor.execute(query)
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+
 
     ##################################
     #           GET STATEMENTS       #
