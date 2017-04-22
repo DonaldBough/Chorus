@@ -3,103 +3,133 @@ import pprint
 import sys
 import os
 import subprocess
-import sched
-import time
 import json
 import requests
 
 from flask import Flask
 from flask_restful import Resource, Api
 from flask_restful import reqparse
-from flask_cors import CORS, cross_origin
 #import our classes
 from database import Database
 from spotify import Spotify
 
 app = Flask(__name__)
-CORS(app)
 api = Api(app)
+    
+def auth2Token(code):
+    url = "https://accounts.spotify.com/api/token"
+    grant_type = "authorization_code"
+    #get code from UI
+    redirect_uri = "http://localhost:8000/create.html"
+    #redirect_uri = "http:%2F%2Flocalhost:8000%2Fcreate.html"
+    client_id = "0abc049d139f4ee8b465fd9416aa358d"
+    client_secret = "dd477b353e744461ae1b3062f256c952"
+    payload = {'grant_type': grant_type, 'code': code, 'redirect_uri': redirect_uri, 'client_id':client_id, 'client_secret':client_secret}
 
-@app.route("/")
-def helloWorld():
-  return "Hello, cross-origin-world!"
+    req = requests.post(url, data = payload)
+    res = json.loads (req.content)
 
-class CreateUser(Resource):
-    def post(self):
-        try:
-            # Parse the arguments
-            parser = reqparse.RequestParser()
-            parser.add_argument('password', type=str, help='Password to create user')
-            #parser.add_argument('explicit', type=bool, help='Flag to check if event exists')
-            args = parser.parse_args()
+    return [res['access_token'], res['refresh_token']]
 
-            return {'Password': args['password']}
-
-        except Exception as e:
-            return {'error': str(e)}
-
+#class CreateUser(Resource):
+def CreateUser(currentEvent, inEvent, isHost):
+    try:
+        # Parse the arguments
+        '''
+        parser = reqparse.RequestParser()
+        parser.add_argument('currentEvent', type=str)
+        parser.add_argument('inEvent', type=str)
+        parser.add_argument('host', type=str)
+        args = parser.parse_args()
+        '''     
+        
+         
+        db = Database()
+        userID = db.insertUser(currentEvent, inEvent, isHost)
+        
+        return userID
+    
+    except Exception as e:
+        return str(e)
+    
+#class CreateHost(Resource):
+def CreateHost(playlistID, spotifyUsername):
+    try:
+        '''
+        # Parse the arguments
+        parser = reqparse.RequestParser()
+        parser.add_argument('playlistID', type=str)
+        parser.add_argument('spotifyToken', type=str)
+        parser.add_argument('spotifyUsername', type =str)
+        args = parser.parse_args()
+        '''
+        db = Database()
+        hostID = db.insertHost(playlistID, spotifyUsername)
+        return hostID
+    
+    except Exception as e:
+        return {'error': str(e)}
+    
 class SendVote(Resource):
     def post(self):
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
-            parser.add_argument('eventid', type=str, help='ID of event user is in')
-            parser.add_argument('songid', type=str, help='ID of song that is being voted on')
-            parser.add_argument('vote', type=str, help='Email address to create user')
-            parser.add_argument('veto', type=str, help='Email address to create user')
+            parser.add_argument('userID', type=int)
+            parser.add_argument('eventID', type=int)
+            parser.add_argument('songID', type=str)
+            parser.add_argument('vote', type=int)
+            parser.add_argument('veto', type=int)
             args = parser.parse_args()
-
-            _userID = args['userid']
-            _eventID = args['eventid']
-            _songID = args['songid']
+            
+            _userID = args['userID']
+            _eventID = args['eventID']
+            _songID = args['songID']
             _vote = args['vote']
             _veto = args['veto']
-            
+
             db = Database();
-            db.registerVote(_userID, _eventID, _songID, _vote, _veto);
-            return {'status': 'Success'} #'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
+            votes = db.isVoted(_eventID, _userID, _songID)
+
+            if (votes == -1):
+                if (_vote == 1 and _veto == 0):
+                    db.registerVote(_songID)
+                    db.updateVote(_userID, _eventID, _songID, _vote)
+                    return {'status': 'Success'}
+                elif (_vote == 0 and _veto == 1):
+                    db.registerVeto(_songID)
+                    db.updateVeto(_userID, _eventID, _songID, _veto)
+                    return {'status': 'Success'} #'User ID': args['userid'], 'Event ID': args['eventid'], 'Song ID': args['songid'], 'Vote': args['vote'], 'Veto': args['veto']}
+            return {'status': 'Failure'}
 
         except Exception as e:
             return {'error': str(e)}
 
 class CreateEvent(Resource):
     def post(self):
-        print "b4"
         try:
             # Parse the arguments
             parser = reqparse.RequestParser()
-            #parser.add_argument('eventStatus', type=str)
-            #parser.add_argument('hostID', type=int)
             parser.add_argument('explicitAllowed', type=str)
             parser.add_argument('eventName', type=str)
             parser.add_argument('authCode', type=str)
             args = parser.parse_args()
             
-            print args
-
-            _authCode = args['authCode']
-            tokens = auth2Token(_authCode)
-
-            accessToken = tokens[0]
+            _authCode    = args['authCode']
+            tokens       = auth2Token(_authCode)
+            accessToken  = tokens[0]
             refreshToken = tokens[1]
 
-            print "token"
-
-            #print(accessToken)
-            #host = CreateHost();
-            host = 1
-
-            db = Database()
-            db.insertEvent("LIVE", host, args['explicitAllowed'], 
+            sp  = Spotify()
+            ids = sp.createPlaylist(accessToken)
+            
+            hostID = CreateUser("0", "0", "1")
+            db     = Database()
+            db.insertEvent("LIVE", hostID, args['explicitAllowed'], 
                 args['eventName'], accessToken, refreshToken)
-
-            print "db"
-
-            eventID = db.getEventID(args['eventName'], host)
-            #json.dumps({'EventID': eventID}), 200, {'ContentType':'application/json'} 
-            #print eventID
-            return json.dumps({'eventID': eventID, 'hostID': host})
+            
+            eventID = db.getEventID(args['eventName'], hostID)
+            return json.dumps({'eventID': eventID, 'hostID': hostID})
 
         except Exception as e:
             return {'error': str(e)}
@@ -113,15 +143,38 @@ class GetQueue(Resource):
             parser.add_argument('eventid', type=str, help='ID of event user is in')
             args = parser.parse_args()
 
+            _userID = args['userid']
+            _eventID = args['eventid']
+
             db = Database()
-            songs = db.getQueue()
-            
+            songs = db.getQueue(_eventID, _userID)
+
             return {'songs': songs}
 
         except Exception as e:
             return {'error': str(e)}
 
-class joinEvent(Resource):
+class GetPlayedSongs(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                               
+            parser = reqparse.RequestParser()
+            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
+            parser.add_argument('eventid', type=str, help='ID of event user is in')
+            args = parser.parse_args()
+
+            _userID = args['userid']
+            _eventID = args['eventid']
+
+            db = Database()
+            songs = db.getPlayedSongs(_eventID, _userID)
+
+            return {'songs': songs}
+
+        except Exception as e:
+            return {'error': str(e)}
+
+class JoinEvent(Resource):
     def post(self):
         try:
             # Parse the arguments
@@ -135,70 +188,24 @@ class joinEvent(Resource):
             
             db = Database()
             #print("name :" +_eventPassword)
-            eventID = db.getEventID(_eventPassword)
-            print(eventID)
-            db.JoinEvent(eventID, "0", "0")
-
-
+            eventID = db.getEventID(_eventPassword, "1")
+            userID  = CreateUser(eventID, "0", "0")
+            db.joinEvent(eventID, "0", "0")
 
             return {'EventID': eventID}
 
         except Exception as e:
             return {'error': str(e)}
-            
-
-def auth2Token(code):
-    url = "https://accounts.spotify.com/api/token"
-    grant_type = "authorization_code"
-    #get code from UI
-    redirect_uri = "http://localhost:8000/create.html"
-    #redirect_uri = "http:%2F%2Flocalhost:8000%2Fcreate.html"
-    client_id = "0abc049d139f4ee8b465fd9416aa358d"
-    client_secret = "dd477b353e744461ae1b3062f256c952"
-    payload = {'grant_type': grant_type, 'code': code, 'redirect_uri': redirect_uri, 'client_id':client_id, 'client_secret':client_secret}
-
-    req = requests.post(url, data = payload)
-    res = json.loads (req.content)
-    #print(res['access_token'])
-    #print(res['refresh_token'])
-    #print(res)
-    return [res['access_token'], res['refresh_token']]
-
-
-
-
-'''
-def timer():
-    while(True):
-        #scheduler = sched.scheduler(time.time, time.sleep)
-        #scheduler.enter(15, 1, checkSongs, ('Checking  for new songs',))
-        #scheduler.run()
-        checkSongs('123')
-        time.sleep(10)
-    
-
-
-def checkSongs(val):
-    print(val)
-
-timer()'''
-
-db = Database()
-
-#def insertEvent(self, eventID, eventStatus, hostID, explicit):
-# newData = db.getArtistOfSong(1)
-#print db.getSongID("Riptide")
-
-# print newData
-
-# print "Token was : %s" % db.getHostSpotifyToken(100)
-#print("token was" + db.getHostSpotifyToken(100))
 
 #define API endpoints
-api.add_resource(CreateUser, '/CreateUser')
+
+#api.add_resource(CreateUser, '/CreateUser')
+#api.add_resource(CreateHost, '/CreateHost')
 api.add_resource(SendVote, '/SendVote')
 api.add_resource(CreateEvent, '/CreateEvent')
-api.add_resource(joinEvent, '/JoinEvent')
+api.add_resource(JoinEvent, '/JoinEvent')
 api.add_resource(GetQueue, '/GetQueue')
+api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
+
 if __name__ == '__main__':
     app.run(debug=True)
