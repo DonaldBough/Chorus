@@ -111,6 +111,7 @@ class Spotify:
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3', '0KKkJNfGyhkQ5aFogxQAPU'})
+        db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
 
         
     def createGuestPlaylist(userID):
