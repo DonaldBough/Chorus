@@ -52,6 +52,7 @@ class Database:
         cursor.execute(query, data)
 
         #Get the userID from the insert
+        cursor.execute("SELECT LAST_INSERT_ID()")
         userID = cursor.fetchone()
         cursor.close()
         cnx.commit()
@@ -60,7 +61,7 @@ class Database:
         if userID is None:
             return -1
         return userID[0]
-    
+  
     def insertSong(self, songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
@@ -72,8 +73,8 @@ class Database:
         cursor.close()
         cnx.commit()
         cnx.close()
-    
-    def insertPlaylistID(self, userID, playlistID):
+
+   	def insertPlaylistID(self, userID, playlistID):
     	cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
@@ -298,13 +299,28 @@ class Database:
         if result is None:
             return -1
         return token[0]
+
+    def getHostID(self, eventID):
+        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+            host='174.138.64.25', database ='mydb')
+        cursor = cnx.cursor(buffered=True)
+        query = ("SELECT userid from events where eventid = '%s' and host = 1") % (eventid) 
+        cursor.execute(query)
+        result = cursor.fetchone()
+        cursor.close()
+        cnx.commit()
+        cnx.close()
+
+        if result is None:
+            return -1
+        return token[0]
     
     #get accessToken based off of the eventID
     def getEventSpotifyToken(self, eventID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT accessToken FROM EVENT WHERE eventID = '%s' ") % (eventID)
+        query = ("SELECT spotifyToken FROM USER WHERE currentEvent = '%s' ") % (eventID)
         cursor.execute(query)
         result = cursor.fetchone()
         cursor.close()
