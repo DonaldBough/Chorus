@@ -22,13 +22,13 @@ class Database:
         cnx.commit()
         cnx.close()
 
-    def insertUser(self, currentEvent, inEvent, hostID):
+    def insertUser(self, currentEvent, inEvent, host):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor()
-        query = ("INSERT INTO USER (currentEvent, inEvent, hostID) "
+        query = ("INSERT INTO USER (currentEvent, inEvent, host) "
            "VALUES(%s, %s, %s)")
-        data = (currentEvent, inEvent, hostID)
+        data = (currentEvent, inEvent, host)
         cursor.execute(query, data)
 
         #Get the userID from the insert
@@ -42,26 +42,7 @@ class Database:
             return -1
         return userID[0]
 
-    def insertHost(self, playlistID, spotifyToken, spotifyUsername):
-        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
-            host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor()
-        query = ("INSERT INTO HOST (playlistID, spotifyToken, spotifyUsername) "
-           "VALUES(%s, %s, %s)")
-        data = (playlistID, spotifyToken, spotifyUsername)
-        cursor.execute(query, data)
-
-        #Get the hostID from the insert
-        cursor.execute("SELECT LAST_INSERT_ID()")
-        hostID = cursor.fetchone()
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-
-        if hostID is None:
-            return -1
-        return hostID[0]
-
+  
     def insertSong(self, songID, eventID, voteCount, songName, artist, isExplicit, vetoCount, vetoBoolean):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
@@ -97,7 +78,7 @@ class Database:
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT playlistID FROM HOST WHERE hostID in (SELECT hostID from EVENT where eventId = '%s')") % (eventID)
+        query = ("SELECT playlistID from USER where currentEvent = '%s' and host = 1") % (eventID)
         cursor.execute(query)
         playlistID = cursor.fetchone()
         cursor.close()
@@ -108,11 +89,11 @@ class Database:
             return -1
         return playlistID[0]
 
-    def getHostSpotifyToken(self, hostID):
+    def getHostSpotifyToken(self, eventid):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
             host='174.138.64.25', database ='mydb')
         cursor = cnx.cursor(buffered=True)
-        query = ("SELECT spotifyToken FROM HOST WHERE hostID = %s") % (hostID)
+        query = ("SELECT spotifyToken from USER where currentEvent = '%s' and host = 1") % (hostID)
         cursor.execute(query)
         token = cursor.fetchone()
         cursor.close()
@@ -152,21 +133,6 @@ class Database:
             return -1
         return songID[0]
 
-    def getEventID(self, eventName, hostID):
-        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
-            host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor(buffered=True)
-        query = ("SELECT eventID FROM EVENT WHERE eventName = %s and hostID = %s")
-        data = (eventName, hostID)
-        cursor.execute(query, data)
-
-        result = cursor.fetchone();
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-        if result is None:
-            return -1
-        return result[0]
 
     def getEventid(self, eventname):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -232,20 +198,6 @@ class Database:
             return -1
         return songID[0]
 
-    def getHostID(self, eventID):
-        cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
-            host='174.138.64.25', database ='mydb')
-        cursor = cnx.cursor(buffered=True)
-        query = ("SELECT hostID FROM EVENT WHERE eventID in (SELECT eventID from USER where currentEvent = '%s' and host = 1) ") % (eventID)
-        cursor.execute(query)
-        result = cursor.fetchone()
-        cursor.close()
-        cnx.commit()
-        cnx.close()
-
-        if result is None:
-            return -1
-        return result[0]
 
     def getUserID(self, eventID):
         cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
