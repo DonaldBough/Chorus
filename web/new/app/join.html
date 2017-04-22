@@ -1,10 +1,18 @@
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Chorus</title>
+  <!--link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css"-->
+  <link rel="stylesheet" href="app.css">
+  <!--script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script-->
 
   <!--Bootstrap-->
     <!-- Latest compiled and minified CSS -->
@@ -16,44 +24,52 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-   <!-- Angular -->
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script src="js/joinController.js"></script>
-
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-      <![endif]-->
-    </head>
-    <body ng-app="myApp">
+   <!-- Angular 
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
+</head>
+<body ng-app="myApp">
     <div ng-controller = "joinCtrl as controller">
-    <div class="cover-image"></div>
-    <div class="cover">
-      <div class="cover-image"></div>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <img class="img-responsive" src="img\Chorus.png">
-            <p>Bringing music to the masses</p>
-            <br>
-            <br>
+      <div class="cover">
+        <div class="cover-image"></div>
+          <div class="container">
             <div class="row">
-              <div class="col-xs-2"></div>
-              <div class="col-xs-8">
-                <input type="text" class="form-control" placeholder="Enter party code" style="height:45px">
+              <div class="col-md-12 text-center">
+                <br>
+                <br>
+                <br>
+                <br>
+                <img class="img-responsive" src="img\Chorus.png">
+                <p>Bringing music to the masses</p>
+                <br>
+                <br>
+                <div class="row">
+                  <div class="col-xs-2"></div>
+                    <div class="col-xs-8">
+                      <input type="text" class="form-control" placeholder="Enter party code" style="height:45px" ng-model="eventCode">
+                      </label>
+                    </div>
+                  </div>
+                  <br>
+                  <button ng-click="joinEvent()">Join Event</button>
+                  <br>
+                </div>
               </div>
             </div>
-            <br>
-            <a href="index.html"class="btn btn-lg btn-default">Join</a>
-            <br>
-            <a href="index.html">Create a new event</a>
-          </div>
-        </div>
       </div>
     </div>
-  </div>
-  
-
-</body></html>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
+  <script src="app.js"></script>
+  <script src="create.js"></script>
+  <script src="join.js"></script>
+  <script src="played/played.js"></script>
+  <script src="next/next.js"></script>
+  <script src="suggest/suggest.js"></script>
+  <script src="settings/settings.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</body>
+</body>
+</html>

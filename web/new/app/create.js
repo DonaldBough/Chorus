@@ -52,6 +52,7 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 					var res = $.parseJSON(data)
 					//console.log(res)
 					document.cookie = "eventID="+res.eventID;
+					document.cookie = "eventName="+$scope.eventCode;
 					document.cookie = "userID="+res.hostID;
 					document.cookie = "isHost="+true;
 					//window.alert(document.chorusUser)
