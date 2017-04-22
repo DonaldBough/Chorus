@@ -283,6 +283,11 @@ class Spotify:
         headers={"Authorization":'Bearer ' + token}
         requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + token})
 
+    def toggle(eventID):
+        db = Database()
+        token = db.getEventSpotifyToken(eventID)
+        headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/shuffle',headers={"Authorization":'Bearer ' + token})
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
     def deleteSong(eventID):
