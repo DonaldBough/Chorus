@@ -9,6 +9,7 @@ import json
 import spotipy.util as util
 import urllib2
 import time
+from database import Database
 
 #All functions that interact directly with the Spotify API go here
 
