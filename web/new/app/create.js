@@ -24,10 +24,17 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 		}
 		else{
 			if(code != 'http'){
+				var check
+				if($scope.check){
+					check = 1
+				}
+				else{
+					check = 0
+				}
 
 				var sendData = {
 					eventName: $scope.eventCode,
-					explicitAllowed: 1,//$scope.check,
+					explicitAllowed: check,//1,//$scope.check,
 					authCode: code
 				}
 				sendData = JSON.stringify(sendData);
@@ -44,9 +51,9 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 					//console.log(data)
 					var res = $.parseJSON(data)
 					//console.log(res)
-					document.chorusUser = res.hostID;
-					document.chorusEvent = res.eventID;
-					document.chorusIsHost = true;
+					document.cookie = "eventID="+res.eventID;
+					document.cookie = "userID="+res.hostID;
+					document.cookie = "isHost="+true;
 					//window.alert(document.chorusUser)
 					//window.alert(document.chorusEvent)
 					console.log(data)
