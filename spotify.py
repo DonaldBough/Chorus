@@ -204,8 +204,8 @@ class Spotify:
         resultList = []
         while True:
             resultList = db.getAllEventID()
-            for i in resultList: timer(i)
             time.sleep(30)
+            for i in resultList: timer(i) 
         t = threading.Thread(target = authtarget)
         t.daemon = True
         t.start()
