@@ -120,7 +120,8 @@ class Spotify:
         playlist_id = db.getPlaylistID(eventID)
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3', '0KKkJNfGyhkQ5aFogxQAPU'})
+        sp.user_playlist_add_tracks(username, playlist_id, {'7qiZfU4dY1lWllzX7mPBI3'})
+        #, '0KKkJNfGyhkQ5aFogxQAPU'
         db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
 
         
@@ -173,7 +174,7 @@ class Spotify:
         db = Database()
         token = db.getGuestSpotifyToken(userID)
         playingSong = db.getCurrentPlayingSong(eventID)
-        req = requests.get("https://api.spotify.com/v1/me/player/currently-playing", headers={"Authorization":'Bearer ' + token})
+        req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
         indexID = req.text.find("id", 0, len(req.text))
         indexID = indexID + 7
         currentSong = ""
@@ -191,7 +192,7 @@ class Spotify:
             #send playingSong back to db
             #addSongs(eventID)
             print("song added")
-
+            
         #do nothing if it is the same   
         else:
             print "the same"
@@ -235,9 +236,10 @@ class Spotify:
         #print(req.content)
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
-            if(count < 10):
+            if(count < 1)
                 addSongs(token, i, playlist_id, username)
                 count = count + 1
+            break
 
     '''
         recommend_ui
