@@ -1,5 +1,32 @@
-<p>This is the partial for next</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<body ng-app="myApp">
+	<div ng-controller = "nextCtrl as controller">
+		<div class="container">
+			<ul class="list-group">
+				<h3>Next Songs</h3>
+
+				<div ng-repeat="song in q">	
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-xs-7">
+								<h4>{{song.songname}}</h4>
+								<h5>{{song.artist}}</h5>
+							</div>
+							<!--BUTTONS-->
+							<div class="col-xs-5">
+								<div class="btn-group pull-right">
+									<button type="button" class="btn btn-secondary" ng-click="sendVeto(song.songid)">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+									<button type="button" class="btn btn-secondary" ng-click="sendVote(song.songid)">
+										<span class="glyphicon glyphicon-ok"></span>
+									</button>
+								</div>
+							</div>
+							<!--BUTTONS-->
+						</li>	
+					</div>
+				</div>
+			</ul>
+		</div>
+	</div>
+</body>

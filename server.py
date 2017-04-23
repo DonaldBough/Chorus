@@ -9,11 +9,13 @@ import requests
 from flask import Flask
 from flask_restful import Resource, Api
 from flask_restful import reqparse
+from flask_cors import CORS, cross_origin
 #import our classes
 from database import Database
 from spotify import Spotify
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
     
 def auth2Token(code):
@@ -53,7 +55,8 @@ def CreateUser(currentEvent, inEvent, isHost):
         return str(e)
     
 #class CreateHost(Resource):
-def CreateHost(playlistID, spotifyUsername):
+
+def CreateHost(currentEvent, inEvent, isHost, spotufyUsername, playlistID, accessToken, refreshToken):
     try:
         '''
         # Parse the arguments
@@ -64,12 +67,12 @@ def CreateHost(playlistID, spotifyUsername):
         args = parser.parse_args()
         '''
         db = Database()
-        hostID = db.insertHost(playlistID, spotifyUsername)
+        hostID = db.insertHost(currentEvent, inEvent, isHost, spotufyUsername, playlistID, accessToken, refreshToken)
         return hostID
     
     except Exception as e:
         return {'error': str(e)}
-    
+
 class SendVote(Resource):
     def post(self):
         try:
@@ -114,21 +117,33 @@ class CreateEvent(Resource):
             parser.add_argument('eventName', type=str)
             parser.add_argument('authCode', type=str)
             args = parser.parse_args()
-            
             _authCode    = args['authCode']
             tokens       = auth2Token(_authCode)
+            print(tokens)
             accessToken  = tokens[0]
             refreshToken = tokens[1]
-
+            print("here0")
             sp  = Spotify()
             ids = sp.createPlaylist(accessToken)
-            
-            hostID = CreateUser("0", "0", "1")
+            print("here1")
+            print(ids[0])
+            print(ids[1])
+            hostID = CreateHost("0", "0", "1", ids[0], ids[1], accessToken, refreshToken) #######username, playlistid
             db     = Database()
+            print(hostID)
             db.insertEvent("LIVE", hostID, args['explicitAllowed'], 
-                args['eventName'], accessToken, refreshToken)
-            
-            eventID = db.getEventID(args['eventName'], hostID)
+                           args['eventName'])
+            print("here2")
+            eventID = db.getEventid(args['eventName'])
+            db.updateHostEventID(hostID, eventID)
+            print("here3")
+            sp.addTwo(eventID)
+            print("here4")
+            sp.play(eventID)
+            print("here5")
+            #sp.authtarget(hostID)
+            #print("here6")
+
             return json.dumps({'eventID': eventID, 'hostID': hostID})
 
         except Exception as e:
@@ -149,7 +164,7 @@ class GetQueue(Resource):
             db = Database()
             songs = db.getQueue(_eventID, _userID)
 
-            return {'songs': songs}
+            return json.dumps({'songs': songs})
 
         except Exception as e:
             return {'error': str(e)}
@@ -163,7 +178,7 @@ class GetPlayedSongs(Resource):
             parser.add_argument('eventid', type=str, help='ID of event user is in')
             args = parser.parse_args()
 
-            _userID = args['userid']
+            _userID = args['userid']           
             _eventID = args['eventid']
 
             db = Database()
@@ -185,20 +200,101 @@ class JoinEvent(Resource):
             _eventPassword = args['password']
     
             #print(_eventPassword)
-            
             db = Database()
             #print("name :" +_eventPassword)
-            eventID = db.getEventID(_eventPassword, "1")
+            
+            eventID = db.getEventid(_eventPassword)
             userID  = CreateUser(eventID, "0", "0")
-            db.joinEvent(eventID, "0", "0")
-
-            return {'EventID': eventID}
+            
+            return json.dumps({'eventID': eventID, 'userID': userID})
 
         except Exception as e:
             return {'error': str(e)}
 
-#define API endpoints
+class JoinSpotify(Resource): #############
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                  
+            parser = reqparse.RequestParser()
+            parser.add_argument('authCode', type=str)
+            parser.add_argument('userID', type=str)
+            args = parser.parse_args()
 
+            _authCode    = args['authCode']
+            _userID      = args['userID']
+            tokens       = auth2Token(_authCode)
+            accessToken  = tokens[0]
+            refreshToken = tokens[1]
+
+            sp         = Spotify()
+            username   = sp.guestUsername(accessToken)
+            playlistID = sp.createGuestPlaylsit(userID) ##########
+            
+            db = Database()
+            db.insertUserData(userID, username, acessToken) ##########
+            db.insertPlaylistID(userID, playlistID) ########
+
+        except Exception as e:
+            return {'error': str(e)}
+
+'''
+class CreateGuestPlaylist(Resource): #################
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                         
+            parser = reqparse.RequestParser()
+            parser.add_argument('userID', type=str)
+
+            userID  = args['userID']
+
+            sp = Spotify()
+            playlistID = sp.createGuestPlaylsit(userID)
+
+            db = Database()
+            db.insertPlaylistID
+            return {status : 'Success'}
+
+        except Exception as e:
+            return {'error': str(e)}
+'''
+'''
+class GuestAdd(Resoruce): #################
+    def post(self):
+        try:
+            # Parse the arguments                                                                                               
+            parser = reqparse.RequestParser()
+            parser.add_argument('userID', type=str)
+            parser.add_argument('songID', type=str)
+
+            userID = args['userID']
+            songID = args['songID']
+
+            sp = Spotify()
+            sp.guestAdd(userID, songID)
+
+            return {status : 'Success'}
+
+        except Exception as e:
+            return {'error': str(e)}
+
+class Search(Resource): ##################
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                           
+            parser = reqparse.RequestParser()
+            parser.add_argument('query', type=str)
+            
+            query = args['query']
+            sp = Spotify()
+            results = sp.search(query)
+
+            return {'results': results}
+
+        except Exception as e:
+            return {'error': str(e)}
+'''
+
+#define API endpoints
 #api.add_resource(CreateUser, '/CreateUser')
 #api.add_resource(CreateHost, '/CreateHost')
 api.add_resource(SendVote, '/SendVote')

@@ -1,6 +1,14 @@
 'use strict';
 angular.module('myApp.join', []).
 controller('joinCtrl', ['$scope', '$http', function ($scope, $http) {
+	
+	function getCookie(name){
+    		var re = new RegExp(name + "=([^;]+)");
+    		var value = re.exec(document.cookie);
+    		return (value != null) ? unescape(value[1]) : null;
+  		}
+
+
 	$scope.check = true;
 	var url = window.location.href;
 
@@ -15,6 +23,7 @@ controller('joinCtrl', ['$scope', '$http', function ($scope, $http) {
 				console.log($scope.eventCode)
 
 				var url = 'http://localhost:5000/JoinEvent?password='+$scope.eventCode
+				console.log(url)
 
 				$.ajax({
 					type:"POST",
@@ -22,12 +31,16 @@ controller('joinCtrl', ['$scope', '$http', function ($scope, $http) {
 				async:false,
 				success: function(data) {
 					//console.log(data)
-					var res = $.parseJSON(data)
-					//console.log(res)
-					document.cookie = "eventID="+res.eventID;
-					document.cookie = "eventName="+$scope.eventCode;
-					document.cookie = "userID="+res.hostID;
-					document.cookie = "isHost="+false;
+					var res = 	JSON.parse(data)
+					//window.alert(res.EventID)
+					document.cookie = "eventID="+ res.eventID;
+					document.cookie = "eventName="+ $scope.eventCode;
+					window.alert(res.userID)
+					document.cookie = "userID="+ res.userID;
+					document.cookie = "isHost="+ false;
+
+					console.log(getCookie('eventID'))
+
 					//window.alert(document.chorusUser)
 					//window.alert(document.chorusEvent)
 					console.log(data)
