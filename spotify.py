@@ -189,6 +189,8 @@ class Spotify:
         if (playingSong != currentSong):
             playingSong = currentSong;
             db.updateCurrentSong(playingSong, eventID)
+            db.transfer(playingSong, eventID)
+            db.delete(playingSong, eventID)
             #send playingSong back to db
             #addSongs(eventID)
             print("song added")
@@ -237,7 +239,7 @@ class Spotify:
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
             if(count < 1)
-                addSongs(token, i, playlist_id, username)
+                sp.user_playlist_add_tracks(username, playlist_id, i)
                 count = count + 1
             break
 
