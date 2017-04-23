@@ -42,13 +42,13 @@ class Spotify:
         Input: username of user from database, oauth token from database
         return: playlist ID, ID of playlist created
     '''
-    def search(name)
+    def search(self, name)
         sp = spotipy.Spotify()
         sp.trace = False
         results = spotify.search(q='artist:' + name, type='track')
         return results
     
-    def createPlaylist(token):
+    def createPlaylist(self, token):
         #db = Database()
         #token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
@@ -80,14 +80,14 @@ class Spotify:
         data.append(playlist_id)
         return data
     
-    def getPlaylistUrl(eventID)
+    def getPlaylistUrl(self, eventID)
         db = Database()
         userID = db.getHostSpotifyUserName(eventID)
         playlist_id = db.getPlaylistID(eventID)
         url = ('https://open.spotify.com/user/' + userID + '/playlist/' + platlist_id)
         return url
     
-    def addSongs(eventID):
+    def addSongs(self, eventID):
         db = Database()
         trackID = db.getTopSong(eventID)
         token = db.getEventSpotifyToken(eventID)
@@ -98,7 +98,7 @@ class Spotify:
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
 
 
-    def guestUsername(token):
+    def guestUsername(self, token):
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
         #gets start of user id
@@ -113,7 +113,7 @@ class Spotify:
         return userID
 
     
-    def addTwo(eventID):
+    def addTwo(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         username = db.getHostSpotifyUserName(eventID)
@@ -125,7 +125,7 @@ class Spotify:
         db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
 
         
-    def createGuestPlaylist(userID):
+    def createGuestPlaylist(self, userID):
         #db = Database()
         #token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
@@ -160,7 +160,7 @@ class Spotify:
         return: N/A
     '''
     
-    def guestAdd(userID, songID):
+    def guestAdd(self, userID, songID):
         db = Database()
         playlist_id = db.getPlaylist(userID)
         token = db.getGuestSpotifyToken(userID)
@@ -168,7 +168,7 @@ class Spotify:
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
         
-    def timer(eventID):
+    def timer(self, eventID):
         #use GET command to get users played songs
         #currentSong = ""
         db = Database()
@@ -204,7 +204,7 @@ class Spotify:
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
     '''
-    def authtarget():
+    def authtarget(self):
         db = Database()
         resultList = []
         while True:
@@ -222,7 +222,7 @@ class Spotify:
         Input: token, track_id from ui, num_tracks from ui possibly
         Return: N/A
     '''
-    def recommend_fallback(eventID): 
+    def recommend_fallback(self, eventID): 
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         playlist_id = db.getPlaylistID(eventID)
@@ -247,7 +247,7 @@ class Spotify:
         Input: token, tracks for what to recommend
         Returrn: req.contents, the json text
     '''
-    def recommend_ui(eventID):
+    def recommend_ui(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
@@ -257,7 +257,7 @@ class Spotify:
         return req.contents
 
     #play playlist start
-    def play(eventID):
+    def play(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         #print('play')
@@ -265,7 +265,7 @@ class Spotify:
         requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
 
     #pause playlist
-    def pause(eventID):
+    def pause(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         #print('pause')
@@ -273,7 +273,7 @@ class Spotify:
         requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + token})
 
     #resume playlist
-    def resume(eventID):  
+    def resume(self, eventID):  
         #print('resume')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
@@ -281,7 +281,7 @@ class Spotify:
         requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
 
     #veto, skip track
-    def skip(eventID):
+    def skip(self, eventID):
         #print('skip')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
@@ -289,7 +289,7 @@ class Spotify:
         requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + token})
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
-    def deleteSong(eventID):
+    def deleteSong(self, eventID):
         #print('delete')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
