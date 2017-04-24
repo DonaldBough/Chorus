@@ -182,9 +182,11 @@ class GetPlayedSongs(Resource):
             _eventID = args['eventid']
 
             db = Database()
+            print(_eventID)
+            print(_userID)
             songs = db.getPlayedSongs(_eventID, _userID)
 
-            return {'songs': songs}
+            return json.dumps({'songs': songs})
 
         except Exception as e:
             return {'error': str(e)}

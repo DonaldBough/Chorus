@@ -1,1 +1,22 @@
-<p>This is the partial for view 1.</p>
+<body ng-app="myApp">
+	<div ng-controller = "playedCtrl as controller">
+		<div class="container">
+					<ul class="list-group">
+						<li class="list-group-item disabled" style="text-align: center; font-size: 17px">
+							Played Songs
+						</li>
+
+						<div ng-repeat="song in q">	
+							<li class="list-group-item">
+								<div class="row">
+									<div class="col-xs-7">
+										<h5>{{song.songname}}</h5>
+										<h6>{{song.artist}}</h6>
+									</div>
+								</li>	
+							</div>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</body>

@@ -133,7 +133,7 @@ class Spotify:
         sp.user_playlist_add_tracks(username, str(playlist_id), {'7qiZfU4dY1lWllzX7mPBI3'})
         #, '0KKkJNfGyhkQ5aFogxQAPU'
         db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
-        db.insertSong('7qiZfU4dY1lWllzX7mPBI3', eventID, "0", "  "0", "0", "0")
+        db.insertSong('7qiZfU4dY1lWllzX7mPBI3', eventID, "0", "Shape of You", "Ed Sheraan", "0", "0", "0")
 
     def addFive(self, eventID):
         db = Database()
