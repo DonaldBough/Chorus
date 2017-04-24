@@ -53,15 +53,20 @@ class Spotify:
         #token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
+        #print("---------")
+        #print(req.text)
+        #print("---------")
         #gets start of user id
-        indexID = req.text.find("id", 0, len(req.text))
-        indexID = indexID + 7
-        userID = ""
+        #indexID = req.text.find("\"id\"", 0, len(req.text))
+        #indexID = indexID + 7
+        #userID = ""
 
-        while (req.text[indexID] != '"'):
-            userID += req.text[indexID]
-            indexID+= 1
-            
+        #while (req.text[indexID] != '"'):
+            #userID += req.text[indexID]
+            #indexID+= 1
+        j = json.loads(req.text)
+        userID = j['id'] 
+        #print("userID === " + userID)
         playlist_name = 'Chorus'
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
@@ -118,6 +123,10 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         username = db.getHostSpotifyUserName(eventID)
         playlist_id = db.getPlaylistID(eventID)
+        print("--------")
+        print(username)
+        print(playlist_id)
+        print("--------")
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         #ERROR: int has no attribute split

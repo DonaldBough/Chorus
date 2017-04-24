@@ -29,25 +29,25 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
 </head>
 <body>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default" style="">
     <div class="navbar-header">
-        <a class="navbar-brand" href="#" contenteditable="true" style="padding:0px"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
+        <a class="navbar-brand" href="#" contenteditable="true" style="transform: translateX(-50%); left: 50%; position: absolute;padding:0px;"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
         <!--a href="#!/settings" data-toggle="tab">Settings</a-->
-        <a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a>
+        <!--a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a-->
     </div>
   </nav>
 
 
-    <div class="col-md-6"><div ng-view></div>
+    <div class="col-12"><div ng-view></div>
     
             
       <!-- tabs bottom -->
-      <div class="tabbable tabs-below navbar-fixed-bottom">
+      <div class="tabbable tabs-below navbar-fixed-bottom" style="background-color: #f8f8f8">
         <ul class="nav nav-tabs">
-          <li><a href="#!/played" data-target="#played" data-toggle="tab">Played Songs</a></li>
-          <li><a href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
-          <li><a href="#!/suggest" data-target="#suggest" data-toggle="tab">Suggested</a></li>
-          <li><a href="#!/search" data-target="#search" data-toggle="tab">Search</a></li>
+          <li><a class="nav-link" href="#!/played" data-target="#played" data-toggle="tab">Played Songs</a></li>
+          <li><a class="nav-link active" href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
+          <li><a class="nav-link" href="#!/suggest" data-target="#suggest" data-toggle="tab">Suggested</a></li>
+          <li><a class="nav-link" href="#!/search" data-target="#search" data-toggle="tab"><span class="glyphicon glyphicon-search"></span></a></li>
         </ul>
       </div>
       <!-- /tabs -->
@@ -64,6 +64,7 @@
   <script src="app.js"></script>
   <script src="create.js"></script>
   <script src="join.js"></script>
+  <script src="search/search.js"></script
   <script src="played/played.js"></script>
   <script src="next/next.js"></script>
   <script src="suggest/suggest.js"></script>

@@ -5,6 +5,7 @@ angular.module('myApp', [
   'ngRoute',
   'myApp.create',
   'myApp.join',
+  'myApp.search',
   'myApp.played',
   'myApp.next',
   'myApp.suggest',
