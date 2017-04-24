@@ -190,6 +190,7 @@ class Spotify:
     def timer(self, eventID):
         #use GET command to get users played songs
         #currentSong = ""
+        print bye
         db = Database()
         token = db.getGuestSpotifyToken(userID)
         playingSong = db.getCurrentPlayingSong(eventID)
