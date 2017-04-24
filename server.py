@@ -310,6 +310,7 @@ def authtarget(self, userID):
     while True:
         resultList = db.getAllEventID()
         time.sleep(10)
+        print hi
         for i in resultList: sp.timer(i, userID) 
     #t = threading.Thread(target = authtarget)
     #t.daemon = True
