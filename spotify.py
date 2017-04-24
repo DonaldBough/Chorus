@@ -193,13 +193,14 @@ class Spotify:
         token = db.getGuestSpotifyToken(userID)
         playingSong = db.getCurrentPlayingSong(eventID)
         req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
-        indexID = req.text.find("id", 0, len(req.text))
-        indexID = indexID + 7
-        currentSong = ""
-
-        while (req.text[indexID] != '"'):
-            currentSong += req.text[indexID]
-            indexID+= 1
+        #indexID = req.text.find("id", 0, len(req.text))
+        #indexID = indexID + 7
+        #currentSong = ""
+        j = json.loads(req.text)
+        currentSong = j['id'] 
+        #while (req.text[indexID] != '"'):
+         #   currentSong += req.text[indexID]
+          #  indexID+= 1
         #compare the last played track ID to trackID in server
         #if it is the different, move song ID from next to played in database
         #call query to move the song
