@@ -5,6 +5,7 @@ import os
 import subprocess
 import json
 import requests
+import threading
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -293,6 +294,24 @@ class Search(Resource): ##################
         except Exception as e:
             return {'error': str(e)}
 '''
+'''
+    authtarget
+    Def: Runs timer function every 30 seconds to lock in the top voted song on a different thread
+    Input: oauth token from database, playlist_id from database/ other functions, trackID from what user requests (UI),
+    username from database/other function, currentSong from server, topVoted from database
+    return: N/A
+'''
+def authtarget(self, userID):
+    sp  = Spotify()
+    db = Database()
+    resultList = []
+    while True:
+        resultList = db.getAllEventID()
+        time.sleep(10)
+        for i in resultList: sp.timer(i, userID) 
+    #t = threading.Thread(target = authtarget)
+    #t.daemon = True
+    #t.start()
 
 #define API endpoints
 #api.add_resource(CreateUser, '/CreateUser')
@@ -305,3 +324,6 @@ api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
 
 if __name__ == '__main__':
     app.run(debug=True)
+    t = threading.Thread(target = authtarget)
+    t.daemon = True
+    t.start()
