@@ -1,3 +1,4 @@
+
 import requests
 import spotipy
 import datetime
@@ -133,23 +134,15 @@ class Spotify:
         sp.user_playlist_add_tracks(username, str(playlist_id), {'7qiZfU4dY1lWllzX7mPBI3'})
         #, '0KKkJNfGyhkQ5aFogxQAPU'
         db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
-        db.insertSong('7qiZfU4dY1lWllzX7mPBI3', eventID, "0", "Shape of You", "Ed Sheraan", "0", "0", "0")
+        db.insertSong('7qiZfU4dY1lWllzX7mPBI3', eventID, "0", "Shape of You", "Ed Sheeran", "0", "0", "0")
 
     def addFive(self, eventID):
         db = Database()
-        token = db.getEventSpotifyToken(eventID)
-        username = db.getHostSpotifyUserName(eventID)
-        playlist_id = db.getPlaylistID(eventID)
-        print("--------")
-        print(username)
-        print(playlist_id)
-        print("--------")
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-        #ERROR: int has no attribute split
-        sp.user_playlist_add_tracks(username, str(playlist_id), {'7qiZfU4dY1lWllzX7mPBI3'})
-        #, '0KKkJNfGyhkQ5aFogxQAPU'
-        db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
+        db.insertSong('6b8Be6ljOzmkOmFslEb23P', eventID, "0",  "24K Magic", "Bruno Mars", "0", "0", "0")
+        db.insertSong('0mBKv9DkYfQHjdMcw2jdyI', eventID, "0",  "Chunky", "Bruno Mars", "0", "0", "0")
+        db.insertSong('0KKkJNfGyhkQ5aFogxQAPU', eventID, "0",  "That's What I Like", "Bruno Mars", "0", "0", "0")
+        db.insertSong('0kN8xEmgMW9mh7UmDYHlJP', eventID, "0",  "Straight Up & Down", "Bruno Mars", "0", "0", "0")
+        db.insertSong('5XMkENs3GfeRza8MfVAhjK', eventID, "0",  "Finesse", "Bruno Mars", "0", "0", "0")
         
     def createGuestPlaylist(self, userID):
         #db = Database()
@@ -201,13 +194,14 @@ class Spotify:
         token = db.getGuestSpotifyToken(userID)
         playingSong = db.getCurrentPlayingSong(eventID)
         req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
-        indexID = req.text.find("id", 0, len(req.text))
-        indexID = indexID + 7
-        currentSong = ""
-
-        while (req.text[indexID] != '"'):
-            currentSong += req.text[indexID]
-            indexID+= 1
+        #indexID = req.text.find("id", 0, len(req.text))
+        #indexID = indexID + 7
+        #currentSong = ""
+        j = json.loads(req.text)
+        currentSong = j['id'] 
+        #while (req.text[indexID] != '"'):
+         #   currentSong += req.text[indexID]
+          #  indexID+= 1
         #compare the last played track ID to trackID in server
         #if it is the different, move song ID from next to played in database
         #call query to move the song
@@ -323,4 +317,4 @@ class Spotify:
         playlist_id = db.getPlaylistID(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
-        sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)
+        sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)s
