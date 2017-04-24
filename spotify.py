@@ -187,7 +187,7 @@ class Spotify:
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
         
-    def timer(self, eventID, userID):
+    def timer(self, eventID):
         #use GET command to get users played songs
         #currentSong = ""
         db = Database()
@@ -223,20 +223,20 @@ class Spotify:
         Input: oauth token from database, playlist_id from database/ other functions, trackID from what user requests (UI),
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
-    '''
-    def authtarget(self, userID):
+    
+    def authtarget(self):
         db = Database()
         resultList = []
         while True:
             resultList = db.getAllEventID()
             time.sleep(5)
-            for i in resultList: self.timer(i, userID) 
+            for i in resultList: self.timer(i) 
         t = threading.Thread(target = authtarget)
         t.daemon = True
         t.start()
         #do we need to put raw_input for the rest of the stuff?
 
-    '''
+    
         recommend_fallback
         Def: uses a track the user selects to add n related songs to the chorus playlist as a fallback
         Input: token, track_id from ui, num_tracks from ui possibly
