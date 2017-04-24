@@ -45,7 +45,7 @@ class Spotify:
     def search(self, name)
         sp = spotipy.Spotify()
         sp.trace = False
-        results = spotify.search(q='artist:' + name, type='track')
+        results = sp.search(q='artist:' + name, type='track')
         return results
     
     def createPlaylist(self, token):
