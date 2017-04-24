@@ -137,19 +137,11 @@ class Spotify:
 
     def addFive(self, eventID):
         db = Database()
-        token = db.getEventSpotifyToken(eventID)
-        username = db.getHostSpotifyUserName(eventID)
-        playlist_id = db.getPlaylistID(eventID)
-        print("--------")
-        print(username)
-        print(playlist_id)
-        print("--------")
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-        #ERROR: int has no attribute split
-        sp.user_playlist_add_tracks(username, str(playlist_id), {'7qiZfU4dY1lWllzX7mPBI3'})
-        #, '0KKkJNfGyhkQ5aFogxQAPU'
-        db.updateCurrentSong('7qiZfU4dY1lWllzX7mPBI3', eventID)
+        db.insertSong('6b8Be6ljOzmkOmFslEb23P', eventID, "0", "  "0", "0", "0")
+        db.insertSong('0mBKv9DkYfQHjdMcw2jdyI', eventID, "0", "  "0", "0", "0")
+        db.insertSong('0KKkJNfGyhkQ5aFogxQAPU', eventID, "0", "  "0", "0", "0")
+        db.insertSong('0kN8xEmgMW9mh7UmDYHlJP', eventID, "0", "  "0", "0", "0")
+        db.insertSong('5XMkENs3GfeRza8MfVAhjK', eventID, "0", "  "0", "0", "0")
         
     def createGuestPlaylist(self, userID):
         #db = Database()
