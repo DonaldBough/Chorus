@@ -317,4 +317,4 @@ class Spotify:
         playlist_id = db.getPlaylistID(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
-        sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)s
+        sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)

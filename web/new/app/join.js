@@ -38,6 +38,7 @@ controller('joinCtrl', ['$scope', '$http', function ($scope, $http) {
 					window.alert(res.userID)
 					document.cookie = "userID="+ res.userID;
 					document.cookie = "isHost="+ false;
+					document.cookie = "spotifyLoggedIn="+false;
 
 					console.log(getCookie('eventID'))
 

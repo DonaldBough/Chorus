@@ -2,7 +2,8 @@
 <!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> 
+<html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,12 +29,13 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
 </head>
-<body>
+<body ng-controller = "mainCtrl as controller">
   <nav class="navbar navbar-default" style="">
     <div class="navbar-header">
         <a class="navbar-brand" href="#" contenteditable="true" style="transform: translateX(-50%); left: 50%; position: absolute;padding:0px;"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
         <!--a href="#!/settings" data-toggle="tab">Settings</a-->
         <!--a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a-->
+        <a href="#!/settings" ng-show="showSpotify"data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px; background: #1ed760"><img src="img/spotifyBlack.png" style="height: 2em"></a>
     </div>
   </nav>
 
@@ -64,6 +66,7 @@
   <script src="app.js"></script>
   <script src="create.js"></script>
   <script src="join.js"></script>
+  <script src="main.js"></script>
   <script src="search/search.js"></script>
   <script src="played/played.js"></script>
   <script src="next/next.js"></script>

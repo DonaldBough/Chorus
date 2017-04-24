@@ -9,7 +9,7 @@
     });
   }])
 
-  .controller('playedCtrl', ['$scope', '$http', function ($scope, $http) {
+  .controller('playedCtrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
     $scope.q
 
     var eventID = getCookie('eventID')
@@ -24,6 +24,7 @@
 
   var url = 'http://localhost:5000/GetPlayedSongs?userid='+ userID +'&eventid='+ eventID
 
+  var getData = function(){
   $.ajax({
    type:"POST",
    url: url,
@@ -35,4 +36,12 @@
     console.log(error)
   },
 });
+
+    }
+
+  getData()
+
+  $interval(function(){
+    getData()
+    },10000);
 }]);

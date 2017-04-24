@@ -145,6 +145,8 @@ class CreateEvent(Resource):
             #sp.authtarget(hostID)
             #print("here6")
 
+            sp.addFive(eventID)
+
             return json.dumps({'eventID': eventID, 'hostID': hostID})
 
         except Exception as e:
