@@ -190,7 +190,7 @@ class Spotify:
     def timer(self, eventID):
         #use GET command to get users played songs
         #currentSong = ""
-        print "bye"
+        #print "bye"
         db = Database()
         token = db.getGuestSpotifyToken(userID)
         playingSong = db.getCurrentPlayingSong(eventID)
@@ -211,7 +211,7 @@ class Spotify:
             playingSong = currentSong;
             db.updateCurrentSong(playingSong, eventID)
             #send playingSong back to db
-            #addSongs(eventID)
+            addSongs(eventID)
             print("song added")
             
         #do nothing if it is the same   
