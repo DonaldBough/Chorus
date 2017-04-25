@@ -53,7 +53,7 @@ class Spotify:
         #db = Database()
         #token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
-        req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
+        req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + str(token)})
         #print("---------")
         #print(req.text)
         #print("---------")
@@ -78,8 +78,8 @@ class Spotify:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
         
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/shuffle?state=false',headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/shuffle?state=false',headers={"Authorization":'Bearer ' + str(token)})
         
         data = []
         data.append(userID)
@@ -254,11 +254,11 @@ class Spotify:
         playlist_id = db.getPlaylistID(eventID)
         username = db.getHostID(eventID)
         track_id = db.getCurrentPlayingSong(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         count = 0
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers)
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers={"Authorization":'Bearer ' + str(token)})
         #print(req.content)
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
@@ -276,11 +276,11 @@ class Spotify:
     def recommend_ui(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         tracks = db.getCurrentPlayingSong(eventID)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + str(token)})
         return req.contents
 
     #play playlist start
@@ -298,24 +298,24 @@ class Spotify:
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         #print('pause')
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + str(token)})
 
     #resume playlist
     def play(self, eventID):  
         #print('resume')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + str(token)})
 
     #veto, skip track
     def skip(self, eventID):
         #print('skip')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
-        requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + str(token)})
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
     def deleteSong(self, eventID):
@@ -324,6 +324,6 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         user = db.getHostID(eventID)
         playlist_id = db.getPlaylistID(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)
