@@ -45,10 +45,9 @@ class Spotify:
         return: playlist ID, ID of playlist created
     '''
     def search(self, name):
-        sp = spotipy.Spotify()
-        sp.trace = False
-        results = sp.search(q='artist:' + name, type='track')
-        return results
+        name = name.replace(' ', '+' )
+        req = requests.get('https://api.spotify.com/v1/search?q=' + str(name) + '&type=track', headers={"Accept": "application/json"})
+        return req.content
     
     def createPlaylist(self, token):
         #db = Database()
