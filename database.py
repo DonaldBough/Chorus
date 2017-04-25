@@ -133,7 +133,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT spotifyToken from USER where currentEvent = '%s' and host = 1") % (hostID)
+		query = ("SELECT spotifyToken from USER where currentEvent = '%s' and host = 1") % (eventid)
 		cursor.execute(query)
 		token = cursor.fetchone()
 		cursor.close()
@@ -148,7 +148,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT spotifyUsername from USER where currentEvent = '%s' and host = 1") % (hostID)
+		query = ("SELECT spotifyUsername from USER where currentEvent = '%s' and host = 1") % (eventid)
 		cursor.execute(query)
 		token = cursor.fetchone()
 		cursor.close()
@@ -238,7 +238,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventid) 
+		query = ("SELECT songid, votecount, artist, vetocount, songname FROM NEXTSONGS WHERE eventid = '%s' order by voteCount desc, vetocount asc") % (eventID) 
 		row = cursor.execute(query)
 
 		songs = []
@@ -255,7 +255,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT songsid, eventID, playOrder, songname, artist FROM PLAYEDSONGS WHERE eventid = '%s' order by playOrder") % (eventid) 
+		query = ("SELECT songsid, eventID, playOrder, songname, artist FROM PLAYEDSONGS WHERE eventid = '%s' order by playOrder") % (eventID) 
 		row = cursor.execute(query)
 
 		songs = []
@@ -319,7 +319,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT spotifyToken FROM USER WHERE currentEvent = '%s' ") % (eventID)
+		query = ("SELECT spotifyToken FROM USER WHERE currentEvent = '%s' and host = 1") % (eventID)
 		cursor.execute(query)
 		result = cursor.fetchone()
 		cursor.close()
@@ -419,9 +419,8 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor()
-		query = ("UPDATE NEXTSONGS SET vetoCount = vetoCount + 1 WHERE songID = '%s'")
-		data = (songID)
-		cursor.execute(query, data)
+		query = ("UPDATE NEXTSONGS SET vetoCount = vetoCount + 1 WHERE songID = '%s'") % (songID)
+		cursor.execute(query)
 		cursor.close()
 		cnx.commit()
 		cnx.close()
@@ -441,9 +440,8 @@ class Database:
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor()
 		query = ("INSERT INTO user (currentEvent, inEvent, host) "
-		   "VALUES(%s, %s, %s)")
-		data = (currentEvent, inEvent, host)
-		cursor.execute(query, data)
+		   "VALUES(%s, %s, %s)") % (currentEvent, inEvent, host)
+		cursor.execute(query)
 		cursor.close()
 		cnx.commit()
 		cnx.close()
@@ -465,15 +463,31 @@ class Database:
 		return result[0]
 
 	#transfer songs from nextsongs to playedsongs table
-	def transfer(self, songID):
+	def transfer(self, songID, eventID):
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query1 = ("""INSERT into PLAYEDSONGS (songsid, eventid, songname)
-		select songid, eventid, songname from NEXTSONGS where songID = '%s' """) % (songID);
+		query1 = ("INSERT into PLAYEDSONGS (songsid, eventid, songname) select songid, eventid, songname from NEXTSONGS where songID = '%s' and eventID = '%s'") % (songID, eventID);
 		cursor.execute(query1)
+		cursor.close()
+		cnx.commit()
+		cnx.close()
 
-		query2 = ("DELETE from NEXTSONGS where songID = '%s'") % (songID)
+	def deleteNextSong(self, songID, eventID):
+		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+			host='174.138.64.25', database ='mydb')
+		cursor = cnx.cursor(buffered=True)
+		query2 = ("DELETE from NEXTSONGS where songID = '%s' and eventID = '%s'") % (songID, eventID)
+		cursor.execute(query2)
+		cursor.close()
+		cnx.commit()
+		cnx.close()
+
+	def deleteVoteSong(self, songID, eventID):
+		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+			host='174.138.64.25', database ='mydb')
+		cursor = cnx.cursor(buffered=True)
+		query2 = ("DELETE from VOTEDSONGS where songID = '%s' and eventID = '%s'") % (songID, eventID)
 		cursor.execute(query2)
 		cursor.close()
 		cnx.commit()
@@ -493,8 +507,18 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query1 = ("UPDATE EVENTS SET songID = '%s' WHERE eventID = '%s'") % (songID, eventID); 
+		query1 = ("UPDATE EVENT SET songID = '%s' WHERE eventID = '%s'") % (songID, eventID); 
 		cursor.execute(query1)
+		cursor.close()
+		cnx.commit()
+		cnx.close()
+
+	def updateHostEventID(self, hostID, eventID):
+		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1',
+		  host='174.138.64.25', database ='mydb')
+		cursor = cnx.cursor()
+		query = ("UPDATE USER SET currentEvent = '%s' WHERE userID = '%s'") % (eventID, hostID)
+		cursor.execute(query)
 		cursor.close()
 		cnx.commit()
 		cnx.close()
