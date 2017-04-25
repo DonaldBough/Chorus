@@ -278,6 +278,7 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
+        tracks = db.getCurrentPlayingSong(eventID)
         sp.trace = False
         req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
         return req.contents
