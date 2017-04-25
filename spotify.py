@@ -291,7 +291,7 @@ class Spotify:
     def start(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        hostID = db.getHostID(eventID)
+        hostID = db.getHostSpotifyUserName(eventID)
         playlistID = db.getPlaylistID(eventID)
         url = 'spotify:user:' + str(hostID) + ':playlist:' + str(playlistID)
         payload = {"context_uri": url}
