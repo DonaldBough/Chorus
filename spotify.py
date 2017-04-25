@@ -194,33 +194,34 @@ class Spotify:
         sp  = Spotify()
         token = str(db.getEventSpotifyToken(eventID))
         print 'token: ' + str(token)
-        playingSong = db.getCurrentPlayingSong(eventID)
-        print 'current playing song: ' + str(playingSong)
-        #req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
-        req = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers={"Accept": "application/json", "Authorization":'Bearer ' + str(token)})
-        #indexID = req.text.find("id", 0, len(req.text))
-        #indexID = indexID + 7
-        #currentSong = ""
-        j = json.loads(req.text)
-        currentSong = j['id'] 
-        while (req.text[indexID] != '"'):
-            currentSong += req.text[indexID]
-            indexID+= 1
-            #compare the last played track ID to trackID in server
-            #if it is the different, move song ID from next to played in database
-            #call query to move the song
-            #change the song in server to what was played
-        if (playingSong != currentSong):
-            playingSong = currentSong;
-            db.updateCurrentSong(playingSong, eventID)
-                #send playingSong back to db
-            print 'going to add song'
-            sp.addSongs(eventID)
-            print("song added")
-                
-            #do nothing if it is the same   
-        else:
-            print "the same"
+        if(token  != -1):
+            playingSong = db.getCurrentPlayingSong(eventID)
+            print 'current playing song: ' + str(playingSong)
+            #req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
+            req = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers={"Accept": "application/json", "Authorization":'Bearer ' + str(token)})
+            #indexID = req.text.find("id", 0, len(req.text))
+            #indexID = indexID + 7
+            #currentSong = ""
+            j = json.loads(req.text)
+            currentSong = j['id'] 
+            while (req.text[indexID] != '"'):
+                currentSong += req.text[indexID]
+                indexID+= 1
+                #compare the last played track ID to trackID in server
+                #if it is the different, move song ID from next to played in database
+                #call query to move the song
+                #change the song in server to what was played
+            if (playingSong != currentSong):
+                playingSong = currentSong;
+                db.updateCurrentSong(playingSong, eventID)
+                    #send playingSong back to db
+                print 'going to add song'
+                sp.addSongs(eventID)
+                print("song added")
+
+                #do nothing if it is the same   
+            else:
+                print "the same"
 
     '''
         authtarget
