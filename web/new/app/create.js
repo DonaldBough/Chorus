@@ -54,8 +54,8 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 					document.cookie = "eventID="+res.eventID;
 					document.cookie = "eventName="+$scope.eventCode;
 					document.cookie = "userID="+res.hostID;
-					document.cookie = "isHost="+true;
-					document.cookie = "spotifyLoggedIn="+true;
+					document.cookie = "isHost="+1;
+					document.cookie = "spotifyLoggedIn="+1;
 					//window.alert(document.chorusUser)
 					//window.alert(document.chorusEvent)
 					console.log(data)

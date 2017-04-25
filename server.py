@@ -242,6 +242,26 @@ class JoinSpotify(Resource): #############
         except Exception as e:
             return {'error': str(e)}
 
+class GetRecommendations(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                                                                 
+            parser = reqparse.RequestParser()
+            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
+            parser.add_argument('eventid', type=str, help='ID of event user is in')
+            args = parser.parse_args()
+
+            _userID = args['userid']
+            _eventID = args['eventid']
+
+            sp = Spotify()
+            songs = sp.recommend_ui(_eventID)
+
+            return json.dumps({'songs': songs})
+
+        except Exception as e:
+            return {'error': str(e)}
+
 '''
 class CreateGuestPlaylist(Resource): #################
     def post(self):
@@ -281,14 +301,15 @@ class GuestAdd(Resoruce): #################
 
         except Exception as e:
             return {'error': str(e)}
-
+'''
 class Search(Resource): ##################
     def post(self):
         try:
             # Parse the arguments                                                                                                           
             parser = reqparse.RequestParser()
             parser.add_argument('query', type=str)
-            
+            args = parser.parse_args()
+
             query = args['query']
             sp = Spotify()
             results = sp.search(query)
@@ -297,7 +318,7 @@ class Search(Resource): ##################
 
         except Exception as e:
             return {'error': str(e)}
-'''
+
 '''
     authtarget
     Def: Runs timer function every 30 seconds to lock in the top voted song on a different thread
@@ -312,6 +333,7 @@ def authtarget(self, userID):
     while True:
         resultList = db.getAllEventID()
         time.sleep(10)
+        print hi
         for i in resultList: sp.timer(i, userID) 
     #t = threading.Thread(target = authtarget)
     #t.daemon = True
@@ -325,6 +347,8 @@ api.add_resource(CreateEvent, '/CreateEvent')
 api.add_resource(JoinEvent, '/JoinEvent')
 api.add_resource(GetQueue, '/GetQueue')
 api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
+api.add_resource(Search, '/Search')
+api.add_resource(GetRecommendations, '/Suggest')
 
 if __name__ == '__main__':
     app.run(debug=True)

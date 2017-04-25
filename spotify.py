@@ -1,4 +1,3 @@
-
 import requests
 import spotipy
 import datetime
@@ -10,6 +9,7 @@ import json
 import spotipy.util as util
 import urllib2
 import time
+import json
 from database import Database
 
 #All functions that interact directly with the Spotify API go here
@@ -44,16 +44,15 @@ class Spotify:
         return: playlist ID, ID of playlist created
     '''
     def search(self, name):
-        sp = spotipy.Spotify()
-        sp.trace = False
-        results = spotify.search(q='artist:' + name, type='track')
-        return results
+        name = name.replace(' ', '+' )
+        req = requests.get('https://api.spotify.com/v1/search?q=' + str(name) + '&type=track', headers={"Accept": "application/json"})
+        return req.content
     
     def createPlaylist(self, token):
         #db = Database()
         #token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
-        req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
+        req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + str(token)})
         #print("---------")
         #print(req.text)
         #print("---------")
@@ -78,8 +77,8 @@ class Spotify:
             if(playlist['name'] == "Chorus"):
                 playlist_id = playlist['id']
         
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/shuffle?state=false',headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/shuffle?state=false',headers={"Authorization":'Bearer ' + str(token)})
         
         data = []
         data.append(userID)
@@ -98,12 +97,14 @@ class Spotify:
         trackID = db.getTopSong(eventID)
         token = db.getEventSpotifyToken(eventID)
         username = db.getHostSpotifyUserName(eventID)
+        print 'username: ' + str(username)
         playlist_id = db.getPlaylistID(eventID)
+        
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         sp.user_playlist_add_tracks(username, playlist_id, trackID)
 
-
+    '''
     def guestUsername(self, token):
         #use GET command to get user info
         req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
@@ -111,13 +112,11 @@ class Spotify:
         indexID = req.text.find("id", 0, len(req.text))
         indexID = indexID + 7
         userID = ""
-
         while (req.text[indexID] != '"'):
             userID += req.text[indexID]
             indexID+= 1
-
         return userID
-
+    '''
     
     def addTwo(self, eventID):
         db = Database()
@@ -187,33 +186,36 @@ class Spotify:
         sp.trace = False              
         sp.user_playlist_add_tracks(userID, playlist_id, songID)
         
-    def timer(self, eventID, userID):
-        #use GET command to get users played songs
-        #currentSong = ""
+    def timer(self, eventID):
         db = Database()
-        token = db.getGuestSpotifyToken(userID)
+        sp  = Spotify()
+        token = str(db.getEventSpotifyToken(eventID))
+        print 'token: ' + str(token)
         playingSong = db.getCurrentPlayingSong(eventID)
-        req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
+        print 'current playing song: ' + str(playingSong)
+        #req = requests.get("https://api.spotify.com/v1/me/player/recently-played", headers={"Authorization":'Bearer ' + token})
+        req = requests.get('https://api.spotify.com/v1/me/player/currently-playing', headers={"Accept": "application/json", "Authorization":'Bearer ' + str(token)})
         #indexID = req.text.find("id", 0, len(req.text))
         #indexID = indexID + 7
         #currentSong = ""
         j = json.loads(req.text)
         currentSong = j['id'] 
-        #while (req.text[indexID] != '"'):
-         #   currentSong += req.text[indexID]
-          #  indexID+= 1
-        #compare the last played track ID to trackID in server
-        #if it is the different, move song ID from next to played in database
-        #call query to move the song
-        #change the song in server to what was played
+        while (req.text[indexID] != '"'):
+            currentSong += req.text[indexID]
+            indexID+= 1
+            #compare the last played track ID to trackID in server
+            #if it is the different, move song ID from next to played in database
+            #call query to move the song
+            #change the song in server to what was played
         if (playingSong != currentSong):
             playingSong = currentSong;
             db.updateCurrentSong(playingSong, eventID)
-            #send playingSong back to db
-            #addSongs(eventID)
+                #send playingSong back to db
+            print 'going to add song'
+            sp.addSongs(eventID)
             print("song added")
-            
-        #do nothing if it is the same   
+                
+            #do nothing if it is the same   
         else:
             print "the same"
 
@@ -223,7 +225,7 @@ class Spotify:
         Input: oauth token from database, playlist_id from database/ other functions, trackID from what user requests (UI),
         username from database/other function, currentSong from server, topVoted from database
         return: N/A
-    '''
+    
     def authtarget(self, userID):
         db = Database()
         resultList = []
@@ -235,6 +237,7 @@ class Spotify:
         t.daemon = True
         t.start()
         #do we need to put raw_input for the rest of the stuff?
+    '''
 
     '''
         recommend_fallback
@@ -248,11 +251,11 @@ class Spotify:
         playlist_id = db.getPlaylistID(eventID)
         username = db.getHostID(eventID)
         track_id = db.getCurrentPlayingSong(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         count = 0
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers)
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers={"Authorization":'Bearer ' + str(token)})
         #print(req.content)
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
@@ -270,43 +273,46 @@ class Spotify:
     def recommend_ui(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
+        tracks = db.getCurrentPlayingSong(eventID)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
-        return req.contents
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + str(tracks), headers={"Authorization":'Bearer ' + str(token)})
+        return json.loads(req.content)
 
     #play playlist start
-    def play(self, eventID):
+    def start(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        #print('play')
-        headers={"Authorization":'Bearer ' + str(token)}
-        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + str(token)})
+        hostID = db.getHostID(eventID)
+        playlistID = db.getPlaylistID(eventID)
+        url = 'spotify:user:' + str(hostID) + ':playlist:' + str(playlistID)
+        payload = {"context_uri": url}
+        r = requests.put('https://api.spotify.com/v1/me/player/play', data=json.dumps(payload), headers={"Accept": "application/json", "Authorization":'Bearer ' + str(token)})
 
     #pause playlist
     def pause(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
         #print('pause')
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/pause', headers={"Authorization":'Bearer ' + str(token)})
 
     #resume playlist
-    def resume(self, eventID):  
+    def play(self, eventID):  
         #print('resume')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
-        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.put('https://api.spotify.com/v1/me/player/play', headers={"Authorization":'Bearer ' + str(token)})
 
     #veto, skip track
     def skip(self, eventID):
         #print('skip')
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        headers={"Authorization":'Bearer ' + token}
-        requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + token})
+        #headers={"Authorization":'Bearer ' + token}
+        requests.post('https://api.spotify.com/v1/me/player/next',headers={"Authorization":'Bearer ' + str(token)})
     #delete veto'd track from playlist
     #requests.delete('https://api.spotify.com/v1/users/%s/playlists/%s/tracks')
     def deleteSong(self, eventID):
@@ -315,6 +321,6 @@ class Spotify:
         token = db.getEventSpotifyToken(eventID)
         user = db.getHostID(eventID)
         playlist_id = db.getPlaylistID(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        #headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.user_playlist_remove_all_occurrences_of_tracks(user, playlist_id, {track_id}, snapshot_id=None)
