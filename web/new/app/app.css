@@ -194,9 +194,8 @@ input:checked + .slider:before {
 /*Background image gradient */
 .backgrndImgContainer {
     height: 100%;
-    /*background: url("https://images.freecreatives.com/wp-content/uploads/2016/02/Gradient-Blue-Background-For-Free-Download.jpg")no-repeat center center fixed;*/
-    
-    background: url("img/Gradient.jpg")no-repeat center center fixed;
+    background: url("https://images.freecreatives.com/wp-content/uploads/2016/02/Gradient-Blue-Background-For-Free-Download.jpg")no-repeat center center fixed;
+    /*background: url("img/Gradient.jpg")no-repeat center center fixed;*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
