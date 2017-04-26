@@ -251,6 +251,36 @@ class JoinSpotify(Resource): #############
         except Exception as e:
             return {'error': str(e)}
 
+class AddToQueue(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                  
+            parser = reqparse.RequestParser()
+            parser.add_argument('eventID', type=str)
+            parser.add_argument('songID', type=str)
+            parser.add_argument('songName', type=str)
+            parser.add_argument('artist', type=str)
+            args = parser.parse_args()
+
+            db = Database()
+            db.insertSong(args['songID'], args['eventID'], 1, args['songName'], args['artist'], 0, 0, 0)
+        except Exception as e:
+            return {'error': str(e)}
+
+class GetSuggestedSongs(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                  
+            parser = reqparse.RequestParser()
+            parser.add_argument('eventID', type=str)
+            args = parser.parse_args()
+
+            spotify = Spotify()
+            songs = spotify.recommend_ui(args['eventID'])
+            return songs
+        except Exception as e:
+            return {'error': str(e)}
+
 '''
 class CreateGuestPlaylist(Resource): #################
     def post(self):
@@ -337,6 +367,8 @@ api.add_resource(CreateEvent, '/CreateEvent')
 api.add_resource(JoinEvent, '/JoinEvent')
 api.add_resource(GetQueue, '/GetQueue')
 api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
+api.add_resource(AddToQueue, '/AddToQueue')
+api.add_resource(GetSuggestedSongs, '/GetSuggestedSongs')
 
 if __name__ == '__main__':
     t = threading.Thread(target = authtarget)

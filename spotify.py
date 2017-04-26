@@ -296,12 +296,14 @@ class Spotify:
     '''
     def recommend_ui(self, eventID):
         db = Database()
-        token = db.getEventSpotiyToken(eventID)
+        token = db.getEventSpotifyToken(eventID)
+        token = "BQBtWg09gpsYN7R3YFWqeF8gwI7Ss3q1jHGGLoye5SMrXRPukD909-dJcHzk-xghI-7Y0F8VygsNvhwPajUqEQAucIr4ZWYhioTBA6TUx0T882mZxABTVFr-XCDHYoIXgkIDKj5kg95Wl8b8ejukCnA4Yv7h2E0C5PAsTz39Hg6FIHgcF0AQB0YTM9N9x5KIryssl90PnQzlKaCdwN5U10vV0FWfqoRX8lxZ3quLFusl1jBgn0L7dPCvMk9xC3jvlNA3KmzuFCPGedLa6BX-J6EG1FnIC0GSqfcQUPNGks110MrfCEVLrxqhN0npESrrvqK13mA"
+        tracks = db.getCurrentPlayingSong(eventID)
         headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
         req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
-        return req.contents
+        return req.content
 
     def start(self, eventID):
         db = Database()
