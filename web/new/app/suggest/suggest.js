@@ -1,41 +1,26 @@
-'use strict';
+	'use strict';
 
-angular.module('myApp.search', ['ngRoute'])
+  angular.module('myApp.suggest', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/search', {
-    templateUrl: 'search/search.html',
-    controller: 'searchCtrl'
-  });
-}])
+  .config(['$routeProvider', function($routeProvider) {
+    $routeProvider.when('/suggest', {
+      templateUrl: 'suggest/suggest.html',
+      controller: 'suggestCtrl'
+    });
+  }])
 
-.controller('searchCtrl', ['$scope', '$http', function($scope, $http) {
+  .controller('suggestCtrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
+    $scope.q
+
+    var eventID = getCookie('eventID')
+    var userID = getCookie('userID')
+    var isHost = getCookie('isHost')
+
     function getCookie(name){
      var re = new RegExp(name + "=([^;]+)");
      var value = re.exec(document.cookie);
      return (value != null) ? unescape(value[1]) : null;
    }
-
-   	var eventID = getCookie('eventID')
-    var userID = getCookie('userID')
-
-	$scope.search = function(){
-		console.log($scope.searchQuery)
-		var url = "https://api.spotify.com/v1/search?q=" + $scope.searchQuery + "&type=track"
-		$.ajax({
-   		type:"GET",
-   		url: url,
-   		async:false,
-   		success: function(data) {
-   			$scope.q = data.tracks.items
-   			console.log($scope.q)
-    		//$scope.q = JSON.parse(data).songs
-  		},
-  		error: function(error){
-    		//console.log(error)
-  		},
-  	});
-  }
 
    $scope.sendVote = function(songID){
     window.alert("vote1")
@@ -55,4 +40,49 @@ angular.module('myApp.search', ['ngRoute'])
   });
     window.alert("vote2")
   }
+
+  $scope.sendVeto = function(songID){
+    window.alert("vote1")
+    var url = 'http://localhost:5000/SendVote?userID='+
+    userID +'&eventID='+ eventID + "&songID=" +
+    songID + "&vote="+ 0 + "&veto=" + 1
+
+    $.ajax({
+     type:"POST",
+     url: url,
+     async:false,
+     success: function(data) {
+     },
+     error: function(error){
+      console.log(error)
+    },
+  });
+    window.alert("vote2")
+  }
+
+  var url = 'http://localhost:5000/GetQueue?userid='+ userID +'&eventid='+ eventID
+
+  var getData = function(){
+
+  $.ajax({
+   type:"POST",
+   url: url,
+   async:false,
+   success: function(data) {
+    $scope.q = JSON.parse(data).songs
+  },
+  error: function(error){
+    console.log(error)
+  },
+  });
+
+  }
+
+  getData()
+
+  $interval(function(){
+    getData()
+    },10000);
+
+
 }]);
