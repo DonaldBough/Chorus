@@ -1,59 +1,34 @@
 <body ng-app="myApp">
-	<div ng-controller = "nextCtrl as controller">
-		<div class="innerContainer">
-			
-			<ul class="list-group">
-				<li class="list-group-item disabled" style="text-align: center; font-size: 17px">
-					Now Playing
-				</li>
-				<li class="list-group-item">
-					<div class="row">
-						<div class="col-xs-7">
-							<!--Now playing goes here-->
-						</div>
-						<!--BUTTONS-->
-							<!--div class="col-xs-5">
-								<div class="btn-group-vertical pull-right">
-									<button type="button" class="btn btn-secondary" ng-click="sendVote(q[0].songid)">
-										<span class="glyphicon glyphicon-ok"></span>
-									</button>
-									<button type="button" class="btn btn-secondary" ng-click="sendVeto(q[0].songid)">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
-								</div>
-							</div-->
-							<!--BUTTONS-->
-						</li>	
-					</ul>
-
-					<ul class="list-group">
-						<li class="list-group-item disabled" style="text-align: center; font-size: 17px">
-							Up Next
-						</li>
-
-						<div ng-repeat="song in q">	
-							<li class="list-group-item">
-								<div class="row">
-									<div class="col-xs-7">
-										<h5>{{song.songname}}</h5>
-										<h6>{{song.artist}}</h6>
-									</div>
-									<!--BUTTONS-->
-									<div class="col-xs-5">
-										<div class="btn-group-vertical pull-right">
-											<button type="button" class="btn btn-secondary" ng-click="sendVote(song.songid)">
-												<span class="glyphicon glyphicon-ok"></span>
-											</button>
-											<button type="button" class="btn btn-secondary" ng-click="sendVeto(song.songid)">
-												<span class="glyphicon glyphicon-remove"></span>
-											</button>
-										</div>
-									</div>
-									<!--BUTTONS-->
-								</li>	
-							</div>
-						</div>
-					</ul>
+	<div ng-controller = "searchCtrl as controller">
+		<div class="container">
+				<div class="input-group">
+					<input type="text" class="form-control input-lg" placeholder="Search for a song" ng-model="searchQuery">
+					<span class="input-group-btn">
+						<button class="btn btn-default btn-lg" type="button" ng-click="search()"><span class="glyphicon glyphicon-search"></span></button>
+					</span>
 				</div>
+				<br>
+				<ul class="list-group">
+					<div ng-repeat="song in q">	
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-7">
+									<h5>{{song.name}}</h5>
+									<h6>{{song.artists[0].name}}</h6>
+								</div>
+								<!--BUTTONS-->
+								<div class="col-xs-5">
+									<div class="btn-group-vertical pull-right">
+										<button type="button" class="btn btn-secondary" ng-click="sendVote(song.id)">
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
+								</div>
+								<!--BUTTONS-->
+							</li>	
+						</div>
+					</div>
+				</ul>
 			</div>
-		</body>
+		</div>
+	</body>
