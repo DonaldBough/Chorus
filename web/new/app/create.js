@@ -17,7 +17,7 @@ controller('createCtrl', ['$scope', '$http', function ($scope, $http) {
 			window.alert("success123")
 			console.log(response)
 		}*/
-		window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Fcreate.html&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09")
+		window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Fcreate.html&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&20streaming&20user-read-recently-played&20user-read-private&20user-read-currently-playing&20user-read-playback-state&20user-modify-playback-state&state=34fFs29kd09")
 		
 		if(error >= 0){
 			window.alert("an error occured")

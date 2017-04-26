@@ -35,7 +35,7 @@
         <a class="navbar-brand" href="#" contenteditable="true" style="transform: translateX(-50%); left: 50%; position: absolute;padding:0px;"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
         <!--a href="#!/settings" data-toggle="tab">Settings</a-->
         <!--a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a-->
-        <a href="#!/settings" ng-show="showSpotify" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px; background: #1ed760"><img src="img/spotifyBlack.png" style="height: 2em"></a>
+        <a ng-show="showSpotify" type="button" class="btn btn-default pull-right" style="margin:15px; background: #1ed760" onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Findex.html#!/next&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'><img src="img/spotifyBlack.png" style="height: 2em"></a>
         <a href="#!/settings" ng-show="showSettings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px; height: 2em"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
     </div>
   </nav>

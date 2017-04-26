@@ -1,15 +1,15 @@
 	'use strict';
 
-  angular.module('myApp.next', ['ngRoute'])
+  angular.module('myApp.suggest', ['ngRoute'])
 
   .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/next', {
-      templateUrl: 'next/next.html',
-      controller: 'nextCtrl'
+    $routeProvider.when('/suggest', {
+      templateUrl: 'suggest/suggest.html',
+      controller: 'suggestCtrl'
     });
   }])
 
-  .controller('nextCtrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
+  .controller('suggestCtrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
     $scope.q
 
     var eventID = getCookie('eventID')
