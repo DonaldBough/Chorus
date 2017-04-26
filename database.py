@@ -272,7 +272,7 @@ class Database:
 		cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
 			host='174.138.64.25', database ='mydb')
 		cursor = cnx.cursor(buffered=True)
-		query = ("SELECT MAX(songID) FROM NEXTSONGS WHERE eventid = %s") % (eventID) 
+		query = ("SELECT songID FROM NEXTSONGS WHERE eventid = '%s' ORDER BY voteCount DESC LIMIT 1") % (eventID) 
 		cursor.execute(query)
 		songID = cursor.fetchone()
 		cursor.close()
