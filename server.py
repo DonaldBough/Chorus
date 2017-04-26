@@ -6,6 +6,8 @@ import subprocess
 import json
 import requests
 import threading
+import time
+import thread 
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -120,32 +122,39 @@ class CreateEvent(Resource):
             args = parser.parse_args()
             _authCode    = args['authCode']
             tokens       = auth2Token(_authCode)
-            print(tokens)
+
+            #print(tokens)
+            #t = threading.Thread(target = authtarget)
+            #t.daemon = True
+            #t.start()
+
             accessToken  = tokens[0]
             refreshToken = tokens[1]
-            print("here0")
+            #print("here0")
             sp  = Spotify()
             ids = sp.createPlaylist(accessToken)
-            print("here1")
-            print(ids[0])
-            print(ids[1])
+            #print("here1")
+            #print(ids[0])
+            #print(ids[1])
             hostID = CreateHost("0", "0", "1", ids[0], ids[1], accessToken, refreshToken) #######username, playlistid
             db     = Database()
-            print(hostID)
+            #print(hostID)
             db.insertEvent("LIVE", hostID, args['explicitAllowed'], 
                            args['eventName'])
-            print("here2")
+            #print("here2")
             eventID = db.getEventid(args['eventName'])
             db.updateHostEventID(hostID, eventID)
             print("here3")
             sp.addTwo(eventID)
+            print("here9")
+            sp.addFive(eventID)
+            print("HERE")
+            sp.start(eventID)
             print("here4")
             sp.play(eventID)
             print("here5")
             #sp.authtarget(hostID)
             #print("here6")
-
-            sp.addFive(eventID)
 
             return json.dumps({'eventID': eventID, 'hostID': hostID})
 
@@ -242,26 +251,6 @@ class JoinSpotify(Resource): #############
         except Exception as e:
             return {'error': str(e)}
 
-class GetRecommendations(Resource):
-    def post(self):
-        try:
-            # Parse the arguments                                                                                                                                                 
-            parser = reqparse.RequestParser()
-            parser.add_argument('userid', type=str, help='ID of User that is sending vote')
-            parser.add_argument('eventid', type=str, help='ID of event user is in')
-            args = parser.parse_args()
-
-            _userID = args['userid']
-            _eventID = args['eventid']
-
-            sp = Spotify()
-            songs = sp.recommend_ui(_eventID)
-
-            return json.dumps({'songs': songs})
-
-        except Exception as e:
-            return {'error': str(e)}
-
 '''
 class CreateGuestPlaylist(Resource): #################
     def post(self):
@@ -301,15 +290,14 @@ class GuestAdd(Resoruce): #################
 
         except Exception as e:
             return {'error': str(e)}
-'''
+
 class Search(Resource): ##################
     def post(self):
         try:
             # Parse the arguments                                                                                                           
             parser = reqparse.RequestParser()
             parser.add_argument('query', type=str)
-            args = parser.parse_args()
-
+            
             query = args['query']
             sp = Spotify()
             results = sp.search(query)
@@ -318,7 +306,7 @@ class Search(Resource): ##################
 
         except Exception as e:
             return {'error': str(e)}
-
+'''
 '''
     authtarget
     Def: Runs timer function every 30 seconds to lock in the top voted song on a different thread
@@ -326,15 +314,17 @@ class Search(Resource): ##################
     username from database/other function, currentSong from server, topVoted from database
     return: N/A
 '''
-def authtarget(self, userID):
+def authtarget():
     sp  = Spotify()
     db = Database()
     resultList = []
     while True:
         resultList = db.getAllEventID()
-        time.sleep(10)
-        print hi
-        for i in resultList: sp.timer(i, userID) 
+        #time.sleep(10)
+        #print hi
+#        for i in resultList:
+        #t.start()
+        sp.timer(204) 
     #t = threading.Thread(target = authtarget)
     #t.daemon = True
     #t.start()
@@ -347,11 +337,10 @@ api.add_resource(CreateEvent, '/CreateEvent')
 api.add_resource(JoinEvent, '/JoinEvent')
 api.add_resource(GetQueue, '/GetQueue')
 api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
-api.add_resource(Search, '/Search')
-api.add_resource(GetRecommendations, '/Suggest')
 
 if __name__ == '__main__':
-    app.run(debug=True)
     t = threading.Thread(target = authtarget)
     t.daemon = True
     t.start()
+    #thread.start_new_thread(authtarget, ())
+    app.run(debug=True)

@@ -22,12 +22,12 @@ angular.module('myApp.main', ['ngRoute'])
   var codeStart = url.search("code") + 5
   var codeEnd = url.search("state") - 1
 
-  window.alert(url)
-  window.alert(codeStart)
-  window.alert(codeEnd)
+  //window.alert(url)
+  //window.alert(codeStart)
+  //window.alert(codeEnd)
 
   var code = url.substring(codeStart, codeEnd);
-  window.alert(code)
+  //window.alert(code)
 
   var error = url.search("code");
 
@@ -46,8 +46,8 @@ angular.module('myApp.main', ['ngRoute'])
           //var res = $.parseJSON(data)
           //console.log(res)
           document.cookie = "spotifyLoggedIn="+1;
-          //window.alert(document.chorusUser)
-          //window.alert(document.chorusEvent)
+          ////window.alert(document.chorusUser)
+          ////window.alert(document.chorusEvent)
           console.log(data)
           window.location.replace("/index.html#!/next")
         },
@@ -71,7 +71,7 @@ angular.module('myApp.main', ['ngRoute'])
      return (value != null) ? unescape(value[1]) : null;
    }
 
-   //window.alert("starting")
+   ////window.alert("starting")
 
    var spotifyLoggedIn = getCookie('spotifyLoggedIn')
    var isHost = getCookie('isHost')
@@ -80,25 +80,25 @@ angular.module('myApp.main', ['ngRoute'])
    $scope.showSettings = 0;
    $scope.showSpotify = 1;
 
-   //window.alert("is Host: " + isHost)
-   //window.alert("logged in: " + spotifyLoggedIn)
-   //window.alert("show spotify: " + $scope.showSpotify)
+   ////window.alert("is Host: " + isHost)
+   ////window.alert("logged in: " + spotifyLoggedIn)
+   ////window.alert("show spotify: " + $scope.showSpotify)
 
    if(isHost == 1){
-      //window.alert("if 1")
+      ////window.alert("if 1")
    		$scope.showSettings = 1;
    		$scope.showSpotify = 0;
    }
    else if(spotifyLoggedIn == 1){
-   		//window.alert("if 2")
+   		////window.alert("if 2")
    		$scope.showSpotify = 0;
    }
    /*else{
-      //window.alert("else")
+      ////window.alert("else")
    		$scope.showSpotify = 1;
-      //window.alert($scope.showSpotify)
+      ////window.alert($scope.showSpotify)
    }*/
 
-//window.alert("show spotify: " + $scope.showSpotify)
+////window.alert("show spotify: " + $scope.showSpotify)
 
 }]);

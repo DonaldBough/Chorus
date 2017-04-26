@@ -9,6 +9,50 @@ angular.module('myApp.search', ['ngRoute'])
   });
 }])
 
-.controller('searchCtrl', [function() {
+.controller('searchCtrl', ['$scope', '$http', function($scope, $http) {
+    function getCookie(name){
+     var re = new RegExp(name + "=([^;]+)");
+     var value = re.exec(document.cookie);
+     return (value != null) ? unescape(value[1]) : null;
+   }
 
+   	var eventID = getCookie('eventID')
+    var userID = getCookie('userID')
+
+	$scope.search = function(){
+		console.log($scope.searchQuery)
+		var url = "https://api.spotify.com/v1/search?q=" + $scope.searchQuery + "&type=track"
+		$.ajax({
+   		type:"GET",
+   		url: url,
+   		async:false,
+   		success: function(data) {
+   			$scope.q = data.tracks.items
+   			console.log($scope.q)
+    		//$scope.q = JSON.parse(data).songs
+  		},
+  		error: function(error){
+    		//console.log(error)
+  		},
+  	});
+  }
+
+   $scope.sendVote = function(songID){
+    window.alert("vote1")
+    var url = 'http://localhost:5000/SendVote?userID='+
+    userID +'&eventID='+ eventID + "&songID=" +
+    songID + "&vote="+ 1 + "&veto=" + 0
+
+    $.ajax({
+     type:"POST",
+     url: url,
+     async:false,
+     success: function(data) {
+     },
+     error: function(error){
+      console.log(error)
+    },
+  });
+    window.alert("vote2")
+  }
 }]);
