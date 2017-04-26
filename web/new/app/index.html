@@ -29,26 +29,44 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
 </head>
+<style>
+.jumbotron {
+  padding: 3px;
+  padding-top: 10px;
+  background-color: rgba(255,255,255, 0.5);
+  color: inherit;
+}
+.img-responsive {
+  border: 0px;
+  padding:0px;
+  margin:0px;
+}
+</style>
+
 <body ng-controller = "mainCtrl as controller">
-  <nav class="navbar navbar-default" style="">
-    <div class="navbar-header">
-        <a class="navbar-brand" href="#" contenteditable="true" style="transform: translateX(-50%); left: 50%; position: absolute;padding:0px;"><img class="img-responsive" src="img\Chorus.png" style="height:100%"></a>
-        <!--a href="#!/settings" data-toggle="tab">Settings</a-->
-        <!--a href="#!/settings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px"><span class="glyphicon glyphicon-cog"></span></a-->
-        <a ng-show="showSpotify" type="button" class="btn btn-default pull-right" style="margin:15px; background: #1ed760" onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Findex.html#!/next&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'><img src="img/spotifyBlack.png" style="height: 2em"></a>
-        <a href="#!/settings" ng-show="showSettings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin:15px; height: 2em"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+<div class="backgrndImgContainer">
+
+  <div class="jumbotron jumbotron-fluid" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+    <div class="container">
+      <div class="col-xs-9">
+        <img src="img\Chorus.png" class="img-responsive" style="margin-left:15px;">
+      </div>
+
+      <div class="col-xs-3">
+        <a ng-show="showSpotify" type="button" class="btn btn-default" style="margin-top: 20px; background: #1ed760" onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Findex.html#!/next&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'><img src="img/spotifyBlack.png" style="height: 2em"></a>
+
+        <a href="#!/settings" ng-show="showSettings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin-top: 20px;"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+      </div>
+        
     </div>
-  </nav>
+  </div>
 
-
-    <div class="col-12"><div ng-view></div>
-    
-            
+    <div class="col-12 innerContainer"><div ng-view></div>
       <!-- tabs bottom -->
       <div class="tabbable tabs-below navbar-fixed-bottom" style="background-color: #f8f8f8">
         <ul class="nav nav-tabs">
           <li><a class="nav-link" href="#!/played" data-target="#played" data-toggle="tab">Played Songs</a></li>
-          <li><a class="nav-link active" href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
+          <li class="active"><a class="nav-link" href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
           <li><a class="nav-link" href="#!/suggest" data-target="#suggest" data-toggle="tab">Suggested</a></li>
           <li><a class="nav-link" href="#!/search" data-target="#search" data-toggle="tab"><span class="glyphicon glyphicon-search"></span></a></li>
         </ul>
@@ -76,5 +94,6 @@
   <script src="components/version/version.js"></script>
   <script src="components/version/version-directive.js"></script>
   <script src="components/version/interpolate-filter.js"></script>
+  </div>
 </body>
 </html>

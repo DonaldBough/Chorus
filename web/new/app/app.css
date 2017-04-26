@@ -190,3 +190,40 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+/*Background image gradient */
+.backgrndImgContainer {
+    height: 100%;
+    /*background: url("https://images.freecreatives.com/wp-content/uploads/2016/02/Gradient-Blue-Background-For-Free-Download.jpg")no-repeat center center fixed;*/
+    
+    background: url("img/Gradient.jpg")no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 679px;
+    padding:0;
+}
+
+/* Remove padding for the sides of the chorus banner, change color */
+.navbar.navbar-default {
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(255,255,255, 0.5);
+  color: inherit;
+  -webkit-box-shadow: 0 8px 6px -6px #999;
+  -moz-box-shadow: 0 8px 6px -6px #999;
+  box-shadow: 0 8px 6px -6px #999;
+}
+
+/* Pads the elements below Chorus banner in Guest view */
+.innerContainer {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+
