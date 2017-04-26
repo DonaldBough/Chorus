@@ -272,7 +272,7 @@ class Database:
     cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
       host='174.138.64.25', database ='mydb')
     cursor = cnx.cursor(buffered=True)
-    query = ("SELECT MAX(songID) FROM NEXTSONGS WHERE eventid = %s") % (eventID) 
+    query = ("SELECT songID FROM NEXTSONGS WHERE eventid = '%s' ORDER BY voteCount DESC LIMIT 1") % (eventID) 
     cursor.execute(query)
     songID = cursor.fetchone()
     cursor.close()
@@ -297,7 +297,7 @@ class Database:
 
     if result is None:
       return -1
-    return token[0]
+    return result[0]
 
   def getHostID(self, eventID):
     cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
@@ -312,14 +312,14 @@ class Database:
 
     if result is None:
       return -1
-    return token[0]
+    return result[0]
   
   #get accessToken based off of the eventID
   def getEventSpotifyToken(self, eventID):
     cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
       host='174.138.64.25', database ='mydb')
     cursor = cnx.cursor(buffered=True)
-    query = ("SELECT spotifyToken FROM USER WHERE currentEvent = '%s' ") % (eventID)
+    query = ("SELECT spotifyToken FROM USER WHERE currentEvent = '%s' and host = 1") % (eventID)
     cursor.execute(query)
     result = cursor.fetchone()
     cursor.close()
@@ -504,6 +504,26 @@ class Database:
     cursor = cnx.cursor()
     query = ("UPDATE USER SET currentEvent = '%s' WHERE userID = '%s'") % (eventID, hostID)
     cursor.execute(query)
+    cursor.close()
+    cnx.commit()
+    cnx.close()
+
+  def deleteNextSong(self, songID, eventID):
+    cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+                                  host='174.138.64.25', database ='mydb')
+    cursor = cnx.cursor(buffered=True)
+    query2 = ("DELETE from NEXTSONGS where songID = '%s' and eventID = '%s'") % (songID, eventID)
+    cursor.execute(query2)
+    cursor.close()
+    cnx.commit()
+    cnx.close()
+    
+  def deleteVoteSong(self, songID, eventID):
+    cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+                                  host='174.138.64.25', database ='mydb')
+    cursor = cnx.cursor(buffered=True)
+    query2 = ("DELETE from VOTEDSONGS where songID = '%s' and eventID = '%s'") % (songID, eventID)
+    cursor.execute(query2)
     cursor.close()
     cnx.commit()
     cnx.close()
