@@ -61,6 +61,24 @@
   }
 
   var url = 'http://localhost:5000/GetQueue?userid='+ userID +'&eventid='+ eventID
+  var url2 = 'http://localhost:5000/GetQueue?userid='+ userID +'&eventid='+ eventID
+
+  var getNext = function(){
+
+  $.ajax({
+   type:"POST",
+   url: url2,
+   async:false,
+   success: function(data) {
+    $scope.q = JSON.parse(data).songs
+  },
+  error: function(error){
+    console.log(error)
+  },
+  });
+
+  }
+
 
   var getData = function(){
 
@@ -82,7 +100,8 @@
 
   $interval(function(){
     getData()
-    },10000);
+    getNext()
+    },5000);
 
 
 }]);

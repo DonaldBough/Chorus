@@ -297,12 +297,13 @@ class Spotify:
     def recommend_ui(self, eventID):
         db = Database()
         token = db.getEventSpotifyToken(eventID)
-        token = "BQBtWg09gpsYN7R3YFWqeF8gwI7Ss3q1jHGGLoye5SMrXRPukD909-dJcHzk-xghI-7Y0F8VygsNvhwPajUqEQAucIr4ZWYhioTBA6TUx0T882mZxABTVFr-XCDHYoIXgkIDKj5kg95Wl8b8ejukCnA4Yv7h2E0C5PAsTz39Hg6FIHgcF0AQB0YTM9N9x5KIryssl90PnQzlKaCdwN5U10vV0FWfqoRX8lxZ3quLFusl1jBgn0L7dPCvMk9xC3jvlNA3KmzuFCPGedLa6BX-J6EG1FnIC0GSqfcQUPNGks110MrfCEVLrxqhN0npESrrvqK13mA"
+        token = "BQChblfIv5hZtngVK5x9Ym2nZjS_O5IMSclMjVecZC7CDx2gj2goulFDkvw5Q7_e8U--7xNYZ1DuJCcqZ6agv2ayPxljs3AIoVZ69_-wNWZwVS1SMwMWn_r1C3aKF1Dd_yilTvz4ETo7KekrVFXC6hkOYvG0ZM0JWRwHuQ9BCqGMtmX0n9uncLwWE4znQvwS9uCRhmTRw9PscOt8JPiOTiau8QCtq0HWx_HWBNnkqoAy-q3zg01gHVDjf1HFXXYRLLhKHUcFxJWkUxysZEWm4lc_t_AzxKLUpuw7w6-8P7cUbwW3prh34DvvvTbOFfLzNA" 
         tracks = db.getCurrentPlayingSong(eventID)
-        headers={"Authorization":'Bearer ' + token}
+        print ("LOOK HERE BITCH " + str(tracks))
+        headers={"Authorization":'Bearer ' + str(token)}
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + str(tracks), headers={"Authorization":'Bearer ' + str(token)})
         return req.content
 
     def start(self, eventID):

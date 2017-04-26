@@ -37,11 +37,9 @@ angular.module('myApp.search', ['ngRoute'])
   	});
   }
 
-   $scope.sendVote = function(songID){
+   $scope.sendVote = function(songID, song, artist){
     window.alert("vote1")
-    var url = 'http://localhost:5000/SendVote?userID='+
-    userID +'&eventID='+ eventID + "&songID=" +
-    songID + "&vote="+ 1 + "&veto=" + 0
+    var url = 'http://localhost:5000/AddToQueue?eventID='+ eventID + "&songID=" + songID + "&songName="+ song + "&artist=" + artist
 
     $.ajax({
      type:"POST",

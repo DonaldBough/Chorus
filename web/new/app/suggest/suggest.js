@@ -1,32 +1,28 @@
-	'use strict';
+'use strict';
 
-  angular.module('myApp.suggest', ['ngRoute'])
+angular.module('myApp.suggest', ['ngRoute'])
 
-  .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/suggest', {
-      templateUrl: 'suggest/suggest.html',
-      controller: 'suggestCtrl'
-    });
-  }])
+.config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/suggest', {
+    templateUrl: 'suggest/suggest.html',
+    controller: 'suggestCtrl'
+  });
+}])
 
-  .controller('suggestCtrl', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
-    $scope.q
-
-    var eventID = getCookie('eventID')
-    var userID = getCookie('userID')
-    var isHost = getCookie('isHost')
-
+.controller('suggestCtrl', ['$scope', '$http', function($scope, $http) {
     function getCookie(name){
      var re = new RegExp(name + "=([^;]+)");
      var value = re.exec(document.cookie);
      return (value != null) ? unescape(value[1]) : null;
    }
 
-   $scope.sendVote = function(songID){
+   	var eventID = getCookie('eventID')
+    var userID = getCookie('userID')
+
+
+   $scope.sendVote = function(songID, song, artist){
     window.alert("vote1")
-    var url = 'http://localhost:5000/SendVote?userID='+
-    userID +'&eventID='+ eventID + "&songID=" +
-    songID + "&vote="+ 1 + "&veto=" + 0
+    var url = 'http://localhost:5000/AddToQueue?eventID='+ eventID + "&songID=" + songID + "&songName="+ song + "&artist=" + artist
 
     $.ajax({
      type:"POST",
@@ -41,35 +37,16 @@
     window.alert("vote2")
   }
 
-  $scope.sendVeto = function(songID){
-    window.alert("vote1")
-    var url = 'http://localhost:5000/SendVote?userID='+
-    userID +'&eventID='+ eventID + "&songID=" +
-    songID + "&vote="+ 0 + "&veto=" + 1
-
-    $.ajax({
-     type:"POST",
-     url: url,
-     async:false,
-     success: function(data) {
-     },
-     error: function(error){
-      console.log(error)
-    },
-  });
-    window.alert("vote2")
-  }
-
-  var url = 'http://localhost:5000/GetQueue?userid='+ userID +'&eventid='+ eventID
-
-  var getData = function(){
+var getData = function(){
+  var url2 = 'http://localhost:5000/GetSuggestedSongs?eventID='+ eventID
 
   $.ajax({
    type:"POST",
-   url: url,
+   url: url2,
    async:false,
    success: function(data) {
-    $scope.q = JSON.parse(data).songs
+    console.log(data)
+    $scope.s = data.tracks//JSON.parse(JSON.stringify(data)).tracks
   },
   error: function(error){
     console.log(error)
@@ -78,11 +55,6 @@
 
   }
 
-  getData()
-
-  $interval(function(){
-    getData()
-    },10000);
-
+getData()
 
 }]);

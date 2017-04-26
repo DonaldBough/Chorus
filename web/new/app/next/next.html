@@ -8,13 +8,30 @@
 				</li>
 				<li class="list-group-item">
 					<div class="row">
-						<div class="col-xs-7">
-							<!--Now playing goes here-->
-						</div>
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-7">
+									<h5>{{np.songname}}</h5>
+									<h6>{{np.artist}}</h6>
+								</div>
+								<!--BUTTONS-->
+								<div class="col-xs-5">
+									<div class="btn-group-vertical pull-right">
+										<button type="button" class="btn btn-secondary" ng-click="sendVote(song.songid)">
+											<span class="glyphicon glyphicon-ok"></span>
+										</button>
+										<button type="button" class="btn btn-secondary" ng-click="sendVeto(song.songid)">
+											<span class="glyphicon glyphicon-remove"></span>
+										</button>
+									</div>
+								</div>
+								<!--BUTTONS-->
+							</li>	
+						
 						<div class="col-xs-5">
-							<a href="#!/settings" ng-show="showSettings" type="button" class="btn btn-default pull-right" style="margin:15px; height: 2em"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-						</div>
-						<!--BUTTONS-->
+						<a href="#!/settings" ng-show="showSettings" type="button" class="btn btn-default pull-right" style="margin:15px; height: 2em"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+					</div>
+					<!--BUTTONS-->
 							<!--div class="col-xs-5">
 								<div class="btn-group-vertical pull-right">
 									<button type="button" class="btn btn-secondary" ng-click="sendVote(q[0].songid)">
@@ -57,6 +74,6 @@
 							</div>
 						</div>
 					</ul>
-		</div>
-	</div>
-</body>
+				</div>
+			</div>
+		</body>

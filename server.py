@@ -277,7 +277,7 @@ class GetSuggestedSongs(Resource):
 
             spotify = Spotify()
             songs = spotify.recommend_ui(args['eventID'])
-            return songs
+            return json.dumps(songs)
         except Exception as e:
             return {'error': str(e)}
 
