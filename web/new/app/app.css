@@ -224,5 +224,17 @@ input:checked + .slider:before {
   padding-right: 20px;
 }
 
+html, body {
+      height: 100%;
+    background: url("https://images.freecreatives.com/wp-content/uploads/2016/02/Gradient-Blue-Background-For-Free-Download.jpg")no-repeat center center fixed;
+    /*background: url("img/Gradient.jpg")no-repeat center center fixed;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 679px;
+    padding:0;
+}
+
 
 

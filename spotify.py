@@ -13,9 +13,7 @@ import time
 from database import Database
 
 #All functions that interact directly with the Spotify API go here
-
-globalToken = "BQCrhgmICeTIG6eUh0XhB5W6ywUQhibY-se4YIuBfXHW7jb5BSn3-_bKvZVKACNYMULg1UgwFndQp4gtFMTWw5uYqECpJg30z-z3hv9dz9NZ2BpPSsZq_gxFlZsmJ6RoJoEQOw1fJluvJkgl6MrQDpk7HnxcIH0uoWbOZgwUERI6HAjh6cms0ozPJFB87WXnUvwTV-vKx9zFODvbARDa3wA3Gyu6nB7YHt958f3mamNPf9Ukqq5V7uaXaDh5Nfe58Cg7yjX1tF-7s2A4M_WtImjH9IlakKrT_tAWL9rNabTSkSSRFpPmg_0GUc6gx-w"
-
+token = "BQBOqXQgzMeLkaSvD5WebB7ztP_7P0hX3ZvEAofEen1b-z7MeuP6Dn_fmDLrt12L8Yfa9KLLIRn9o6vExfTnUODxMt6SscT3UtIdGb9uXGLOa2OKt6NkpVF3Pl_G4MXZlkapeqJRkX7Jc8BBl4ysltNEGczBhgsKHHL3xc05bvStosPQ_REUEWFCViRx6Yf7KZ1sNnzhSiMjaeMAZ12Z7OGx5yp75wfH8acalKYQfDjoMSfA8kofQlw-rCdzvepQmUrbseduuNvdWf0Cp87t3Gu_SQ4RpaOa3KHMIkijdrA2yCXQK_fMaPOAJVQIZw"
 class Spotify:
     #get token
     #get current song id
@@ -87,7 +85,11 @@ class Spotify:
     def addSongs(self, eventID):
         db = Database()
         trackID = db.getTopSong(eventID)
-        token = globalToken#"BQBn6fdfTF3D0kQ8hMUVik1AyZES2izfbHj8btVjmY_WUAFxUwdsJUMjuONjyyc2kP6YF1d324MLl3enBjElWLeWOB2hyYgnERptowErXHFLiEg3K1wEMe-85g1wQEdt9U1QnoRbPh8US-dR7Qajt9GnHSdIoZ7Ie47BvmKefGPEocsVdhk_jHv1JEoPdzST5lMg_3gZqu_8j3E_gYtn-4aCdQxRlTxfu43EYxqKIZSDe8FYZMHmvaMUkIwr6wKnqvAjOgxuyP82bnoYeHhFQMyVQqZr_WMrGDo_d7Z8s3u6Ir1VLyUSSx5qOxLAA-SP_A"
+        spotify = Spotify()
+        token = db.getEventSpotifyToken(eventID)
+        if(trackID == -1):
+            trackID = spotify.recommend_fallback(eventID)
+
         username = db.getHostSpotifyUserName(eventID)
         playlist_id = db.getPlaylistID(eventID)
         if(trackID == -1): print("NO TOP VOTED")
@@ -132,15 +134,15 @@ class Spotify:
 
     def addFive(self, eventID):
         db = Database()
-        #db.insertSong('6b8Be6ljOzmkOmFslEb23P', eventID, "0",  "24K Magic", "Bruno Mars", "0", "0", "0")
+        #db.insertSong('6b8Be6ljOzmkOmFslEb23P', eventID, "0",  "24K Magic", "Bruno Mars", "10", "0", "0")
         db.insertSong('0mBKv9DkYfQHjdMcw2jdyI', eventID, "0",  "Chunky", "Bruno Mars", "0", "0", "0")
         #db.insertSong('0KKkJNfGyhkQ5aFogxQAPU', eventID, "0",  "That's What I Like", "Bruno Mars", "0", "0", "0")
         db.insertSong('0kN8xEmgMW9mh7UmDYHlJP', eventID, "0",  "Straight Up & Down", "Bruno Mars", "0", "0", "0")
         db.insertSong('5XMkENs3GfeRza8MfVAhjK', eventID, "0",  "Finesse", "Bruno Mars", "0", "0", "0")
         
     def createGuestPlaylist(self, userID):
-        #db = Database()
-        #token = db.getEventSpotifyToken(eventID)
+        db = Database()
+        token = db.getEventSpotifyToken(eventID)
         #use GET command to get user info
         #req = requests.get("https://api.spotify.com/v1/me", headers={"Authorization":'Bearer ' + token})
         #gets start of user id
@@ -214,10 +216,10 @@ class Spotify:
     '''
 
     def timer(self, eventID):
-        #print("timer")
         db = Database()
         sp  = Spotify()
-        token = globalToken#"BQBn6fdfTF3D0kQ8hMUVik1AyZES2izfbHj8btVjmY_WUAFxUwdsJUMjuONjyyc2kP6YF1d324MLl3enBjElWLeWOB2hyYgnERptowErXHFLiEg3K1wEMe-85g1wQEdt9U1QnoRbPh8US-dR7Qajt9GnHSdIoZ7Ie47BvmKefGPEocsVdhk_jHv1JEoPdzST5lMg_3gZqu_8j3E_gYtn-4aCdQxRlTxfu43EYxqKIZSDe8FYZMHmvaMUkIwr6wKnqvAjOgxuyP82bnoYeHhFQMyVQqZr_WMrGDo_d7Z8s3u6Ir1VLyUSSx5qOxLAA-SP_A"
+        
+        token = db.getEventSpotifyToken(eventID)
         if((str(token)  != '-1')):
             if((str(token)  != 'None')):
                 try:
@@ -279,12 +281,13 @@ class Spotify:
         count = 0
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers)
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + track_id, headers={"Authorization":"Bearer "+str(token)})
         #print(req.content)
         json_obj = json.loads(req.text)
         for i in json_obj['tracks']:
             if(count < 1):
-                addSongs(token, i, playlist_id, username)
+                return i
+#addSongs(token, i, playlist_id, username)
                 count = count + 1
             break
 
@@ -296,20 +299,16 @@ class Spotify:
     '''
     def recommend_ui(self, eventID):
         db = Database()
-        token = db.getEventSpotifyToken(eventID)
-        token = "BQChblfIv5hZtngVK5x9Ym2nZjS_O5IMSclMjVecZC7CDx2gj2goulFDkvw5Q7_e8U--7xNYZ1DuJCcqZ6agv2ayPxljs3AIoVZ69_-wNWZwVS1SMwMWn_r1C3aKF1Dd_yilTvz4ETo7KekrVFXC6hkOYvG0ZM0JWRwHuQ9BCqGMtmX0n9uncLwWE4znQvwS9uCRhmTRw9PscOt8JPiOTiau8QCtq0HWx_HWBNnkqoAy-q3zg01gHVDjf1HFXXYRLLhKHUcFxJWkUxysZEWm4lc_t_AzxKLUpuw7w6-8P7cUbwW3prh34DvvvTbOFfLzNA" 
-        tracks = db.getCurrentPlayingSong(eventID)
-        print ("LOOK HERE BITCH " + str(tracks))
-        headers={"Authorization":'Bearer ' + str(token)}
+        token = db.getEventSpotiyToken(eventID)
+        headers={"Authorization":'Bearer ' + token}
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
-        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + str(tracks), headers={"Authorization":'Bearer ' + str(token)})
-        return req.content
+        req = requests.get('https://api.spotify.com/v1/recommendations?seed_tracks=' + tracks, headers={"Authorization":'Bearer ' + token})
+        return req.contents
 
     def start(self, eventID):
         db = Database()
-        token = globalToken#"BQBn6fdfTF3D0kQ8hMUVik1AyZES2izfbHj8btVjmY_WUAFxUwdsJUMjuONjyyc2kP6YF1d324MLl3enBjElWLeWOB2hyYgnERptowErXHFLiEg3K1wEMe-85g1wQEdt9U1QnoRbPh8US-dR7Qajt9GnHSdIoZ7Ie47BvmKefGPEocsVdhk_jHv1JEoPdzST5lMg_3gZqu_8j3E_gYtn-4aCdQxRlTxfu43EYxqKIZSDe8FYZMHmvaMUkIwr6wKnqvAjOgxuyP82bnoYeHhFQMyVQqZr_WMrGDo_d7Z8s3u6Ir1VLyUSSx5qOxLAA-SP_A"
-#db.getEventSpotiyToken(eventID)
+        token = db.getEventSpotifyToken(eventID)
         hostID = db.getHostSpotifyUserName(eventID)
         print(hostID)
         playlistID = db.getPlaylistID(eventID)

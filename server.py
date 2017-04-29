@@ -7,7 +7,7 @@ import json
 import requests
 import threading
 import time
-import thread 
+#import thread 
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -147,11 +147,11 @@ class CreateEvent(Resource):
             print("here3")
             sp.addTwo(eventID)
             print("here9")
-            sp.addFive(eventID)
+            #sp.addFive(eventID)
             print("HERE")
-            sp.start(eventID)
+            #sp.start(eventID)
             print("here4")
-            sp.play(eventID)
+            #sp.play(eventID)
             print("here5")
             #sp.authtarget(hostID)
             #print("here6")
@@ -281,6 +281,21 @@ class GetSuggestedSongs(Resource):
         except Exception as e:
             return {'error': str(e)}
 
+class NowPlaying(Resource):
+    def post(self):
+        try:
+            # Parse the arguments                                                                                                  
+            parser = reqparse.RequestParser()
+            parser.add_argument('eventID', type=str)
+            args = parser.parse_args()
+
+            db = Database()
+            songID =  db.getCurrentPlayingSong(args['eventID'])
+            songName = db.getSongName(songID, args['eventID'])
+            return json.dumps({'songName': songName})
+        except Exception as e:
+            return {'error': str(e)}
+
 '''
 class CreateGuestPlaylist(Resource): #################
     def post(self):
@@ -350,14 +365,12 @@ def authtarget():
     resultList = []
     while True:
         resultList = db.getAllEventID()
-        #time.sleep(10)
-        #print hi
-#        for i in resultList:
-        #t.start()
-        sp.timer(204) 
-    #t = threading.Thread(target = authtarget)
-    #t.daemon = True
-    #t.start()
+        time.sleep(10)
+        for i in resultList:
+            t = threading.Thread(target = authtarget)
+            t.daemon = True
+            t.start()
+            sp.timer(i) 
 
 #define API endpoints
 #api.add_resource(CreateUser, '/CreateUser')
@@ -369,10 +382,12 @@ api.add_resource(GetQueue, '/GetQueue')
 api.add_resource(GetPlayedSongs, '/GetPlayedSongs')
 api.add_resource(AddToQueue, '/AddToQueue')
 api.add_resource(GetSuggestedSongs, '/GetSuggestedSongs')
+api.add_resource(NowPlaying, '/NowPlaying')
+
 
 if __name__ == '__main__':
     t = threading.Thread(target = authtarget)
     t.daemon = True
     t.start()
     #thread.start_new_thread(authtarget, ())
-    app.run(debug=True)
+    app.run(debug=False)

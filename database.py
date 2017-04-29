@@ -204,6 +204,18 @@ class Database:
       return "NO ARTIST FOUND"
     return artist[0]
 
+
+  def getSongName(self, songID, eventID):
+    cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
+      host='174.138.64.25', database ='mydb')
+    cursor = cnx.cursor(buffered=True)
+    query = ("SELECT songName FROM NEXTSONGS WHERE songID = '%s' and eventID = '%s'") % (songID, eventID)
+    cursor.execute(query)
+    artist = cursor.fetchone()
+    cursor.close()
+    cnx.commit()
+    cnx.close()
+
   def getSongID(self, songName):
     cnx = mysql.connector.connect(user='publicuser', password ='ChorusIsNumber1', 
       host='174.138.64.25', database ='mydb')

@@ -23,7 +23,7 @@
    }
 
    $scope.sendVote = function(songID){
-    window.alert("vote1")
+    //window.alert("vote1")
     var url = 'http://localhost:5000/SendVote?userID='+
     userID +'&eventID='+ eventID + "&songID=" +
     songID + "&vote="+ 1 + "&veto=" + 0
@@ -38,11 +38,11 @@
       console.log(error)
     },
   });
-    window.alert("vote2")
+    //window.alert("vote2")
   }
 
   $scope.sendVeto = function(songID){
-    window.alert("vote1")
+    //window.alert("vote1")
     var url = 'http://localhost:5000/SendVote?userID='+
     userID +'&eventID='+ eventID + "&songID=" +
     songID + "&vote="+ 0 + "&veto=" + 1
@@ -57,7 +57,7 @@
       console.log(error)
     },
   });
-    window.alert("vote2")
+    //window.alert("vote2")
   }
 
   var url = 'http://localhost:5000/GetQueue?userid='+ userID +'&eventid='+ eventID
