@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Welcome to Chorus</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css"-->
+  <link rel="stylesheet" href="app.css">
+  <!--script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script-->
+
+  <!--Bootstrap-->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+   <!-- Angular 
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
+</head>
+<body ng-app="myApp">
+  <div ng-controller = "createCtrl as controller">
+  <div class="backgrndImgContainer">
+    <div class="cover">
+      <div class="cover-image"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <br>
+            <br>
+            <br>
+            <br>
+            <img class="img-responsive" src="img\Chorus.png">
+            <p>Bringing music to the masses</p>
+            <br>
+            <br>
+            <div class="row">
+              <div class="col-xs-2"></div>
+              <div class="col-xs-8 text-center">
+                <img src="img/spotify.png" style="height: 2em;position: relative; right: -50%; top: 15px">
+                <button type="button" class="btn btn-default btn-lg btn-block" style="text-align: center"onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Fcreate.html&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'>
+                  <div class="row">
+                    <div class="col-md-2 text-center"></div>
+                    <div class="col-md-8 text-center">Be a Host</div>
+                  </div>
+                  <div class="row">
+                    <!--div class="col-md-12 text-center" style="font-size: 70%">(account required)</div-->
+                  </div>
+                </button>
+
+                <button type="button" class="btn btn-primary btn-lg btn-block" onclick="window.location.href='/join.html'" style="background-color: #2c3e50">Be a Guest</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
+      <script src="app.js"></script>
+      <script src="create.js"></script>
+      <script src="join.js"></script>
+      <script src="main.js"></script>
+      <script src="search/search.js"></script>
+      <script src="played/played.js"></script>
+      <script src="next/next.js"></script>
+      <script src="suggest/suggest.js"></script>
+      <script src="settings/settings.js"></script>
+      <script src="components/version/version.js"></script>
+      <script src="components/version/version-directive.js"></script>
+      <script src="components/version/interpolate-filter.js"></script>
+    </body>
+  </body>
+  </html>

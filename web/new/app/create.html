@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chorus - Create Event</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css"-->
+  <link rel="stylesheet" href="app.css">
+  <!--script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script-->
+
+  <!--Bootstrap-->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+   <!-- Angular 
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
+</head>
+<body ng-app="myApp">
+  <div ng-controller = "createCtrl as controller">
+  <div class="backgrndImgContainer">
+    <div class="cover">
+      <div class="cover-image"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <br>
+            <br>
+            <br>
+            <br>
+            <img class="img-responsive" src="img\Chorus.png">
+            <p>Bringing music to the masses</p>
+            <br>
+            <br>
+            <div class="row">
+              <div class="col-xs-3"></div>
+              <div class="col-xs-6">
+                <input type="text" class="form-control" placeholder="Enter party code" style="height:45px" ng-model="eventCode">
+                </div>
+                <div class="col-xs-3"></div>
+              </div>
+              <br>
+
+              <div class= "row">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-3">
+                                <label>Explicit
+
+                  <!--input type="checkbox" ng-model="check" checked-->
+                </label>
+              </div>
+              <div class="col-xs-3" style="-webkit-transform:scale(0.6); -moz-transform:scale(0.6); -ms-transform:scale(0.6); transform:scale(0.6); text-align: left">
+                <label class="switch">
+                  <input type="checkbox" ng-model="check" checked>
+                  <div class="slider round"></div>
+                </label>
+              </div>
+              <div class="col-xs-3"></div>
+
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary btn-lg " ng-click="createEvent()" style="background-color: #2c3e50">Create Event</button>
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
+  <script src="app.js"></script>
+  <script src="create.js"></script>
+  <script src="join.js"></script>
+  <script src="main.js"></script>
+  <script src="search/search.js"></script>
+  <script src="played/played.js"></script>
+  <script src="next/next.js"></script>
+  <script src="suggest/suggest.js"></script>
+  <script src="settings/settings.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</body>
+</body>
+</html>

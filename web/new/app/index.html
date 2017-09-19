@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> 
+<html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Chorus</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css"-->
+  <link rel="stylesheet" href="app.css">
+  <!--script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script-->
+
+  <!--Bootstrap-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+   <!--Angular 
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>-->
+</head>
+<style>
+.jumbotron {
+  padding: 3px;
+  padding-top: 10px;
+  background-color: rgba(255,255,255, 0.5);
+  color: inherit;
+}
+.img-responsive {
+  border: 0px;
+  padding:0px;
+  margin:0px;
+}
+</style>
+
+<body ng-controller = "mainCtrl as controller">
+<div class="backgrndImgContainer">
+
+  <div class="jumbotron jumbotron-fluid" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+    <div class="container">
+      <div class="col-xs-9">
+        <img src="img\Chorus.png" class="img-responsive" style="margin-left:15px;">
+      </div>
+
+      <div class="col-xs-3">
+        <a ng-show="showSpotify" type="button" class="btn btn-default" style="margin-top: 20px; background: #1ed760" onclick='window.location.replace("https://accounts.spotify.com/en/authorize?client_id=0abc049d139f4ee8b465fd9416aa358d&response_type=code&redirect_uri=http:%2F%2Flocalhost:8000%2Findex.html#!/next&scope=user-read-private%20user-read-email%20playlist-read-private%20playlist-read-collaborative%20playlist-modify-public%20playlist-modify-private&state=34fFs29kd09");'><img src="img/spotifyBlack.png" style="height: 2em"></a>
+
+        <a href="#!/settings" ng-show="showSettings" data-target="#settings" type="button" class="btn btn-default pull-right" style="margin-top: 20px;"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+      </div>
+        
+    </div>
+  </div>
+
+    <div class="col-12 innerContainer"><div ng-view></div>
+      <!-- tabs bottom -->
+      <div class="tabbable tabs-below navbar-fixed-bottom" style="background-color: #f8f8f8">
+        <ul class="nav nav-tabs">
+          <li><a class="nav-link" href="#!/played" data-target="#played" data-toggle="tab">Played Songs</a></li>
+          <li class="active"><a class="nav-link" href="#!/next" data-target="#next" data-toggle="tab">Up Next</a></li>
+          <li><a class="nav-link" href="#!/suggest" data-target="#suggest" data-toggle="tab">Suggested</a></li>
+          <li><a class="nav-link" href="#!/search" data-target="#search" data-toggle="tab"><span class="glyphicon glyphicon-search"></span></a></li>
+        </ul>
+      </div>
+      <!-- /tabs -->
+<hr>
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular-route.js"></script>
+  <script src="app.js"></script>
+  <script src="create.js"></script>
+  <script src="join.js"></script>
+  <script src="main.js"></script>
+  <script src="search/search.js"></script>
+  <script src="played/played.js"></script>
+  <script src="next/next.js"></script>
+  <script src="suggest/suggest.js"></script>
+  <script src="settings/settings.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+  </div>
+</body>
+</html>
