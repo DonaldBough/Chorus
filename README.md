@@ -1,4 +1,5 @@
-[![Chorus_Logo.jpg](https://s23.postimg.org/ynsqwywt7/Chorus_Logo.jpg)](https://postimg.org/image/szmg62sgn/)
+![Chorus Logo](/web/new/app/img/Chorus.png?raw=true)
+
 # The Problem:
 Playing the wrong music at a party can completely ruin the experience for the guests and managing the music can be tedious for the hosts. Hiring a DJ could solve this problem, but cost is often prohibitive. Our goal is to make music selection accessible to our guests and carefree for our hosts. Our website automatically suggests songs based on the music tastes of the guests and allows guests to vote on what they want to hear.
 
