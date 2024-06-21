@@ -1,0 +1,27 @@
+<body ng-app="myApp">
+	<div ng-controller = "suggestCtrl as controller">
+		<div class="container">
+				<ul class="list-group">
+					<div ng-repeat="song in s">	
+						<li class="list-group-item">
+							<div class="row">
+								<div class="col-xs-7">
+									<h5>{{song}}</h5>
+									<h6>{{song.artists[0].name}}</h6>
+								</div>
+								<!--BUTTONS-->
+								<div class="col-xs-5">
+									<div class="btn-group-vertical pull-right">
+										<button type="button" class="btn btn-secondary" ng-click="sendVote(song.id, song.name, song.artists[0].name)">
+											<span class="glyphicon glyphicon-plus"></span>
+										</button>
+									</div>
+								</div>
+								<!--BUTTONS-->
+							</li>	
+						</div>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</body>
